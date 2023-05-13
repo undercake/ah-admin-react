@@ -1,49 +1,32 @@
 'use client';
-import React, { ComponentClass, ReactElement, useEffect, useState } from 'react';
+import { ComponentClass, useEffect, useState, lazy, Suspense, ComponentType } from 'react';
 import Routes from 'next-routes';
 import { onPathChange, get } from '@/utils/Router';
+import routes from '@/routes';
 
 // @ts-ignore
 const routeX = Routes();
 
-interface RouteConfig {
-    name: string;
-    path: string;
-    component: Function;
-    children?: RouteConfig[];
-}
-
 interface RouteViewProps {
-    config: RouteConfig[];
-    defaultComponent?: React.Component<any> | React.FC<any> | ReactElement | Element | HTMLElement | null;
+    DefaultComponent?: ComponentType<any>;
 }
 
-function RouteView(props: RouteViewProps) {
-    const [hash, setHash] = useState('');
+function RouteView({DefaultComponent = () => <span />}: RouteViewProps) {
+    const [hash, setHash]   = useState('');
     const [ready, setReady] = useState(false);
 
-    const { config, defaultComponent = null } = props;
-
-    const handleHashChange = (e:string) => {
+    const handleHashChange = (e: string) => {
         setReady(true);
         setHash(e);
     };
 
     useEffect(() => {
-        config.forEach((route) => routeX.add(route.name, route.path));
+        console.log(routeX.routes = []);
+        routes.forEach((route) => routeX.add(route.name, route.path));
         onPathChange(handleHashChange)
         handleHashChange(get());
         // eslint-disable-next-line
     }, []);
-
-    const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-        event.preventDefault();
-        const href = event.currentTarget.getAttribute('href');
-        if (href) {
-            window.location.hash = href;
-            setHash(href);
-        }
-    };
 
     const testRouteX = (path: string): Array<any> | false => {
         for (let i = 0; i < routeX.routes.length; i++) {
@@ -55,24 +38,27 @@ function RouteView(props: RouteViewProps) {
         return false;
     };
 
-    const renderRoute = () => {
+    const RenderRoute = () => {
         const innerHash = hash.replace('#', '');
         const rs = testRouteX(innerHash == '' ? '/' : innerHash);
         let currentRoute;
         if (!rs) {
-            currentRoute = config.find((route) => route.name == '*');
+            currentRoute = routes.find((route) => route.name == '*');
         }
-        else currentRoute = config.find((route) => route.name === rs[0].name);
+        else currentRoute = routes.find((route) => route.name === rs[0].name);
 
         if (currentRoute) {
-            const Component: React.FC<any> | ComponentClass = currentRoute.component().default;
-            const props = rs ? {...rs[1]} : {};
-            return <Component { ...props } />;
+            let Component: React.FC<any> | ComponentClass;
+            Component = lazy(currentRoute.component);
+            const props = rs ? { ...rs[1] } : {};
+            return <Suspense fallback={<DefaultComponent />}>
+                <Component {...props} />
+            </Suspense>
         }
         return null;
     };
 
-    return <>{ready ? renderRoute() : defaultComponent}</>;
+    return <>{ready ? <RenderRoute /> : <DefaultComponent />}</>;
 }
 
 export default RouteView;

@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-05-07 10:57:02
- * @FilePath: /ah-admin-react/src/components/Layout/Side.tsx
+ * @LastEditTime: 2023-05-13 05:26:45
+ * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
 import { useState, useEffect, MouseEvent } from 'react';
@@ -24,7 +24,7 @@ import './styles/side.scss';
 import { onPathChange, get, push } from '@/utils/Router';
 
 const activeMenu = 'text-purple-dark dark:text-purple-light bg-purple-light dark:bg-purple-dark';
-const activeSubMenu = 'text-purple-dark dark:text-purple-light';
+const activeSubMenu = 'text-purple-dark dark:text-purple-lighter';
 
 const handleChildMap = ({
     child,
@@ -33,17 +33,17 @@ const handleChildMap = ({
     open,
     type = '0'
 }: {
-    child: right[];
-    path: string;
-    index: number;
-    open: boolean;
-    type?: string;
+    child : right[];
+    path  : string;
+    index : number;
+    open  : boolean;
+    type ?: string;
 }): JSX.Element => (
     <List component="div" disablePadding>
         {child.map((child: right, ind: number) => (
             <ListItem
                 className={
-                    (path == child.path ? activeSubMenu : 'hover:text-purple-lightest dark:hover:text-purple-light') + ' cursor-pointer'
+                    (path == child.path ? activeSubMenu : 'hover:text-purple-lighter dark:hover:text-purple-light') + ' cursor-pointer'
                 }
                 sx={{ paddingLeft: type == 'pop' ? '0' : '3.1rem' }}
                 key={`${index}-${ind}`}
@@ -89,13 +89,13 @@ const Tips = ({ index, tipsEl, tips, item }: { index: number; tipsEl: HTMLElemen
 );
 
 function Side({ open }: { open: boolean }) {
-    const [menuList, setMenuList] = useState<right[]>([]);
-    const [path, setPath] = useState<string>('');
-    const [currentTarget, setCurrentTarget] = useState<string>('');
+    const [path, setPath]                         = useState<string>('');
+    const [tips, setTips]                         = useState<string>('');
+    const [tipsEl, setTipsEl]                     = useState<HTMLElement | null>(null);
+    const [menuList, setMenuList]                 = useState<right[]>([]);
+    const [anchorEl, setAnchorEl]                 = useState<HTMLElement | null>(null);
+    const [currentTarget, setCurrentTarget]       = useState<string>('');
     const [popoverCondition, setPopoverCondition] = useState<string>('');
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-    const [tips, setTips] = useState<string>('');
-    const [tipsEl, setTipsEl] = useState<HTMLElement | null>(null);
 
     const findHoverTarget = (e: HTMLElement): HTMLElement | null => {
         const className = 'MuiButtonBase-root';
@@ -177,8 +177,10 @@ function Side({ open }: { open: boolean }) {
                                         paddingLeft: open ? '1rem' : 0,
                                         marginBottom: '.5rem',
                                         borderRadius: '.75rem',
-                                        '.dark &:hover': {backgroundColor: 'rgba(94, 53, 177, .5)' },
-                                        '&:hover': {backgroundColor: 'rgb(237 231 246)'}
+                                        backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
+                                        color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                        '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
+                                        '&:hover': { backgroundColor: 'rgb(237 231 246)' }
                                     }}
                                 >
                                     <ListItemIcon sx={{ paddingLeft: '.6rem' }}>
@@ -193,11 +195,11 @@ function Side({ open }: { open: boolean }) {
                                         />
                                     </ListItemIcon>
                                     <ListItemText primary={item.name} />
-                                    {open ? currentTarget == item.path ? <ExpandLess /> : <ExpandMore /> : null}
+                                    {open ? currentTarget == item.path || currentTarget.indexOf(item.path) == 0 ? <ExpandLess /> : <ExpandMore /> : null}
                                 </ListItemButton>
                                 {open ? null : <Tips index={index} tipsEl={tipsEl} tips={tips} item={item} />}
                                 {open ? (
-                                    <Collapse key={`col-${index}`} in={currentTarget == item.path} timeout="auto" unmountOnExit>
+                                    <Collapse key={`col-${index}`} in={currentTarget == item.path || currentTarget.indexOf(item.path) == 0} timeout="auto" unmountOnExit>
                                         {handleChildMap({ child: item.children, path, index, open })}
                                     </Collapse>
                                 ) : (
@@ -235,7 +237,15 @@ function Side({ open }: { open: boolean }) {
                                     onClick={() => push(item.path)}
                                     onMouseEnter={(e) => showTips(e, item.path)}
                                     onMouseLeave={closeTips}
-                                    sx={{ paddingLeft: open ? '1rem' : 0, marginBottom: '.5rem', borderRadius: '.75rem' }}
+                                    sx={{
+                                        paddingLeft: open ? '1rem' : 0,
+                                        marginBottom: '.5rem',
+                                        borderRadius: '.75rem',
+                                        backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
+                                        color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                        '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
+                                        '&:hover': { backgroundColor: 'rgb(237 231 246)' }
+                                    }}
                                 >
                                     <ListItemIcon sx={{ paddingLeft: '.6rem' }}>
                                         <i

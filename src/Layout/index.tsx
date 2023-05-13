@@ -17,11 +17,9 @@ import routes from '@/routes';
 import RouteView from '@/components/RouteView';
 import './styles/main.scss';
 
-const loading = (
-    <div style={{ margin: 'auto', marginTop: '1rem', textAlign: 'center' }}>
+const loading =()=><div style={{ margin: 'auto', marginTop: '1rem', textAlign: 'center' }}>
         <CircularProgress color="secondary" />
-    </div>
-);
+    </div>;
 
 interface CastLoginProps {
     handleLogin: () => void;
@@ -64,7 +62,6 @@ export default function Layout(props: LayoutProps) {
                     <Box sx={{ display: 'flex' }}>
                         <CssBaseline />
                         <Header handleDrawerOpen={handleDrawerOpen} />
-
                         <PerfectScrollbar
                             component="div"
                             style={{
@@ -81,8 +78,7 @@ export default function Layout(props: LayoutProps) {
                             className="mt-20 layout-main-container bg-gray-200 dark:bg-gray-800 overflow-hidden overflow-y-scroll"
                             sx={{ flexGrow: 1, p: 3 }}
                         >
-                            {/* {is_login ? props.children : <CastLogin handleLogin={() => setIsLogin(true)} />} */}
-                            <RouteView config={routes} defaultComponent={loading} />
+                            <RouteView DefaultComponent={loading} />
                         </Box>
                     </Box>
                     <Massager />
@@ -91,13 +87,12 @@ export default function Layout(props: LayoutProps) {
                 <>
                     <Box sx={{ width: '100wh', height: '100vh' }} className="pt-10 bg-gray-200 dark:bg-gray-900">
                         <CssBaseline />
-                        <Header handleDrawerOpen={handleDrawerOpen} />
+                        <Header handleDrawerOpen={handleDrawerOpen} noMenu />
                         <Box sx={{ width: 500 }} className="mx-auto">
                             <Card
-                                className="mx-auto bg-white dark:bg-gray-800 dark:text-gray-50 p-8"
+                                className="mt-20 mx-auto bg-white dark:bg-gray-800 dark:text-gray-50 p-8"
                                 sx={{ borderRadius: '1rem', boxShadow: 0 }}
                             >
-                                <SwitchDark />
                                 <Login onLogin={() => setIsLogin(true)} />
                             </Card>
                         </Box>

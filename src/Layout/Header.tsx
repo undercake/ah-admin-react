@@ -6,26 +6,25 @@
  * @Description: header
  */
 
-// import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 
 import SwitchDark from './SwitchDark';
 
-function Header({ handleDrawerOpen }: { handleDrawerOpen: () => void }) {
+function Header({ handleDrawerOpen, noMenu = false }: { handleDrawerOpen: () => void, noMenu?: boolean }) {
     return (
         <AppBar className="dark:bg-gray-900 dark:color dark:text-gray-100 py-3 px-6" color="inherit" sx={{ boxShadow: 0 }}>
             <Toolbar>
                 <Box className="flex w-56">
                     <Box className="flex-auto"></Box>
-                    <Avatar className='bg-purple-light hover:bg-purple-lighter text-purple-dark hover:text-purple-light cursor-pointer mr-10' color="inherit" variant="rounded" onClick={handleDrawerOpen} sx={{borderRadius:'.7rem', width: '34px', height: '34px' }}>
-                        <MenuIcon />
-                    </Avatar>
+                    {noMenu ? null :
+                        <Avatar className='bg-purple-light hover:bg-purple-lighter text-purple-dark hover:text-purple-light cursor-pointer mr-10' color="inherit" variant="rounded" onClick={handleDrawerOpen} sx={{ borderRadius: '.7rem', width: '34px', height: '34px' }}>
+                            <MenuIcon />
+                        </Avatar>}
                 </Box>
                 <Typography variant="h6" noWrap component="div">
                     Mini variant drawer

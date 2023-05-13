@@ -1,22 +1,23 @@
+
+import { useState } from 'react';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import FormHelperText from '@mui/material/FormHelperText';
-import Image from 'next/image';
-import Visibility from '@mui/icons-material/Visibility'; // 密码可见
-import VisibilityOff from '@mui/icons-material/VisibilityOff'; // 密码不可见
-import { useState } from 'react';
-import md5 from 'md5';
+import Visibility from '@mui/icons-material/Visibility';        // 密码可见
+import VisibilityOff from '@mui/icons-material/VisibilityOff';  // 密码不可见
 import mittBus from '@/utils/MittBus';
 import axios from '@/utils/Axios';
+import FormInput from '../FormInput';
+import Image from 'next/image';
+import md5 from 'md5';
 
 import { urls } from '@/config';
 import * as Yup from 'yup';
@@ -61,15 +62,15 @@ function VerificationImg() {
 
 function Login(props: Props) {
     const [showPassword, setShowPassword] = useState(false);
-    const [username, setUsername] = useState(''); // 用户名
-    const [password, setPassword] = useState(''); // 密码
-    const [verification, setVerification] = useState(''); // 验证码
-    const [userHelperName, setUserHelperName] = useState(''); // 用户名提示
-    const [userHelperPassword, setUserHelperPassword] = useState(''); // 密码提示
-    const [userHelperVerification, setUserHelperVerification] = useState(''); // 验证码提示
-    const [userColorName, setUserColorName] = useState<colors>(mainColor); // 用户名颜色
-    const [userColorPassword, setUserColorPassword] = useState<colors>(mainColor); // 密码颜色
-    const [userColorVerification, setUserColorVerification] = useState<colors>(mainColor); // 验证码颜色
+    const [username, setUsername] = useState('');                 // 用户名
+    const [password, setPassword] = useState('');                 // 密码
+    const [verification, setVerification] = useState('');                 // 验证码
+    const [userHelperName, setUserHelperName] = useState('');                 // 用户名提示
+    const [userHelperPassword, setUserHelperPassword] = useState('');                 // 密码提示
+    const [userHelperVerification, setUserHelperVerification] = useState('');                 // 验证码提示
+    const [userColorName, setUserColorName] = useState<colors>(mainColor);  // 用户名颜色
+    const [userColorPassword, setUserColorPassword] = useState<colors>(mainColor);  // 密码颜色
+    const [userColorVerification, setUserColorVerification] = useState<colors>(mainColor);  // 验证码颜色
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
     const handleLogin = () => {
@@ -145,7 +146,82 @@ function Login(props: Props) {
                     昆明阿惠家政
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <FormControl sx={{ mt: 3 }} required fullWidth variant="outlined" color={userColorVerification}>
+                    <FormInput
+                        label='用户名'
+                        id='outlined-adornment-username'
+                        color={userColorName}
+                        helperColor={userColorName}
+                        name="username"
+                        required
+                        fullWidth
+                        variant="outlined"
+                        error={userColorName == 'error'}
+                        helperText={userHelperName}
+                        onChange={(e) => {
+                            setUsername(e.target.value);
+                            setUserHelperVerification('');
+                            setUserColorVerification(mainColor);
+                            setUserColorPassword(mainColor);
+                        }}
+                        inputProps={{ maxLength: 6 }}
+                    />
+                    <FormInput
+                        label='密码'
+                        id='outlined-adornment-password'
+                        sx={{ mt: 3 }}
+                        color={userColorPassword}
+                        helperColor ={userColorPassword}
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        required
+                        fullWidth
+                        variant="outlined"
+                        error={userColorPassword == 'error'}
+                        helperText={userHelperPassword}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            setUserHelperPassword('');
+                            setUserColorPassword(mainColor);
+                            setUserColorVerification(mainColor);
+                        }}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    className="dark:text-gray-50"
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        inputProps={{ maxLength: 6 }}
+                    />
+                    <FormInput
+                        label='验证码'
+                        id='outlined-adornment-verification'
+                        sx={{ mt: 3 }}
+                        color={userColorVerification}
+                        helperColor ={userColorVerification}
+                        type='text'
+                        name="password"
+                        required
+                        fullWidth
+                        variant="outlined"
+                        helperText={userHelperVerification}
+                        error={userColorVerification == 'error'}
+                        onChange={(e) => {
+                            setVerification(e.target.value);
+                            setUserHelperVerification('');
+                            setUserColorVerification(mainColor);
+                        }}
+                        autoComplete="none"
+                        endAdornment={<VerificationImg />}
+                        inputProps={{ maxLength: 6 }}
+                    />
+                    {/* <FormControl sx={{ mt: 3 }} required fullWidth variant="outlined" color={userColorVerification}>
                         <InputLabel className="dark:text-gray-50" htmlFor="outlined-adornment-username" error={userColorName == 'error'}>
                             用户名
                         </InputLabel>
@@ -165,7 +241,7 @@ function Login(props: Props) {
                                 setUserColorVerification(mainColor);
                                 setUserColorPassword(mainColor);
                             }}
-                            label="验证码"
+                            label="用户名"
                             // @ts-ignore
                             inputprops={{ maxLength: 6 }}
                         />
@@ -251,7 +327,7 @@ function Login(props: Props) {
                         >
                             {userHelperVerification}
                         </FormHelperText>
-                    </FormControl>
+                    </FormControl> */}
                     <Button
                         type="submit"
                         fullWidth

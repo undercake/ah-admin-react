@@ -1,37 +1,44 @@
-"use client";
+'use client';
+
+import { ComponentType } from 'react';
 
 interface RouteConfig {
     name: string;
     path: string;
-    component: Function;
+    component: () => Promise<{ default: ComponentType<any> }>;
     children?: RouteConfig[];
 }
 
 const routes: RouteConfig[] = [
     {
         name: '*',
-        path: '*',
-        component: () => require('./pages/_404')
+        path     : '*',
+        component: () => import(/* webpackChunkName: "any" */ './pages/_404')
     },
     {
-        name: 'indexHome',
-        path: '/',
-        component: () => require('./pages/dashboard')
+        name     : 'Home',
+        path     : '/dashboard',
+        component: () => import(/* webpackChunkName: "Home" */ './pages/dashboard')
     },
     {
-        name: 'index',
-        path: '/index',
-        component: () => require('./pages/dashboard')
+        name     : 'IndexHome',
+        path     : '/',
+        component: () => import(/* webpackChunkName: "IndexHome" */ './pages/dashboard')
     },
     {
-        name: 'login',
-        path: '/login',
-        component: () => require('./pages/login')
+        name     : 'Index',
+        path     : '/index',
+        component: () => import(/* webpackChunkName: "Index" */ './pages/dashboard')
     },
     {
-        name: 'Home',
-        path: '/dashboard',
-        component: () => require('./pages/dashboard')
-    }
+        name     : 'Login',
+        path     : '/login',
+        component: () => import(/* webpackChunkName: "Login" */ './pages/login')
+    },
+    {
+        name     : 'MyPass',
+        path     : '/my_pass',
+        component: () => import(/* webpackChunkName: "MyPass" */ './pages/my_pass')
+    },
 ];
 export default routes;

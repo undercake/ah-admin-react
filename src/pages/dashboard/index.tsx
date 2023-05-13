@@ -2,17 +2,15 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 12:38:31
- * @LastEditTime: 2023-05-07 11:03:30
+ * @LastEditTime: 2023-05-13 04:17:20
  * @FilePath: /ah-admin-react/src/pages/dashboard/index.tsx
  * @Description:
  */
 import Typography from '@mui/material/Typography';
-import DrawerHeader from '@/components/DrawerHeader';
 // import Layout from '@/components/Layout';
 export default function Dashboard() {
     return (
         <>
-            <DrawerHeader />
             <Typography paragraph>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
                 aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper
