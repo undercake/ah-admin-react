@@ -1,0 +1,38 @@
+$bg-grey: rgb(243, 244, 246);
+$bg-black: #121212;
+$border-grey: #ddd;
+$border-white: #fff;
+$color-white: #fff;
+$color-black: rgb(17, 24, 39);
+
+html.dark,
+.dark .css-12i7wg6-MuiPaper-root-MuiDrawer-paper,
+.dark main {
+    background-color: $bg-black;
+    color: $color-white;
+}
+body {
+    background-color: #fff;
+    color: $color-black;
+    .dark & {
+        background-color: $bg-black;
+        color: $color-white;
+    }
+}
+
+.dark .css-i4bv87-MuiSvgIcon-root {
+    fill: $color-white;
+}
+:is(.dark .dark\:bg-gray-900),
+.dark .dark\:bg-gray-900 {
+    background-color: $bg-black;
+}
+
+.dark .css-1d3z3hw-MuiOutlinedInput-notchedOutline,
+.dark .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root,
+.dark .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root.Mui-focused,
+.dark .css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.dark .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.dark .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+    color: $color-white;
+}
