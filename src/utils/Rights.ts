@@ -10,14 +10,14 @@ interface req_data {
 
 // !权限相关
 export interface right {
-    detail: string;
-    icon: string;
-    id: number;
-    name: string;
-    parent: number;
-    path: string;
-    sort: number;
-    type: 0 | 1 | 2 | 3 | 4;
+    detail  : string;
+    icon    : string;
+    id      : number;
+    name    : string;
+    parent  : number;
+    path    : string;
+    sort    : number;
+    type    : 0 | 1 | 2 | 3 | 4;
     children: Array<right>;
 }
 
@@ -29,11 +29,11 @@ interface group {
     path: string;
     name: string;
 }
-let groups: group[] = [];
+let groups: group[]           = [];
 let timer: 0 | NodeJS.Timeout = 0;
-let gur_arr: Function[] = [];
-let user_rights: right[] = [];
-let all_rights: right[] = [];
+let gur_arr: Function[]       = [];
+let user_rights: right[]      = [];
+let all_rights: right[]       = [];
 
 const getRights = (): void => {
     groups = [
@@ -75,13 +75,11 @@ const getUserRights = (fun: Function = () => {}) => {
                             clearTimeout(timer);
                             timer = 0;
                             initRights(1);
-                            console.log(user_rights, gur_arr);
                             gur_arr.forEach((f) => f(user_rights));
                             gur_arr = [];
                         }
                     )
                     .catch((e: any) => {
-                        console.log(e, timer);
                         clearTimeout(timer);
                         timer = 0;
                     }),
@@ -90,7 +88,6 @@ const getUserRights = (fun: Function = () => {}) => {
 };
 
 const returnList = (data: right[]) => {
-    console.log(data, typeof data);
     if (data == undefined || data.length < 1) return [];
     data = data
         .filter((e) => e)
@@ -114,7 +111,6 @@ const returnList = (data: right[]) => {
         },
         { path: '/index', name: '主页', children: [], icon: 'fa-solid fa-house', type: 0, id: 0, parent: 0, sort: 0, detail: '' })
         data.sort((a, b) => a.sort - b.sort);
-        console.log(data);
         return data;
 };
 

@@ -21,7 +21,7 @@ function RouteView({DefaultComponent = () => <span />}: RouteViewProps) {
     };
 
     useEffect(() => {
-        console.log(routeX.routes = []);
+        routeX.routes = [];
         routes.forEach((route) => routeX.add(route.name, route.path));
         onPathChange(handleHashChange)
         handleHashChange(get());

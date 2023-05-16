@@ -30,6 +30,7 @@ module.exports = {
                 '4xl': '2rem'
             },
             spacing: {
+                22: '5.5rem',
                 61: '15.25rem',
                 62: '15.75rem',
                 72: '18rem',

@@ -11,7 +11,7 @@ interface RouteConfig {
 
 const routes: RouteConfig[] = [
     {
-        name: '*',
+        name     : '*',
         path     : '*',
         component: () => import(/* webpackChunkName: "any" */ './pages/_404')
     },
@@ -39,6 +39,11 @@ const routes: RouteConfig[] = [
         name     : 'MyPass',
         path     : '/my_pass',
         component: () => import(/* webpackChunkName: "MyPass" */ './pages/my_pass')
+    },
+    {
+        name     : 'EmployeeList',
+        path     : '/employee_list',
+        component: () => import(/* webpackChunkName: "EmployeeList" */ './pages/EmployeeList')
     },
 ];
 export default routes;

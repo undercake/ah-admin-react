@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-// import { styled } from '@mui/material/styles';
-// import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Card from '@mui/material/Card';
@@ -8,12 +6,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Header from './Header';
 import Side from './Side';
 import Massager from './Massager';
-import SwitchDark from './SwitchDark';
 import Login from '@/components/Login';
 import checkLogin from '@/utils/checkLogin';
 import MittBus from '@/utils/MittBus';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import routes from '@/routes';
 import RouteView from '@/components/RouteView';
 import './styles/main.scss';
 
@@ -75,10 +71,12 @@ export default function Layout(props: LayoutProps) {
 
                         <Box
                             component="main"
-                            className="mt-20 layout-main-container bg-gray-200 dark:bg-gray-800 overflow-hidden overflow-y-scroll"
+                            className="mt-22 layout-main-container bg-gray-200 dark:bg-gray-800 overflow-hidden overflow-y-hidden"
                             sx={{ flexGrow: 1, p: 3 }}
                         >
+                        <div style={{height: 'calc(100vh - 8rem)', overflowY: 'auto', borderRadius: '1rem'}}>
                             <RouteView DefaultComponent={loading} />
+                        </div>
                         </Box>
                     </Box>
                     <Massager />

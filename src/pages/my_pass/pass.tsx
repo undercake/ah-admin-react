@@ -29,11 +29,7 @@ interface InfoState {
     [key: string]         : any;
 }
 
-/*
-oldpass: md5(oldpass),
-    newpass: md5(newpass),
-    newpass_repeat: md5(newpass_repeat),
-*/
+const size = 'small';
 
 class Info extends Component<InfoProps, InfoState> {
     state: InfoState = {
@@ -80,7 +76,7 @@ class Info extends Component<InfoProps, InfoState> {
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
                     value={this.state.oldPass}
-                    size='small'
+                    size={size}
                 />
                 <FormInput
                     label='新密码'
@@ -99,7 +95,7 @@ class Info extends Component<InfoProps, InfoState> {
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
                     value={this.state.newPass}
-                    size='small'
+                    size={size}
                 />
                 <FormInput
                     label='重复密码'
@@ -119,7 +115,7 @@ class Info extends Component<InfoProps, InfoState> {
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
                     value={this.state.repeatPass}
-                    size='small'
+                    size={size}
                 />
                 <Button
                     type="submit"
@@ -127,7 +123,7 @@ class Info extends Component<InfoProps, InfoState> {
                     variant="contained"
                     className='bg-purple-dark hover:bg-purple-lighter'
                     color="secondary"
-                    size="large"
+                    size={size}
                     sx={{ mt: 3, mb: 2, border: 0, boxShadow: 0, '&:hover': { border: 0, boxShadow: 0 } }}
                 >
                     提交

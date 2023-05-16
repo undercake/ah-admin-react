@@ -32,6 +32,8 @@ interface InfoState {
     [key: string]       : any;
 }
 
+const size = 'small';
+
 class Info extends Component<InfoProps, InfoState> {
     state: InfoState = {
         nickname           : '',
@@ -89,7 +91,7 @@ class Info extends Component<InfoProps, InfoState> {
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
                     value={this.state.nickname}
-                    size='small'
+                    size={size}
                 />
                 <FormInput
                     label='登录名'
@@ -108,11 +110,10 @@ class Info extends Component<InfoProps, InfoState> {
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
                     value={this.state.userName}
-                    size='small'
+                    size={size}
                 />
                 <FormInput
                     label='手机号'
-                    电子邮箱
                     id='my-pass-mobile'
                     sx={{ mt: 3 }}
                     color={this.state.mobileColor}
@@ -128,7 +129,7 @@ class Info extends Component<InfoProps, InfoState> {
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
                     value={this.state.mobile}
-                    size='small'
+                    size={size}
                 />
                 <FormInput
                     label='电子邮箱'
@@ -147,16 +148,16 @@ class Info extends Component<InfoProps, InfoState> {
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
                     value={this.state.email}
-                    size='small'
+                    size={size}
                 />
                 <Button
                     type="submit"
                     fullWidth
                     variant="contained"
-                    className='bg-purple-dark hover:bg-purple-lighter'
-                    color="secondary"
-                    size="large"
+                    // className='bg-purple-dark hover:bg-purple-lighter'
+                    color="primary"
                     sx={{ mt: 3, mb: 2, border: 0, boxShadow: 0, '&:hover': { border: 0, boxShadow: 0 } }}
+                    size={size}
                 >
                     提交
                 </Button>
