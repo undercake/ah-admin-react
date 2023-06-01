@@ -9,13 +9,13 @@ import Massager from './Massager';
 import Login from '@/components/Login';
 import checkLogin from '@/utils/checkLogin';
 import MittBus from '@/utils/MittBus';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import RouteView from '@/components/RouteView';
+import ScrollView from '@/components/ScrollView';
 import './styles/main.scss';
 
-const loading =()=><div style={{ margin: 'auto', marginTop: '1rem', textAlign: 'center' }}>
-        <CircularProgress color="secondary" />
-    </div>;
+const loading = () => <div style={{ margin: 'auto', marginTop: '1rem', textAlign: 'center' }}>
+    <CircularProgress color="secondary" />
+</div>;
 
 interface CastLoginProps {
     handleLogin: () => void;
@@ -58,28 +58,18 @@ export default function Layout(props: LayoutProps) {
                     <Box sx={{ display: 'flex' }}>
                         <CssBaseline />
                         <Header handleDrawerOpen={handleDrawerOpen} />
-                        <PerfectScrollbar
-                            component="div"
-                            style={{
-                                height: 'calc(100vh - 56px)',
-                                paddingLeft: '10px',
-                                paddingRight: '10px'
-                            }}
-                        >
-                            <Side open={open} />
-                        </PerfectScrollbar>
+                        <Side open={open} />
 
                         <Box
                             component="main"
                             className="mt-22 layout-main-container bg-gray-200 dark:bg-gray-800 overflow-hidden overflow-y-hidden"
                             sx={{ flexGrow: 1, p: 3 }}
                         >
-                        <div style={{height: 'calc(100vh - 8rem)', overflowY: 'auto', borderRadius: '1rem'}}>
-                            <RouteView DefaultComponent={loading} />
-                        </div>
+                            <ScrollView style={{ height: 'calc(100vh - 8rem)', overflowY: 'auto', borderRadius: '1rem' }}>
+                                <RouteView DefaultComponent={loading} />
+                            </ScrollView>
                         </Box>
                     </Box>
-                    <Massager />
                 </>
             ) : (
                 <>
@@ -97,6 +87,7 @@ export default function Layout(props: LayoutProps) {
                     </Box>
                 </>
             )}
+            <Massager />
         </>
     );
 }

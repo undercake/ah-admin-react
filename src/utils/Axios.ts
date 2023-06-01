@@ -23,27 +23,57 @@ axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 // 请求拦截器，内部根据返回值，重新组装，统一管理。
-axios.interceptors.response.use((res) => {
-    console.log('res', res);
-    if ('is_login' in res && !res.is_login) {
-        mittBus.emit('is_login', false);
-        mittBus.emit('msgEmit', {type:'error', msg:'您尚未登陆'});
-        return Promise.reject({ msg: '未登录', res });
-    }
-    if (typeof res.data !== 'object') {
-        return Promise.reject({ msg: '服务端异常！', res });
-    }
-    if ('code' in res.data && res.data.code != 0 && res.config.url != urls.isLogged) {
-        if (res.data.message) return Promise.reject({ msg: res.data.message, res });
-        if (res.data.code == -2) {
-            mittBus.emit('msgEmit', {type:'error', msg:'您尚未登陆'});
-            mittBus.emit('is_login', false);
-        }
-        mittBus.emit('msgEmit', {msg: res.data.message, type: 'error'});
-        return Promise.reject({ msg: res.data.message, data: res.data });
-    }
+axios.interceptors.response.use(
+    (res) => {
+        let data = res;
+        if (('status' in res) && ('statusText' in res)) data = res.data;
+        console.log('res', data);
 
-    return Promise.resolve(res.data);
-});
+        if (typeof data !== 'object') {
+            mittBus.emit('msgEmit', { type: 'error', msg: '服务端异常！' });
+            return Promise.reject({ msg: '服务端异常！', data });
+        }
+
+        if ('is_login' in data && !data.is_login) {
+            mittBus.emit('is_login', false);
+            mittBus.emit('msgEmit', { type: 'error', msg: '您尚未登陆' });
+            return Promise.reject({ msg: '未登录', data });
+        }
+        if ('code' in data && data.code != 0 && ('config' in res && res.config.url != urls.isLogged)) {
+            mittBus.emit('msgEmit', { msg: res.data.message, type: 'error' });
+            // @ts-ignore
+            if (data.message) return Promise.reject({ msg: data.message, res });
+            if (data.code == -2) {
+                mittBus.emit('msgEmit', { type: 'error', msg: '您尚未登陆' });
+                mittBus.emit('is_login', false);
+            }
+            return Promise.reject({ msg: res.data.message, data: res.data });
+        }
+
+        return Promise.resolve(data);
+    },
+    (error) => {
+        // 处理失败响应
+        let msg = '';
+        if (error.response.status === 404) {
+            // 处理 404 错误
+            msg = '页面未找到'
+        } else if (error.code === 'ECONNABORTED') {
+            // 处理超时错误
+            msg = '请求超时，请重试'
+        } else if (error.response.status === 500) {
+            // 处理 500 错误
+            msg = '服务器错误，请稍后重试'
+        } else if (error.response.status === 503) {
+            // 处理 503 错误
+            msg = '服务器错误，请稍后重试'
+        } else {
+            // 其他错误
+            msg = '网络错误，请稍后重试'
+        }
+        mittBus.emit('msgEmit', { type: 'error', msg });
+        return Promise.reject(error);
+    }
+);
 
 export default axios;

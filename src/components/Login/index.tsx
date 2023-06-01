@@ -1,12 +1,8 @@
 
 import { useState } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -15,7 +11,7 @@ import Visibility from '@mui/icons-material/Visibility';        // 密码可见
 import VisibilityOff from '@mui/icons-material/VisibilityOff';  // 密码不可见
 import mittBus from '@/utils/MittBus';
 import axios from '@/utils/Axios';
-import FormInput from '../FormInput';
+import FormInput from '@/components/FormComponents/FormInput';
 import Image from 'next/image';
 import md5 from 'md5';
 
@@ -154,6 +150,7 @@ function Login(props: Props) {
                         name="username"
                         required
                         fullWidth
+                        size='large'
                         variant="outlined"
                         error={userColorName == 'error'}
                         helperText={userHelperName}
@@ -175,6 +172,7 @@ function Login(props: Props) {
                         name="password"
                         required
                         fullWidth
+                        size='large'
                         variant="outlined"
                         error={userColorPassword == 'error'}
                         helperText={userHelperPassword}
@@ -209,6 +207,7 @@ function Login(props: Props) {
                         name="password"
                         required
                         fullWidth
+                        size='large'
                         variant="outlined"
                         helperText={userHelperVerification}
                         error={userColorVerification == 'error'}
@@ -221,113 +220,6 @@ function Login(props: Props) {
                         endAdornment={<VerificationImg />}
                         inputProps={{ maxLength: 6 }}
                     />
-                    {/* <FormControl sx={{ mt: 3 }} required fullWidth variant="outlined" color={userColorVerification}>
-                        <InputLabel className="dark:text-gray-50" htmlFor="outlined-adornment-username" error={userColorName == 'error'}>
-                            用户名
-                        </InputLabel>
-                        <OutlinedInput
-                            className="dark:text-gray-50"
-                            id="outlined-adornment-username"
-                            type="text"
-                            required
-                            fullWidth
-                            name="username"
-                            autoComplete="username"
-                            color={userColorName}
-                            error={userColorName == 'error'}
-                            onChange={(e) => {
-                                setUsername(e.target.value);
-                                setUserHelperVerification('');
-                                setUserColorVerification(mainColor);
-                                setUserColorPassword(mainColor);
-                            }}
-                            label="用户名"
-                            // @ts-ignore
-                            inputprops={{ maxLength: 6 }}
-                        />
-                        <FormHelperText id="outlined-weight-helper-text" color={userColorName} error={userColorName == 'error'}>
-                            {userHelperName}
-                        </FormHelperText>
-                    </FormControl>
-                    <FormControl sx={{ mt: 2 }} required fullWidth variant="outlined" color={userColorPassword}>
-                        <InputLabel
-                            className="dark:text-gray-50 dark:border-gray-50"
-                            htmlFor="outlined-adornment-password"
-                            error={userColorPassword == 'error'}
-                        >
-                            密码
-                        </InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            className="dark:text-gray-50"
-                            type={showPassword ? 'text' : 'password'}
-                            name="password"
-                            required
-                            fullWidth
-                            error={userColorPassword == 'error'}
-                            autoComplete="current-password"
-                            color={userColorPassword}
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                setUserHelperPassword('');
-                                setUserColorPassword(mainColor);
-                                setUserColorVerification(mainColor);
-                            }}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        className="dark:text-gray-50"
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="密码"
-                        />
-                        <FormHelperText id="outlined-weight-helper-text" color={userColorPassword} error={userColorPassword == 'error'}>
-                            {userHelperPassword}
-                        </FormHelperText>
-                    </FormControl>
-                    <FormControl sx={{ mt: 3 }} required fullWidth variant="outlined" color={userColorVerification}>
-                        <InputLabel
-                            className="dark:text-gray-50"
-                            htmlFor="outlined-adornment-verification"
-                            error={userColorVerification == 'error'}
-                        >
-                            验证码
-                        </InputLabel>
-                        <OutlinedInput
-                            className="dark:text-gray-50"
-                            id="outlined-adornment-verification"
-                            type="text"
-                            name="verification"
-                            required
-                            fullWidth
-                            error={userColorVerification == 'error'}
-                            onChange={(e) => {
-                                setVerification(e.target.value);
-                                setUserHelperVerification('');
-                                setUserColorVerification(mainColor);
-                            }}
-                            autoComplete="none"
-                            endAdornment={<VerificationImg />}
-                            label="验证码"
-                            color={userColorVerification}
-                            // @ts-ignore
-                            inputprops={{ maxLength: 6 }}
-                        />
-                        <FormHelperText
-                            id="outlined-weight-helper-text"
-                            color={userColorVerification}
-                            error={userColorVerification == 'error'}
-                        >
-                            {userHelperVerification}
-                        </FormHelperText>
-                    </FormControl> */}
                     <Button
                         type="submit"
                         fullWidth

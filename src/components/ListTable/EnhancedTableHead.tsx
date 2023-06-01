@@ -33,6 +33,7 @@ export default function EnhancedTableHead(props: EnhancedTableProps) {
                         key={ind}
                         align='left'
                         padding='normal'
+                        sx={{'.dark &': {color: '#eee'}}}
                     >
                         {titles[key].name}
                     </TableCell>

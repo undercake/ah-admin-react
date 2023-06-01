@@ -1,7 +1,7 @@
 import { useState, Component, FormEventHandler } from 'react'; import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormInput from '@/components/FormInput';
+import FormInput from '@/components/FormComponents/FormInput';
 import axios from '@/utils/Axios';
 import { urls } from '@/config';
 

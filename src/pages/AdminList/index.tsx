@@ -1,9 +1,9 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-06-01 06:10:53
- * @FilePath: /ah-admin-react/src/pages/EmployeeList/index.tsx
- * @Description: employee list page
+ * @LastEditTime: 2023-06-01 09:33:35
+ * @FilePath: /ah-admin-react/src/pages/AdminList/index.tsx
+ * @Description: Admin list page
  */
 import Card from '@/components/Card';
 import ListTable, { type editList, type rows, type editGroupList, type Actions } from "@/components/ListTable";
@@ -11,45 +11,31 @@ import { useEffect, useState } from 'react';
 import axios, { type resListData } from '@/utils/Axios';
 import ExportExcel from '@/utils/ExportExcel';
 import { urls } from '@/config';
-import EmployeeEditor from '@/components/EditDialogs/Employee';
+// import AdminEditor from '@/components/EditDialogs/Admin';
 
-interface Employee {
-    id: number;
-    avatar: string;
-    name: string;
-    gender: number;
-    phone: string;
-    birth_date: string;
-    intro: string;
-    note: string;
-    address: string;
-    create_time: string;
-    deleted: number;
-    grade: number;
-    id_code: string;
-    img: string;
-    origin: string;
-    pinyin: string;
-    pym: string;
-    work_date: string;
-    workee: string;
-    wx_id: number
+interface Admin {
+    full_name : string;
+    group_name: string;
+    id        : number;
+    mobile    : string;
+    user_group: number;
+    user_name : string;
 }
 
 const rows: rows = {
-    avatar: { type: 'avatar', name: '头像' },
-    name: { type: 'string', name: '姓名' },
-    gender: { type: 'options', name: '性别', value: { 0: '男', 1: '女' } },
-    phone: { type: 'string', name: '手机号' },
-    age: { type: 'string', name: '年龄' },
-    intro: { type: 'string', name: '简介' },
-    note: { type: 'string', name: '备注' },
+    full_name: { type: 'string', name: '姓名' },
+    user_name: { type: 'string', name: '登录名' },
+    // gender: { type: 'options', name: '性别', value: { 0: '男', 1: '女' } },
+    mobile: { type: 'string', name: '手机号' },
+    // age: { type: 'string', name: '年龄' },
+    // intro: { type: 'string', name: '简介' },
+    // note: { type: 'string', name: '备注' },
 }
 
 const current_date = new Date();
 
-function EmployeeList() {
-    const [data, setData] = useState<Employee[]>([]);
+function AdminList() {
+    const [data, setData] = useState<Admin[]>([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount] = useState(0);
@@ -57,13 +43,13 @@ function EmployeeList() {
     const [searchStr, setSearchStr] = useState('');
 
     const getData = () => {
-        const url = urls.employee_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
+        const url = urls.admin_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
         // @ts-ignore
         const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(url, { search: searchStr });
         // @ts-ignore
-        $axios.then((res: resListData<Employee>) => {
+        $axios.then((res: resListData<Admin>) => {
             // @ts-ignore
-            setData(res.data.map((d: Employee) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
+            setData(res.data.map((d: Admin) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
@@ -87,11 +73,11 @@ function EmployeeList() {
     }
 
     const handleDelete = (id: number) => {
-        axios.delete(urls.employee_delete + `/id/${id}`).then(getData);
+        axios.delete(urls.admin_delete + `/id/${id}`).then(getData);
     }
 
     const handleDeleteList = (ids: number[]) => {
-        axios.post(urls.employee_delete, { ids }).then(getData);
+        axios.post(urls.admin_delete, { ids }).then(getData);
     }
 
     const handleExportExcel = (ids: number[]) => {
@@ -143,11 +129,11 @@ function EmployeeList() {
                 searchStr={searchStr}
                 searchLabel='搜索员工'
             />
-            {editId >= 0 ? <EmployeeEditor
+            {/* {editId >= 0 ? <AdminEditor
                 handleClose={handleEditorClose}
                 id={editId}
-            /> : null}
+            /> : null} */}
         </Card>);
 }
 
-export default EmployeeList;
+export default AdminList;

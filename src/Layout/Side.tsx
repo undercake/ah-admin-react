@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-05-16 09:06:51
+ * @LastEditTime: 2023-05-30 05:53:51
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -19,6 +19,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Popover from '@mui/material/Popover';
+import ScrollView from '@/components/ScrollView';
 import { getLists, right } from '@/utils/Rights';
 import MittBus from '@/utils/MittBus';
 import './styles/side.scss';
@@ -101,14 +102,6 @@ function Side({ open }: { open: boolean }) {
     const [currentTarget, setCurrentTarget] = useState<string>('');
     const [popoverCondition, setPopoverCondition] = useState<string>('');
 
-    let count = 0;
-    const errs = [
-        {type: 'success', msg: '我就是2个错误'},
-        {type: 'error', msg: '我就是3个错误'},
-        {type: 'warning', msg: '我就是4个错误'},
-        {type: 'info', msg: '我就是5个错误'},
-    ]
-
     const findHoverTarget = (e: HTMLElement): HTMLElement | null => {
         const className = 'MuiButtonBase-root';
         if (e === null) return null;
@@ -161,121 +154,126 @@ function Side({ open }: { open: boolean }) {
     return (
         <Drawer
             className={
-                'main-layout pt-16 transition-width duration-400 overflow-x-hidden ' +
-                (open ? (menuList.length > 0 ? 'open w-56' : 'w-0') : 'closed w-12')
+                'main-layout transition-width duration-400 ' +
+                (open ? (menuList.length > 0 ? 'open w-62' : 'w-0') : 'closed w-16')
             }
+            sx={{
+                paddingTop: '5.6rem',
+            }}
             variant="permanent"
         >
-            <List className={'mt-16 ' + (open ? (menuList.length > 0 ? 'open w-56' : 'w-0') : 'closed w-12')} sx={{ paddingLeft: '.5rem' }}>
-                        <ListItemButton
-                            onClick={(e) => {MittBus.emit('msgEmit', errs[count]); count++; if(count == 4) count = 0;}}
-                            tabIndex={0}
-                        >
-                            <ListItemText primary='显示错误' />
-                        </ListItemButton>
-                {menuList.map((item: right, index: number) => item.children.length > 0 ?
-                    // <ListItems key={index} item={item} index={index} />
-                    <Fragment key={index}>
-                        <ListItemButton
-                            onClick={(e) => {
-                                handlePopoverOpen(e, item.path);
-                                tongleCol(item.path);
-                            }}
-                            onMouseEnter={(e) => showTips(e, item.path)}
-                            onMouseLeave={closeTips}
-                            className={
-                                (path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path
-                                    ? activeMenu
-                                    : 'hover:bg-purple-light dark:hover:bg-purple-darkest') + ' h-12 rounded-xl mb-2'
-                            }
-                            tabIndex={0}
-                            sx={{
-                                paddingLeft: open ? '1rem' : 0,
-                                marginBottom: '.5rem',
-                                borderRadius: '.75rem',
-                                backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
-                                color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
-                                '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
-                                '&:hover': { backgroundColor: 'rgb(237 231 246)' }
-                            }}
-                        >
-                            <ListItemIcon sx={{ paddingLeft: '.6rem' }}>
-                                <i
-                                    className={
-                                        item.icon +
-                                        ' dark:text-white ' +
-                                        (path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path
-                                            ? activeMenu
-                                            : '')
-                                    }
-                                />
-                            </ListItemIcon>
-                            <ListItemText primary={item.name} />
-                            {open ? currentTarget == item.path || currentTarget.indexOf(item.path) == 0 ? <ExpandLess /> : <ExpandMore /> : null}
-                        </ListItemButton>
-                        {open ? (
-                            <Collapse key={`col-${index}`} in={currentTarget == item.path || currentTarget.indexOf(item.path) == 0} className='transition-height duration-300' timeout={200}>
-                                {handleChildMap({ child: item.children, path, index, open })}
-                            </Collapse>
-                        ) : (<>
-                            <Tips key={`tips-1-${index}`} index={index} tipsEl={tipsEl} tips={tips} item={item} />
-                            <Popover
-                                key={`pop-${index}`}
+            <ScrollView
+                style={{
+                    height: 'calc(100vh - 5.6rem)',
+                    paddingLeft: '10px',
+                    paddingRight: '10px'
+                }}
+            >
+                <List className={'mt-16 ' + (open ? (menuList.length > 0 ? 'open w-56' : 'w-0') : 'closed w-12')} sx={{ paddingLeft: '.5rem' }}>
+                    {menuList.map((item: right, index: number) => item.children.length > 0 ?
+                        // <ListItems key={index} item={item} index={index} />
+                        <Fragment key={index}>
+                            <ListItemButton
+                                onClick={(e) => {
+                                    handlePopoverOpen(e, item.path);
+                                    tongleCol(item.path);
+                                }}
+                                onMouseEnter={(e) => showTips(e, item.path)}
+                                onMouseLeave={closeTips}
+                                className={
+                                    (path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path
+                                        ? activeMenu
+                                        : 'hover:bg-purple-light dark:hover:bg-purple-darkest') + ' h-12 rounded-xl mb-2'
+                                }
+                                tabIndex={0}
                                 sx={{
-                                    marginLeft: '3.5rem'
+                                    paddingLeft: open ? '1rem' : 0,
+                                    marginBottom: '.5rem',
+                                    borderRadius: '.75rem',
+                                    backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
+                                    color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                    '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
+                                    '&:hover': { backgroundColor: 'rgb(237 231 246)' }
                                 }}
-                                anchorEl={anchorEl}
-                                open={popoverCondition == item.path}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'right'
-                                }}
-                                transformOrigin={{
-                                    vertical: 'center',
-                                    horizontal: 'right'
-                                }}
-                                onClose={handlePopoverClose}
-                                disableRestoreFocus
                             >
-                                {handleChildMap({ child: item.children, type: 'pop', path, index, open })}
-                            </Popover>
-                        </>)
-                        }
-                    </Fragment>
-                    :
-                    <Fragment key={index}>
-                        <ListItemButton
-                            key={index}
-                            className={
-                                (path.indexOf(item.path) == 0 || path == item.path ? activeMenu : '') + ' h-12 rounded-xl mb-2'
+                                <ListItemIcon sx={{ paddingLeft: '.6rem' }}>
+                                    <i
+                                        className={
+                                            item.icon +
+                                            ' dark:text-white ' +
+                                            (path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path
+                                                ? activeMenu
+                                                : '')
+                                        }
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={item.name} />
+                                {open ? currentTarget == item.path || currentTarget.indexOf(item.path) == 0 ? <ExpandLess /> : <ExpandMore /> : null}
+                            </ListItemButton>
+                            {open ? (
+                                <Collapse key={`col-${index}`} in={currentTarget == item.path || currentTarget.indexOf(item.path) == 0} className='transition-height duration-300' timeout={200}>
+                                    {handleChildMap({ child: item.children, path, index, open })}
+                                </Collapse>
+                            ) : (<>
+                                <Tips key={`tips-1-${index}`} index={index} tipsEl={tipsEl} tips={tips} item={item} />
+                                <Popover
+                                    key={`pop-${index}`}
+                                    sx={{
+                                        marginLeft: '3.5rem'
+                                    }}
+                                    anchorEl={anchorEl}
+                                    open={popoverCondition == item.path}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'right'
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'center',
+                                        horizontal: 'right'
+                                    }}
+                                    onClose={handlePopoverClose}
+                                    disableRestoreFocus
+                                >
+                                    {handleChildMap({ child: item.children, type: 'pop', path, index, open })}
+                                </Popover>
+                            </>)
                             }
-                            onClick={() => push(item.path)}
-                            onMouseEnter={(e) => showTips(e, item.path)}
-                            onMouseLeave={closeTips}
-                            sx={{
-                                paddingLeft: open ? '1rem' : 0,
-                                marginBottom: '.5rem',
-                                borderRadius: '.75rem',
-                                backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
-                                color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
-                                '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
-                                '&:hover': { backgroundColor: 'rgb(237 231 246)' }
-                            }}
-                        >
-                            <ListItemIcon sx={{ paddingLeft: '.6rem' }}>
-                                <i
-                                    className={
-                                        item.icon +
-                                        ' dark:text-white ' +
-                                        (path.indexOf(item.path) == 0 || path == item.path ? activeMenu : '')
-                                    }
-                                />
-                            </ListItemIcon>
-                            <ListItemText primary={item.name} />
-                        </ListItemButton>
-                        {open ? null : <Tips key={`tips-1-${index}`} index={index} tipsEl={tipsEl} tips={tips} item={item} />}
-                    </Fragment>)}
-            </List>
+                        </Fragment>
+                        :
+                        <Fragment key={index}>
+                            <ListItemButton
+                                key={index}
+                                className={
+                                    (path.indexOf(item.path) == 0 || path == item.path ? activeMenu : '') + ' h-12 rounded-xl mb-2'
+                                }
+                                onClick={() => push(item.path)}
+                                onMouseEnter={(e) => showTips(e, item.path)}
+                                onMouseLeave={closeTips}
+                                sx={{
+                                    paddingLeft: open ? '1rem' : 0,
+                                    marginBottom: '.5rem',
+                                    borderRadius: '.75rem',
+                                    backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
+                                    color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                    '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
+                                    '&:hover': { backgroundColor: 'rgb(237 231 246)' }
+                                }}
+                            >
+                                <ListItemIcon sx={{ paddingLeft: '.6rem' }}>
+                                    <i
+                                        className={
+                                            item.icon +
+                                            ' dark:text-white ' +
+                                            (path.indexOf(item.path) == 0 || path == item.path ? activeMenu : '')
+                                        }
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={item.name} />
+                            </ListItemButton>
+                            {open ? null : <Tips key={`tips-1-${index}`} index={index} tipsEl={tipsEl} tips={tips} item={item} />}
+                        </Fragment>)}
+                </List>
+            </ScrollView>
         </Drawer>
     );
 }

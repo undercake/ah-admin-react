@@ -13,6 +13,8 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+let timer: NodeJS.Timeout|0 = 0;
+
 function Massager() {
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState<Msg>({ type: 'success', msg: '' });
@@ -32,6 +34,11 @@ function Massager() {
             setMsg(msg);
             setOpen(true);
             console.log(msg);
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                handleClose();
+            },
+            13000);
         });
     }, []);
     return (

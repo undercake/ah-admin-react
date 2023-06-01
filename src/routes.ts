@@ -45,5 +45,30 @@ const routes: RouteConfig[] = [
         path     : '/employee_list',
         component: () => import(/* webpackChunkName: "EmployeeList" */ './pages/EmployeeList')
     },
+    {
+        name     : 'EmployeeDeleted',
+        path     : '/employee_deleted',
+        component: () => import(/* webpackChunkName: "EmployeeDeleted" */ './pages/EmployeeDeleted')
+    },
+    {
+        name     : 'CustomerList',
+        path     : '/customer_list',
+        component: () => import(/* webpackChunkName: "CustomerList" */ './pages/CustomerList')
+    },
+    {
+        name     : 'CustomerDeleted',
+        path     : '/customer_deleted',
+        component: () => import(/* webpackChunkName: "CustomerDeleted" */ './pages/CustomerDeleted')
+    },
+    {
+        name     : 'AdminList',
+        path     : '/admin_list',
+        component: () => import(/* webpackChunkName: "AdminList" */ './pages/AdminList')
+    },
+    {
+        name     : 'AdminDeleted',
+        path     : '/admin_deleted',
+        component: () => import(/* webpackChunkName: "AdminDeleted" */ './pages/AdminDeleted')
+    },
 ];
 export default routes;
