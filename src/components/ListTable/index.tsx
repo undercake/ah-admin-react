@@ -35,13 +35,14 @@ export type editList =
         [key: string] : any
     }[];
 
-
-export interface rows {
-    [key: string]: {
+export interface itemInRows {
         type  : 'string' | 'options' | 'avatar' | 'image';
         name  : string;
         value?: any;
-    }
+}
+
+export interface rows {
+    [key: string]: itemInRows;
 }
 
 export interface editGroupList {

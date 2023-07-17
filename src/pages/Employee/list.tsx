@@ -12,60 +12,8 @@ import axios, { type resListData } from '@/utils/Axios';
 import ExportExcel from '@/utils/ExportExcel';
 import { urls } from '@/config';
 import EmployeeEditor from '@/components/EditDialogs/Employee';
+import type Employee from './Employee.d';
 
-export interface Employee {
-    id: number;
-    EmployeeOID: string;
-    ItemCode:string; // 编号
-    FullName: string; // 姓名
-    Sex: string;
-    Tel: string;
-    Birthday: string;
-    Comment: string; // 说明
-    Workday: string; //参工日期
-    Department: string;
-    Address: string;
-    IDCode: string;
-    HomeTel: string;
-    WarrantorTel: string;
-    ItemLevel: string; //员工等级
-    BlameRecord: string; // 过失记录
-    pym: string;
-}
-
-/*
-interface Employee {
-    id: number;
-    avatar: string;
-    name: string;
-    gender: number;
-    phone: string;
-    birth_date: string;
-    intro: string;
-    note: string;
-    address: string;
-    create_time: string;
-    deleted: number;
-    grade: number;
-    id_code: string;
-    img: string;
-    origin: string;
-    pinyin: string;
-    pym: string;
-    work_date: string;
-    workee: string;
-    wx_id: number
-}
-
-const rows: rows = {
-    avatar: { type: 'avatar', name: '头像' },
-    name: { type: 'string', name: '姓名' },
-    gender: { type: 'options', name: '性别', value: { 0: '男', 1: '女' } },
-    phone: { type: 'string', name: '手机号' },
-    age: { type: 'string', name: '年龄' },
-    intro: { type: 'string', name: '简介' },
-    note: { type: 'string', name: '备注' },
-}*/
 const rows: rows = {
     FullName: { type: 'string', name: '姓名' },
     Sex: { type: 'string', name: '性别'},
@@ -127,11 +75,11 @@ function EmployeeList() {
     const handleExportExcel = (ids: number[]) => {
         console.log(ids);
         const exportData: (string | number)[][] = [];
-        data.forEach(({ id, name, phone, id_code, birth_date, address, workee, note, gender, intro }) => {
+        data.forEach(({ id, FullName, Tel, IDCode, Birthday, Address, Department, Comment, Sex }) => {
             if (ids.includes(id))
-                exportData.push([id, name, ["男", "女"][gender], phone, address, id_code, birth_date == '0000-00-00' ? '' : birth_date, intro, workee, note]);
+                exportData.push([id, FullName, Sex, Tel, Address, IDCode, Birthday == '0000-00-00' ? '' : Birthday, Comment, Department, Comment]);
         });
-        exportData.unshift(['ID', '姓名', '性别', '电话', '地址', '身份证号码', '出生年月', '描述', '工作内容', '备注']);
+        exportData.unshift(['ID', '姓名', '性别', '电话', '地址', '身份证号码', '出生日期', '说明', '部门', '说明']);
         ExportExcel(exportData, `员工列表-${page}.xlsx`);
     }
 

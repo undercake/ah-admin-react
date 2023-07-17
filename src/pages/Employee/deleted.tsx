@@ -10,56 +10,7 @@ import ListTable, { type editList, type rows, type Actions } from "@/components/
 import { useEffect, useState } from 'react';
 import axios, { type resListData } from '@/utils/Axios';
 import { urls } from '@/config';
-/*
-interface Employee {
-    id: number;
-    avatar: string;
-    name: string;
-    gender: number;
-    phone: string;
-    birth_date: string;
-    intro: string;
-    note: string;
-    address: string;
-    create_time: string;
-    deleted: number;
-    grade: number;
-    id_code: string;
-    img: string;
-    origin: string;
-    pinyin: string;
-    pym: string;
-    work_date: string;
-    workee: string;
-    wx_id: number
-}
-
-const rows: rows = {
-    name: { type: 'string', name: '姓名' },
-    gender: { type: 'options', name: '性别', value: { 0: '男', 1: '女' } },
-    phone: { type: 'string', name: '手机号' },
-    age: { type: 'string', name: '年龄' },
-    note: { type: 'string', name: '备注' },
-}*/
-export interface Employee {
-    id: number;
-    EmployeeOID: string;
-    ItemCode:string; // 编号
-    FullName: string; // 姓名
-    Sex: string;
-    Tel: string;
-    Birthday: string;
-    Comment: string; // 说明
-    Workday: string; //参工日期
-    Department: string;
-    Address: string;
-    IDCode: string;
-    HomeTel: string;
-    WarrantorTel: string;
-    ItemLevel: string; //员工等级
-    BlameRecord: string; // 过失记录
-    pym: string;
-}
+import type Employee from './Employee.d';
 
 const rows: rows = {
     FullName: { type: 'string', name: '姓名' },

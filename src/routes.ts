@@ -43,12 +43,12 @@ const routes: RouteConfig[] = [
     {
         name     : 'EmployeeList',
         path     : '/employee_list',
-        component: () => import(/* webpackChunkName: "EmployeeList" */ './pages/EmployeeList')
+        component: () => import(/* webpackChunkName: "EmployeeList" */ './pages/Employee/list')
     },
     {
         name     : 'EmployeeDeleted',
         path     : '/employee_deleted',
-        component: () => import(/* webpackChunkName: "EmployeeDeleted" */ './pages/EmployeeDeleted')
+        component: () => import(/* webpackChunkName: "EmployeeDeleted" */ './pages/Employee/deleted')
     },
     {
         name     : 'CustomerList',
