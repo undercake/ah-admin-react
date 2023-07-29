@@ -30,15 +30,15 @@ const routes: RouteConfig[] = [
         path     : '/index',
         component: () => import(/* webpackChunkName: "Index" */ './pages/dashboard')
     },
-    {
-        name     : 'Login',
-        path     : '/login',
-        component: () => import(/* webpackChunkName: "Login" */ './pages/login')
-    },
+    // {
+    //     name     : 'Login',
+    //     path     : '/login',
+    //     component: () => import(/* webpackChunkName: "Login" */ './pages/login')
+    // },
     {
         name     : 'MyPass',
         path     : '/my_pass',
-        component: () => import(/* webpackChunkName: "MyPass" */ './pages/my_pass')
+        component: () => import(/* webpackChunkName: "MyPass" */ './pages/MyPass')
     },
     {
         name     : 'EmployeeList',
@@ -51,14 +51,27 @@ const routes: RouteConfig[] = [
         component: () => import(/* webpackChunkName: "EmployeeDeleted" */ './pages/Employee/deleted')
     },
     {
-        name     : 'CustomerList',
-        path     : '/customer_list',
-        component: () => import(/* webpackChunkName: "CustomerList" */ './pages/CustomerList')
+        // 散户
+        name     : 'CustomerOther',
+        path     : '/customer_other',
+        component: () => import(/* webpackChunkName: "CustomerOther" */ './pages/Customer/others')
+    },
+    {
+        // 合同户
+        name     : 'CustomerContract',
+        path     : '/customer_contract',
+        component: () => import(/* webpackChunkName: "CustomerList" */ './pages/Customer/lists')
+    },
+    {
+        // 合同户
+        name     : 'CustomerOutdated',
+        path     : '/customer_outdated',
+        component: () => import(/* webpackChunkName: "CustomerOutdated" */ './pages/Customer/outdated')
     },
     {
         name     : 'CustomerDeleted',
         path     : '/customer_deleted',
-        component: () => import(/* webpackChunkName: "CustomerDeleted" */ './pages/CustomerDeleted')
+        component: () => import(/* webpackChunkName: "CustomerDeleted" */ './pages/Customer/deleted')
     },
     {
         name     : 'AdminList',

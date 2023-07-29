@@ -350,6 +350,9 @@ export default function ListTable({
                         <MenuItem value = {100}>100</MenuItem>
                         <MenuItem value = {150}>150</MenuItem>
                         <MenuItem value = {200}>200</MenuItem>
+                        <MenuItem value = {400}>400</MenuItem>
+                        <MenuItem value = {800}>800</MenuItem>
+                        <MenuItem value = {8000}>8000</MenuItem>
                     </Select>
                 </div>
                 <div className = "flex-initial w-10 leading-10">
@@ -380,11 +383,10 @@ export default function ListTable({
                 <div className = "flex-initial w-20 leading-10 pl-2">
                     页
                 </div>
-                <div className = "flex-initial w-20 leading-10 pl-2">
+                <div className = "flex-initial w-24 leading-10 pl-2">
                     共{count}条
                 </div>
             </div>
         </>
     );
 }
-// 

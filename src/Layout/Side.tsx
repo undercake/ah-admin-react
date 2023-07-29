@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-05-30 05:53:51
+ * @LastEditTime: 2023-07-25 17:33:02
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -171,7 +171,6 @@ function Side({ open }: { open: boolean }) {
             >
                 <List className={'mt-16 ' + (open ? (menuList.length > 0 ? 'open w-56' : 'w-0') : 'closed w-12')} sx={{ paddingLeft: '.5rem' }}>
                     {menuList.map((item: right, index: number) => item.children.length > 0 ?
-                        // <ListItems key={index} item={item} index={index} />
                         <Fragment key={index}>
                             <ListItemButton
                                 onClick={(e) => {
@@ -271,7 +270,8 @@ function Side({ open }: { open: boolean }) {
                                 <ListItemText primary={item.name} />
                             </ListItemButton>
                             {open ? null : <Tips key={`tips-1-${index}`} index={index} tipsEl={tipsEl} tips={tips} item={item} />}
-                        </Fragment>)}
+                        </Fragment>)
+                    }
                 </List>
             </ScrollView>
         </Drawer>

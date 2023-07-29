@@ -1,8 +1,8 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-06-01 04:49:16
- * @FilePath: /ah-admin-react/src/pages/CustomerDeleted/index.tsx
+ * @LastEditTime: 2023-07-25 11:56:07
+ * @FilePath: /ah-admin-react/src/pages/Customer/deleted.tsx
  * @Description : Customer list page
  */
 import Card from '@/components/Card';
@@ -10,22 +10,7 @@ import ListTable, { type editList, type rows, type Actions } from "@/components/
 import { useEffect, useState } from 'react';
 import axios, { type resListData } from '@/utils/Axios';
 import { urls } from '@/config';
-
-interface Customer {
-    id         : number,
-    name       : string,
-    mobile     : string,
-    black      : number,
-    pym        : string,
-    pinyin     : string,
-    del        : number,
-    create_time: string,
-    last_modify: string,
-    remark     : string,
-    total_money: string,
-    total_count: number,
-    type       : number,
-}
+import type Customer from './Customer.d'
 
 const rows: rows = {
     name  : { type: 'string', name: '姓名' },

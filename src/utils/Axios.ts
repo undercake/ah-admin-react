@@ -27,7 +27,7 @@ axios.interceptors.response.use(
     (res) => {
         let data = res;
         if (('status' in res) && ('statusText' in res)) data = res.data;
-        console.log('res', data);
+        // console.log('res', data);
 
         if (typeof data !== 'object') {
             mittBus.emit('msgEmit', { type: 'error', msg: '服务端异常！' });

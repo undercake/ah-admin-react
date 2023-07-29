@@ -67,7 +67,7 @@ const getUserRights = (fun: Function = () => {}) => {
                             all_rights = [];
                             data.rights.forEach((r) => (all_rights[r.id] = { ...r }));
                             all_rights.forEach((r) => r.parent == 0 && (user_rights[r.id] = { ...r }));
-                            all_rights.forEach((r) => r.parent != 0 && user_rights[r.parent].children.push({ ...r }));
+                            all_rights.forEach((r) => r.parent != 0 && user_rights[r.parent] && user_rights[r.parent].children.push({ ...r }));
                             for (let n = 0; n < user_rights.length; n++) {
                                 user_rights[n] && user_rights[n].children.sort((a, b) => a.sort - b.sort);
                             }
