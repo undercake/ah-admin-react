@@ -2,8 +2,10 @@ import { alpha } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
+import SaveIcon from '@mui/icons-material/Save';
 import { type ReactNode, useState, useEffect, Fragment } from 'react';
 
 export interface Actions {
@@ -22,11 +24,22 @@ interface EnhancedTableToolbarProps {
     onSearch          ?: (s: string) => void;
     searchLabel       ?: string;
     searchStr         ?: string;
+    loading           ?: boolean;
 }
 
 let timer: NodeJS.Timeout | 0 = 0;
 
-export default function EnhancedTableToolbar({ numSelected, selectedActions, nonSelectedActions, selected, showSearch = false, onSearch = () => { }, searchLabel = '搜索', searchStr='' }: EnhancedTableToolbarProps) {
+export default function EnhancedTableToolbar({
+    numSelected,
+    selectedActions,
+    nonSelectedActions,
+    selected,
+    showSearch = false,
+    loading = false,
+    onSearch = () => { },
+    searchLabel = '搜索',
+    searchStr=''
+}: EnhancedTableToolbarProps) {
     const [search, setSearch] = useState('');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [popIndex, setPopIndex] = useState(-1);
@@ -80,7 +93,25 @@ export default function EnhancedTableToolbar({ numSelected, selectedActions, non
                     id        = "tableTitle"
                     component = "div"
                 >
-                        {nonSelectedActions?.map(({ color = 'primary', name, icon, onClick }, index) => <Button key={index} color={color} variant="contained" onClick={() => onClick(selected as number[])} sx={{marginRight: '.5rem'}}><span style={{ marginRight: '.3rem' }}>{icon}</span> {name}</Button>)}
+                    {nonSelectedActions?.map(({
+                        color = 'primary',
+                        name,
+                        icon,
+                        onClick
+                        }, index) => (
+                            <LoadingButton
+                                key={index}
+                                color={color}
+                                variant="contained"
+                                onClick={() => onClick(selected as number[])}
+                                sx={{marginRight: '.5rem'}}
+                                loading={loading}
+                                loadingPosition="start"
+                            >
+                                <span style={{ marginRight: '.3rem' }}>{icon}</span>
+                                {name}
+                            </LoadingButton>
+                        ))}
                     {showSearch && <TextField
                         sx={{
                             marginLeft: '1rem',

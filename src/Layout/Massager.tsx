@@ -23,7 +23,7 @@ function Massager() {
     const handleClose = () => {
         setOpacity(0);
         setTimeout(() => {
-        setOpen(false);
+            setOpen(false);
         }, 300);
     };
     useEffect(() => {
@@ -40,6 +40,7 @@ function Massager() {
             },
             13000);
         });
+        mittBus.on('is_login', (i: boolean) => i && handleClose());
     }, []);
     return (
         <>

@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-07-25 17:33:02
+ * @LastEditTime: 2023-07-31 17:51:52
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -272,6 +272,32 @@ function Side({ open }: { open: boolean }) {
                             {open ? null : <Tips key={`tips-1-${index}`} index={index} tipsEl={tipsEl} tips={tips} item={item} />}
                         </Fragment>)
                     }
+
+                    <ListItemButton
+                        onClick={(e) => {}}
+                        onMouseEnter={(e) => showTips(e, '/exit')}
+                        onMouseLeave={closeTips}
+                        className='hover:bg-purple-light dark:hover:bg-purple-darkest h-12 rounded-xl mb-2'
+                        tabIndex={0}
+                        sx={{
+                            paddingLeft: open ? '1rem' : 0,
+                            marginBottom: '.5rem',
+                            borderRadius: '.75rem',
+                            '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
+                            '&:hover': { backgroundColor: 'rgb(237 231 246)' }
+                        }}
+                    >
+                        <ListItemIcon sx={{ paddingLeft: '.6rem' }}>
+                            <i
+                                className={
+                                    'fa-solid fa-sign-out' +
+                                    ' dark:text-white'
+                                }
+                            />
+                        </ListItemIcon>
+                        <ListItemText primary="退出登录" />
+                    </ListItemButton>
+                    {open ? <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit'}} />: null}
                 </List>
             </ScrollView>
         </Drawer>

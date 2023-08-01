@@ -96,7 +96,6 @@ function Login(props: Props) {
             .then((res: any) => {
                 if (res.code === 0) {
                     mittBus.emit('is_login', true);
-                    mittBus.emit('is_login', true);
                     handleLogin();
                 }
             })

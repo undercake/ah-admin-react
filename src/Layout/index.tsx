@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Card from '@mui/material/Card';
-import CircularProgress from '@mui/material/CircularProgress';
 import Header from './Header';
 import Side from './Side';
 import Massager from './Massager';
@@ -11,11 +10,8 @@ import checkLogin from '@/utils/checkLogin';
 import MittBus from '@/utils/MittBus';
 import RouteView from '@/components/RouteView';
 import ScrollView from '@/components/ScrollView';
+import Loading from '@/components/Status/Loading';
 import './styles/main.scss';
-
-const loading = () => <div style={{ margin: 'auto', marginTop: '1rem', textAlign: 'center' }}>
-    <CircularProgress color="secondary" />
-</div>;
 
 interface CastLoginProps {
     handleLogin: () => void;
@@ -66,7 +62,7 @@ export default function Layout(props: LayoutProps) {
                             sx={{ flexGrow: 1, p: 3 }}
                         >
                             <ScrollView style={{ height: 'calc(100vh - 8rem)', overflowY: 'auto', borderRadius: '1rem' }}>
-                                <RouteView DefaultComponent={loading} />
+                                <RouteView DefaultComponent={Loading} />
                             </ScrollView>
                         </Box>
                     </Box>

@@ -15,7 +15,9 @@ import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
-import Card from '../Card';
+import Card from '@/components/Card';
+import Loading from '@/components/Status/Loading';
+import Empty from '@/components/Status/Empty';
 
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar, { type Actions as Action } from './EnhancedTableToolbar';
@@ -69,6 +71,7 @@ interface EnhancedTableProps {
     onSearch           ?: (s: string) => void;
     searchLabel        ?: string;
     searchStr          ?: string;
+    loading            ?: boolean;
 }
 
 const ComponentByType = ({ type, data, rowVal }: { type: 'string' | 'options' | 'avatar' | 'image'; data: any, rowVal: any }) => {
@@ -98,6 +101,7 @@ export default function ListTable({
     nonSelectedActions = [],
     rows,
     showSearch  = false,
+    loading     = false,
     onSearch    = () => { },
     searchStr   = '',
     searchLabel = '搜索'
@@ -161,6 +165,7 @@ export default function ListTable({
                     onSearch           = {onSearch}
                     searchLabel        = {searchLabel}
                     searchStr          = {searchStr}
+                    loading            = {loading}
                 />
                 <TableContainer>
                     <Table
@@ -173,9 +178,26 @@ export default function ListTable({
                             onSelectAllClick = {handleSelectAllClick}
                             rowCount         = {length}
                             titles           = {rows}
+                            loading          = {loading || data.length === 0}
                         />
                         <TableBody>
-                            {data.map((row, ind) => {
+                            {loading ?
+
+                            <tr style={{width: '100%'}}>
+                                <td colSpan={Object.keys(rows).length + 1}>
+                                    <Loading />
+                                    </td>
+                                </tr>
+                                :
+                                data.length === 0 ?
+                                    <tr style={{width: '100%'}}>
+                                        <td colSpan={Object.keys(rows).length + 1} className='text-center'>
+                                            <Empty fontSize='4rem' className='text-gray-500 dark:text-gray-200' />
+                                            什么都没有了
+                                        </td>
+                                    </tr>
+                                    :
+                                data.map((row, ind) => {
                                 const isItemSelected = isSelected(row.id);
                                 const labelId        = `enhanced-table-checkbox-${ind}`;
                                 const borderBottom   = length == ind + 1 ? 'none' : '1px solid rgba(224, 224, 224, 1)';

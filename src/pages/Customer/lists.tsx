@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-07-28 11:37:06
+ * @LastEditTime: 2023-07-30 14:32:37
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -43,7 +43,7 @@ function List({type = 0} : {type?: number}) {
         console.log(cus_urls[type])
         const url = cus_urls[type] + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
           // @ts-ignore
-        const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(url, { search: searchStr });
+        const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(urls.customer_search, { search: searchStr });
           // @ts-ignore
         $axios.then((res: resListData<Customer>) => {
               // @ts-ignore
@@ -88,14 +88,14 @@ function List({type = 0} : {type?: number}) {
                     `${Tel1} ${Tel2} ${Tel3}`,
                     Address,
                     ['普通客户', 'VIP', '重要领导'][F1],
-                    // TotalCount,
-                    // TotalMoney,
-                    // BeginDate.startsWith('0000') || BeginDate.startsWith('2222') ? '' : BeginDate,
-                    // EndDate.startsWith('0000') || EndDate.startsWith('2222') ? '' : EndDate,
-                    // ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'][UserType]
+                    TotalCount,
+                    TotalMoney,
+                    BeginDate.startsWith('0000') || BeginDate.startsWith('2222') ? '' : BeginDate,
+                    EndDate.startsWith('0000') || EndDate.startsWith('2222') ? '' : EndDate,
+                    ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'][UserType]
                 ]);
         });
-        exportData.unshift(['姓名', '电话', '地址', '客户级别'/*, '剩余次数', '余额', '开始时间', '到期时间', '客户类型'*/]);
+        exportData.unshift(['姓名', '电话', '地址', '客户级别', '剩余次数', '余额', '开始时间', '到期时间', '客户类型']);
         ExportExcel(exportData, `员工列表-${page}.xlsx`);
     }
 

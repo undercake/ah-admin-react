@@ -8,11 +8,16 @@ interface EnhancedTableProps {
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     rowCount: number;
     titles: {[key:string]: any}
+    loading?: boolean;
 }
 
-export default function EnhancedTableHead(props: EnhancedTableProps) {
-    const { onSelectAllClick, numSelected, rowCount, titles } =
-        props;
+export default function EnhancedTableHead({
+    onSelectAllClick,
+    numSelected,
+    rowCount,
+    titles,
+    loading=false
+}: EnhancedTableProps) {
 
     return (
         <TableHead>
@@ -23,6 +28,7 @@ export default function EnhancedTableHead(props: EnhancedTableProps) {
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
+                        disabled={loading}
                         inputProps={{
                             'aria-label': 'select all desserts',
                         }}

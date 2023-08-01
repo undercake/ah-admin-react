@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-06-01 09:33:35
+ * @LastEditTime: 2023-07-30 15:11:24
  * @FilePath: /ah-admin-react/src/pages/AdminList/index.tsx
  * @Description: Admin list page
  */
@@ -41,13 +41,12 @@ function AdminList() {
     const [count, setCount] = useState(0);
     const [editId, setEditId] = useState(-1);
     const [searchStr, setSearchStr] = useState('');
+    const [loading, setLoading] = useState(true);
 
     const getData = () => {
         const url = urls.admin_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
         // @ts-ignore
-        const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(url, { search: searchStr });
-        // @ts-ignore
-        $axios.then((res: resListData<Admin>) => {
+        axios.get(url).then((res: resListData<Admin>) => {
             // @ts-ignore
             setData(res.data.map((d: Admin) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
             setRowsPerPage(res.count_per_page);
@@ -124,10 +123,7 @@ function AdminList() {
                 onChangeRowsPerPage={e => { setPage(1); setRowsPerPage(e) }}
                 selectedActions={selectedActions}
                 nonSelectedActions={nonSelectedActions}
-                showSearch
-                onSearch={handleSearch}
-                searchStr={searchStr}
-                searchLabel='搜索员工'
+                loading={loading}
             />
             {/* {editId >= 0 ? <AdminEditor
                 handleClose={handleEditorClose}
