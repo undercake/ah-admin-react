@@ -54,13 +54,20 @@ function SwitchDark() {
     const [isDark, setIsDark] = useState(true);
 
     useEffect(() => {
-        const isDark = localGet('isDark', true);
-        setIsDark(isDark);
+        // const isDark = localGet('isDark', true);
+        // setIsDark(isDark);
+        const darkModeMediaQuery = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+        setIsDark(darkModeMediaQuery.matches);
+        // window.addEventListener('')
+    darkModeMediaQuery.addListener(() => {
+    //   this.isDarkMode = darkModeMediaQuery.matches;
+        setIsDark(darkModeMediaQuery.matches);
+    });
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        localSet('isDark', isDark);
+        // localSet('isDark', isDark);
         (document.querySelector('html') as HTMLElement).classList.toggle('dark', isDark);
         // eslint-disable-next-line
     }, [isDark]);

@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head><link rel="stylesheet" href="/static/aws/css/all.css" /></head>
+      <head><link rel="stylesheet" href="/static/aws/css/all.css" /><meta name="color-scheme" content="light dark" /></head>
       <body>{children}</body>
     </html>
   )

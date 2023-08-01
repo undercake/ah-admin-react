@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:46
- * @LastEditTime: 2023-05-31 02:33:55
+ * @LastEditTime: 2023-08-01 17:29:19
  * @FilePath: /ah-admin-react/src/Layout/Header.tsx
  * @Description: header
  */
@@ -28,15 +28,15 @@ function Header({ handleDrawerOpen, noMenu = false }: { handleDrawerOpen: () => 
     }, []);
     return (
         <AppBar className="dark:bg-gray-900 dark:color dark:text-gray-100 py-3 px-6" color="inherit" sx={{ boxShadow: 0 }}>
-            <Toolbar>
-                <Box className="flex w-56">
+            <Toolbar className='flex'>
+                <Box className="flex-none flex w-56">
                     <Box className="flex-auto"></Box>
                     {noMenu ? null :
                         <Avatar className='bg-purple-light hover:bg-purple-lighter text-purple-dark hover:text-purple-light cursor-pointer mr-10' color="inherit" variant="rounded" onClick={handleDrawerOpen} sx={{ borderRadius: '.7rem', width: '34px', height: '34px' }}>
                             <MenuIcon />
                         </Avatar>}
                 </Box>
-                <Typography variant="h6" noWrap component="div">
+                <Typography className='flex-auto text-center pr-40' variant="h6" noWrap component="div">
                     {title}
                 </Typography>
                 <SwitchDark />

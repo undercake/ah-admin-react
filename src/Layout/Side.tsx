@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-07-31 17:51:52
+ * @LastEditTime: 2023-08-01 17:18:28
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -162,11 +162,12 @@ function Side({ open }: { open: boolean }) {
             }}
             variant="permanent"
         >
-            <ScrollView
+            {menuList.length > 0 ? <ScrollView
                 style={{
                     height: 'calc(100vh - 5.6rem)',
                     paddingLeft: '10px',
-                    paddingRight: '10px'
+                    paddingRight: '10px',
+                    minWidth: '2rem',
                 }}
             >
                 <List className={'mt-16 ' + (open ? (menuList.length > 0 ? 'open w-56' : 'w-0') : 'closed w-12')} sx={{ paddingLeft: '.5rem' }}>
@@ -299,7 +300,7 @@ function Side({ open }: { open: boolean }) {
                     </ListItemButton>
                     {open ? <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit'}} />: null}
                 </List>
-            </ScrollView>
+            </ScrollView> : null}
         </Drawer>
     );
 }
