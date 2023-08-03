@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-08-01 17:18:28
+ * @LastEditTime: 2023-08-03 17:08:26
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -24,6 +24,8 @@ import { getLists, right } from '@/utils/Rights';
 import MittBus from '@/utils/MittBus';
 import './styles/side.scss';
 import { onPathChange, get, push } from '@/utils/Router';
+import { urls } from '@/config';
+import axios from '@/utils/Axios';
 
 const activeMenu = 'text-purple-dark dark:text-purple-light bg-purple-light dark:bg-purple-dark';
 const activeSubMenu = 'text-purple-dark dark:text-purple-lighter';
@@ -138,6 +140,12 @@ function Side({ open }: { open: boolean }) {
         path == '/' || path == '' ? (target = '/index') : (target = '/' + get().split('/')[1]);
         return target;
     };
+
+    const handleExit = () => {
+        axios.get(urls.logout).then(() => MittBus.emit('is_login', false));
+        MittBus.emit('msgEmit', { type: 'success', msg: '退出成功' });
+    }
+
 
     useEffect(() => {
         getLists(setMenuList);
@@ -275,9 +283,9 @@ function Side({ open }: { open: boolean }) {
                     }
 
                     <ListItemButton
-                        onClick={(e) => {}}
                         onMouseEnter={(e) => showTips(e, '/exit')}
                         onMouseLeave={closeTips}
+                        onClick={handleExit}
                         className='hover:bg-purple-light dark:hover:bg-purple-darkest h-12 rounded-xl mb-2'
                         tabIndex={0}
                         sx={{
@@ -298,7 +306,7 @@ function Side({ open }: { open: boolean }) {
                         </ListItemIcon>
                         <ListItemText primary="退出登录" />
                     </ListItemButton>
-                    {open ? <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit'}} />: null}
+                    {open ? null : <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit'}} />}
                 </List>
             </ScrollView> : null}
         </Drawer>

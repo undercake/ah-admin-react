@@ -11,7 +11,9 @@ import MittBus from '@/utils/MittBus';
 import RouteView from '@/components/RouteView';
 import ScrollView from '@/components/ScrollView';
 import Loading from '@/components/Status/Loading';
+import { urls } from '@/config';
 import './styles/main.scss';
+import axios from '@/utils/Axios';
 
 interface CastLoginProps {
     handleLogin: () => void;
@@ -34,11 +36,18 @@ function CastLogin(props: CastLoginProps) {
 export default function Layout(props: LayoutProps) {
     const [open, setOpen] = useState(true);
 
-    const [is_login, setIsLogin] = useState<boolean>(true);
+    const [is_login, setIsLogin] = useState<boolean>(false);
+
+    const heart_beat = ()=>{
+        axios.get(urls.heart_beat).then(console.log);
+    }
 
     useEffect(() => {
         MittBus.on('is_login', (i: boolean) => setIsLogin(i));
         checkLogin((e: boolean) => setIsLogin(e));
+        setInterval(() => {
+            is_login && heart_beat();
+        }, 1440 / 4 * 1000);
         // eslint-disable-next-line
     }, []);
 

@@ -18,6 +18,7 @@ import Image from 'next/image';
 import Card from '@/components/Card';
 import Loading from '@/components/Status/Loading';
 import Empty from '@/components/Status/Empty';
+import Error from '@/components/Status/Error';
 
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar, { type Actions as Action } from './EnhancedTableToolbar';
@@ -72,6 +73,7 @@ interface EnhancedTableProps {
     searchLabel        ?: string;
     searchStr          ?: string;
     loading            ?: boolean;
+    error              ?: boolean;
 }
 
 const ComponentByType = ({ type, data, rowVal }: { type: 'string' | 'options' | 'avatar' | 'image'; data: any, rowVal: any }) => {
@@ -102,6 +104,7 @@ export default function ListTable({
     rows,
     showSearch  = false,
     loading     = false,
+    error       = false,
     onSearch    = () => { },
     searchStr   = '',
     searchLabel = '搜索'
@@ -197,6 +200,14 @@ export default function ListTable({
                                         </td>
                                     </tr>
                                     :
+                                    error ?
+                                        <tr style={{width: '100%'}}>
+                                            <td colSpan={Object.keys(rows).length + 1} className='text-center'>
+                                                <Error fontSize='4rem' className='text-gray-500 dark:text-gray-200' />
+                                                出错了
+                                            </td>
+                                        </tr>
+                                        :
                                 data.map((row, ind) => {
                                 const isItemSelected = isSelected(row.id);
                                 const labelId        = `enhanced-table-checkbox-${ind}`;

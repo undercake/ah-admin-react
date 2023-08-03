@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-07-30 15:11:24
+ * @LastEditTime: 2023-08-02 16:08:01
  * @FilePath: /ah-admin-react/src/pages/AdminList/index.tsx
  * @Description: Admin list page
  */
@@ -42,6 +42,7 @@ function AdminList() {
     const [editId, setEditId] = useState(-1);
     const [searchStr, setSearchStr] = useState('');
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     const getData = () => {
         const url = urls.admin_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
@@ -53,6 +54,11 @@ function AdminList() {
             setPage(res.current_page);
             setCount(res.count)
             console.log(res);
+            setLoading(false);
+        }).catch(e => {
+            console.log(e);
+            setError(true);
+            setLoading(false);
         });
     }
 
@@ -124,6 +130,7 @@ function AdminList() {
                 selectedActions={selectedActions}
                 nonSelectedActions={nonSelectedActions}
                 loading={loading}
+                error={error}
             />
             {/* {editId >= 0 ? <AdminEditor
                 handleClose={handleEditorClose}

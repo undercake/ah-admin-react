@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-07-30 14:32:37
+ * @LastEditTime: 2023-08-02 11:12:40
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -20,8 +20,10 @@ const rows: rows = {
     Tel2:{type: 'string',name: '电话'},
     Tel3:{type: 'string',name: ''},
     Address: { type: 'string', name: '地址' },
+    UserType: { type: 'options', name: '服务类型', value: ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'] },
     BeginDate: { type: 'string', name: '开始时间' },
     EndDate: { type: 'string', name: '到期时间' },
+    CreateDate: { type: 'string', name: '录入时间' },
 }
 
 const current_date = new Date();
@@ -81,22 +83,30 @@ function List({type = 0} : {type?: number}) {
     const handleExportExcel = (ids: number[]) => {
         console.log(ids);
         const exportData: (string | number)[][] = [];
-        data.forEach(({id, FullName, Tel1, Tel2, Tel3, TotalCount, TotalMoney, UserType, Address, BeginDate, EndDate, F1 }) => {
-            if (ids.includes(id))
-                exportData.push([
+        data.forEach(({id, FullName, Tel1, Tel2, Tel3, TotalCount, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate }) => {
+            const baseData:any[] = [
                     FullName,
                     `${Tel1} ${Tel2} ${Tel3}`,
                     Address,
-                    ['普通客户', 'VIP', '重要领导'][F1],
-                    TotalCount,
+                    ['普通客户', 'VIP', '重要领导'][F1]
+                ];
+            if(type !== 1) {
+                baseData.push(TotalCount,
                     TotalMoney,
                     BeginDate.startsWith('0000') || BeginDate.startsWith('2222') ? '' : BeginDate,
                     EndDate.startsWith('0000') || EndDate.startsWith('2222') ? '' : EndDate,
                     ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'][UserType]
-                ]);
+                );
+            }
+            baseData.push(CreateDate);
+            if (ids.includes(id))
+                exportData.push(baseData);
         });
-        exportData.unshift(['姓名', '电话', '地址', '客户级别', '剩余次数', '余额', '开始时间', '到期时间', '客户类型']);
-        ExportExcel(exportData, `员工列表-${page}.xlsx`);
+        const baseTitle = ['姓名', '电话', '地址', '客户级别'];
+        type !== 1 && baseTitle.push('剩余次数', '余额', '开始时间', '到期时间', '客户类型');
+        baseTitle.push('录入日期');
+        exportData.unshift(baseTitle);
+        ExportExcel(exportData, `${['合同户', '散户', '过期合同户'][type]}列表-${page}.xlsx`);
     }
 
     const handleSearch = (e: string) => {

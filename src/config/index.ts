@@ -5,6 +5,7 @@ const BaseUri: string = '/midas';
 export const urls: url = {
     BaseUri,
     captcha               : BaseUri + '/cap/get',
+    heartbeat             : BaseUri + '/user/heart_beat',
     login                 : BaseUri + '/user/login',
     isLogged              : BaseUri + '/user/logged',
     logout                : BaseUri + '/user/logout',
