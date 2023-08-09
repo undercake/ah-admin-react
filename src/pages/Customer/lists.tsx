@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-02 11:12:40
+ * @LastEditTime: 2023-08-09 16:16:26
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -12,17 +12,18 @@ import axios, { type resListData } from '@/utils/Axios';
 import ExportExcel from '@/utils/ExportExcel';
 import { urls } from '@/config';
 import type Customer from './Customer'
+import CustomerDetail from '@/components/DetailDialogs/Customer';
 
 const rows: rows = {
     FullName  : { type: 'string', name: '顾客姓名' },
-    HouseArea: { type: 'string', name: '住房面积' },
-    Tel1:{type: 'string',name: ''},
-    Tel2:{type: 'string',name: '电话'},
-    Tel3:{type: 'string',name: ''},
-    Address: { type: 'string', name: '地址' },
-    UserType: { type: 'options', name: '服务类型', value: ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'] },
-    BeginDate: { type: 'string', name: '开始时间' },
-    EndDate: { type: 'string', name: '到期时间' },
+    HouseArea : { type: 'string', name: '住房面积' },
+    Tel1      : {type: 'string',name: ''},
+    Tel2      : {type: 'string',name: '电话'},
+    Tel3      : {type: 'string',name: ''},
+    Address   : { type: 'string', name: '地址' },
+    UserType  : { type: 'options', name: '服务类型', value: ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'] },
+    BeginDate : { type: 'string', name: '开始时间' },
+    EndDate   : { type: 'string', name: '到期时间' },
     CreateDate: { type: 'string', name: '录入时间' },
 }
 
@@ -34,9 +35,14 @@ function List({type = 0} : {type?: number}) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount]             = useState(0);
     const [editId, setEditId]           = useState(-1);
+    const [detailId, setDetailId]       = useState(-1);
     const [searchStr, setSearchStr]     = useState('');
+    const [Loading, setLoading]         = useState(true);
+    const [error, setError]             = useState(false);
 
     const getData = () => {
+        setLoading(true);
+        setError(false);
         const cus_urls:string[] = [
             urls.customer_list,
             urls.customer_other,
@@ -45,7 +51,7 @@ function List({type = 0} : {type?: number}) {
         console.log(cus_urls[type])
         const url = cus_urls[type] + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
           // @ts-ignore
-        const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(urls.customer_search, { search: searchStr });
+        const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(urls.customer_search + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : ''), { search: searchStr });
           // @ts-ignore
         $axios.then((res: resListData<Customer>) => {
               // @ts-ignore
@@ -54,6 +60,12 @@ function List({type = 0} : {type?: number}) {
             setPage(res.current_page);
             setCount(res.count)
             console.log(res);
+            setLoading(false);
+            setError(false);
+        }).catch((e) => {
+            console.log(e);
+            setLoading(false);
+            setError(true);
         });
     }
 
@@ -72,6 +84,11 @@ function List({type = 0} : {type?: number}) {
         setEditId(id);
     }
 
+    const openDetail = (id: number) => {
+        console.log(id);
+        setDetailId(id);
+    }
+
     const handleDelete = (id: number) => {
         axios.delete(urls.customer_delete + `/id/${id}`).then(getData);
     }
@@ -83,18 +100,20 @@ function List({type = 0} : {type?: number}) {
     const handleExportExcel = (ids: number[]) => {
         console.log(ids);
         const exportData: (string | number)[][] = [];
-        data.forEach(({id, FullName, Tel1, Tel2, Tel3, TotalCount, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate }) => {
+        data.forEach(({id, FullName, Tel1, Tel2, Tel3, TotalCount, HouseArea, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate }) => {
+            console.log({id, FullName, Tel1, Tel2, Tel3, TotalCount, HouseArea, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate })
             const baseData:any[] = [
                     FullName,
                     `${Tel1} ${Tel2} ${Tel3}`,
                     Address,
+                    HouseArea,
                     ['普通客户', 'VIP', '重要领导'][F1]
                 ];
             if(type !== 1) {
                 baseData.push(TotalCount,
                     TotalMoney,
-                    BeginDate.startsWith('0000') || BeginDate.startsWith('2222') ? '' : BeginDate,
-                    EndDate.startsWith('0000') || EndDate.startsWith('2222') ? '' : EndDate,
+                    BeginDate && (BeginDate.startsWith('0000') || BeginDate.startsWith('2222')) ? '' : BeginDate,
+                    EndDate && (EndDate.startsWith('0000') || EndDate.startsWith('2222')) ? '' : EndDate,
                     ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'][UserType]
                 );
             }
@@ -102,7 +121,7 @@ function List({type = 0} : {type?: number}) {
             if (ids.includes(id))
                 exportData.push(baseData);
         });
-        const baseTitle = ['姓名', '电话', '地址', '客户级别'];
+        const baseTitle = ['姓名', '电话', '地址', '面积', '客户级别'];
         type !== 1 && baseTitle.push('剩余次数', '余额', '开始时间', '到期时间', '客户类型');
         baseTitle.push('录入日期');
         exportData.unshift(baseTitle);
@@ -115,7 +134,8 @@ function List({type = 0} : {type?: number}) {
     }
 
     const editList: editList = [
-        { label: '编辑', color: 'info', onClick: openEdit },
+        { label: '详情', color: 'info', onClick: setDetailId },
+        { label: '编辑', color: 'info', onClick: setEditId },
         { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
     ];
 
@@ -146,11 +166,17 @@ function List({type = 0} : {type?: number}) {
                 onSearch    = {handleSearch}
                 searchStr   = {searchStr}
                 searchLabel = '搜索客户'
+                loading     = {Loading}
+                error       = {error}
             />
             {/* {editId >= 0 ? <CustomerEditor
                 handleClose = {handleEditorClose}
                 id          = {editId}
             /> : null} */}
+            {detailId > 0 ? <CustomerDetail
+                handleClose = {()=>setDetailId(0)}
+                id          = {detailId}
+            /> : null}
         </Card>);
 }
 

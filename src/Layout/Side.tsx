@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-08-03 17:08:26
+ * @LastEditTime: 2023-08-05 16:41:50
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -142,8 +142,11 @@ function Side({ open }: { open: boolean }) {
     };
 
     const handleExit = () => {
-        axios.get(urls.logout).then(() => MittBus.emit('is_login', false));
-        MittBus.emit('msgEmit', { type: 'success', msg: '退出成功' });
+        axios.get(urls.logout).then(() => {
+            push('/');
+            MittBus.emit('is_login', false);
+            MittBus.emit('msgEmit', { type: 'success', msg: '退出成功' });
+        });
     }
 
 

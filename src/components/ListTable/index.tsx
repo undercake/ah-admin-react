@@ -195,7 +195,7 @@ export default function ListTable({
                                 data.length === 0 ?
                                     <tr style={{width: '100%'}}>
                                         <td colSpan={Object.keys(rows).length + 1} className='text-center'>
-                                            <Empty fontSize='4rem' className='text-gray-500 dark:text-gray-200' />
+                                            <Empty />
                                             什么都没有了
                                         </td>
                                     </tr>
@@ -203,7 +203,7 @@ export default function ListTable({
                                     error ?
                                         <tr style={{width: '100%'}}>
                                             <td colSpan={Object.keys(rows).length + 1} className='text-center'>
-                                                <Error fontSize='4rem' className='text-gray-500 dark:text-gray-200' />
+                                                <Error />
                                                 出错了
                                             </td>
                                         </tr>

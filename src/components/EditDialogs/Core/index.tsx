@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-05-29 03:34:13
+ * @LastEditTime: 2023-08-08 11:15:56
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
@@ -158,6 +158,7 @@ function EditCore({
                                     return null;
                             }
                         })}
+                    {children}
                     <Button
                         type = "submit"
                         fullWidth

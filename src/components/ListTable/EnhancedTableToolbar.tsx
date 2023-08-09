@@ -2,7 +2,9 @@ import { alpha } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import LoadingButton from '@mui/lab/LoadingButton';
+// import LoadingButton from '@mui/lab/LoadingButton';
+import LoadingButton from '@/components/LoadingButton';
+
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import SaveIcon from '@mui/icons-material/Save';
@@ -107,8 +109,8 @@ export default function EnhancedTableToolbar({
                                 sx={{marginRight: '.5rem'}}
                                 loading={loading}
                                 loadingPosition="start"
+                                startIcon={<span style={{ marginRight: '.3rem' }}>{icon}</span>}
                             >
-                                <span style={{ marginRight: '.3rem' }}>{icon}</span>
                                 {name}
                             </LoadingButton>
                         ))}

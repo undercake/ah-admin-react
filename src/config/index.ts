@@ -63,6 +63,7 @@ export const urls: url = {
     customer_past         : BaseUri + '/customer/past',
     customer_search       : BaseUri + '/customer/search',
     customer_detail       : BaseUri + '/customer/detail',
+    customer_history      : BaseUri + '/customer/history',
     customer_add          : BaseUri + '/customer/add',
     customer_alter        : BaseUri + '/customer/alter',
     customer_delete       : BaseUri + '/customer/delete',

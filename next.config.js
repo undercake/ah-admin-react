@@ -8,15 +8,15 @@ const nextConfig = {
         return [
             {
                 source: '/midas/:path*',
-                destination: 'http://test.kmahjz.com.cn/midas/:path*'
+                destination: 'https://manage.kmahjz.com.cn/midas/:path*'
             },
             {
                 source: '/static/:path*',
-                destination: 'http://test.kmahjz.com.cn/static/:path*'
+                destination: 'https://manage.kmahjz.com.cn/static/:path*'
             },
             {
                 source: '/upload/:path*',
-                destination: 'http://test.kmahjz.com.cn/upload/:path*'
+                destination: 'https://manage.kmahjz.com.cn/upload/:path*'
             }
         ];
     },

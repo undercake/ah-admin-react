@@ -38,16 +38,9 @@ export default function Layout(props: LayoutProps) {
 
     const [is_login, setIsLogin] = useState<boolean>(false);
 
-    const heart_beat = ()=>{
-        axios.get(urls.heart_beat).then(console.log);
-    }
-
     useEffect(() => {
         MittBus.on('is_login', (i: boolean) => setIsLogin(i));
         checkLogin((e: boolean) => setIsLogin(e));
-        setInterval(() => {
-            is_login && heart_beat();
-        }, 1440 / 4 * 1000);
         // eslint-disable-next-line
     }, []);
 

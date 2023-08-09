@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-07-15 08:50:21
- * @FilePath: /ah-admin-react/src/pages/EmployeeList/index.tsx
+ * @LastEditTime: 2023-08-09 12:45:00
+ * @FilePath: /ah-admin-react/src/pages/Employee/list.tsx
  * @Description: employee list page
  */
 import Card from '@/components/Card';
@@ -33,8 +33,12 @@ function EmployeeList() {
     const [count, setCount] = useState(0);
     const [editId, setEditId] = useState(-1);
     const [searchStr, setSearchStr] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
     const getData = () => {
+        setLoading(true);
+        setError(false);
         const url = urls.employee_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
         // @ts-ignore
         const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(url, { search: searchStr });
@@ -46,6 +50,11 @@ function EmployeeList() {
             setPage(res.current_page);
             setCount(res.count)
             console.log(res);
+        }).catch((e) => {
+            console.log(e);
+            setError(true);
+        }).finally(() => {
+            setLoading(false);
         });
     }
 
@@ -120,6 +129,8 @@ function EmployeeList() {
                 onSearch={handleSearch}
                 searchStr={searchStr}
                 searchLabel='搜索员工'
+                loading={loading}
+                error={error}
             />
             {editId >= 0 ? <EmployeeEditor
                 handleClose={handleEditorClose}

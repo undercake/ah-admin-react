@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -40,14 +40,17 @@ const schema = Yup.object().shape({
     verification: Yup.string().required('验证码不能为空').length(5, '验证码必须为5位')
 });
 
-function VerificationImg() {
-    const [src, setSrc] = useState('/midas/cap/get?_=' + Math.random());
+function VerificationImg({random, handleClick}: {random: string, handleClick: () => void}) {
+    const [src, setSrc] = useState('/midas/cap/get?_=' + random);
+    useEffect(() => {
+        setSrc('/midas/cap/get?_=' + random);
+    }, [random]);
     return (
         <Image
             src={src}
             alt="verification"
             className="w-1/2 h-1/2"
-            onClick={() => setSrc('/midas/cap/get?_=' + Math.random())}
+            onClick={handleClick}
             width="250"
             height="62"
             style={{ cursor: 'pointer', marginRight: '-.78rem' }}
@@ -57,16 +60,18 @@ function VerificationImg() {
 }
 
 function Login(props: Props) {
-    const [showPassword, setShowPassword] = useState(false);
-    const [username, setUsername] = useState('');                 // 用户名
-    const [password, setPassword] = useState('');                 // 密码
-    const [verification, setVerification] = useState('');                 // 验证码
-    const [userHelperName, setUserHelperName] = useState('');                 // 用户名提示
-    const [userHelperPassword, setUserHelperPassword] = useState('');                 // 密码提示
+    const [showPassword, setShowPassword]                     = useState(false);
+    const [username, setUsername]                             = useState('');                 // 用户名
+    const [password, setPassword]                             = useState('');                 // 密码
+    const [verification, setVerification]                     = useState('');                 // 验证码
+    const [userHelperName, setUserHelperName]                 = useState('');                 // 用户名提示
+    const [userHelperPassword, setUserHelperPassword]         = useState('');                 // 密码提示
     const [userHelperVerification, setUserHelperVerification] = useState('');                 // 验证码提示
-    const [userColorName, setUserColorName] = useState<colors>(mainColor);  // 用户名颜色
-    const [userColorPassword, setUserColorPassword] = useState<colors>(mainColor);  // 密码颜色
-    const [userColorVerification, setUserColorVerification] = useState<colors>(mainColor);  // 验证码颜色
+    const [userColorName, setUserColorName]                   = useState<colors>(mainColor);  // 用户名颜色
+    const [userColorPassword, setUserColorPassword]           = useState<colors>(mainColor);  // 密码颜色
+    const [userColorVerification, setUserColorVerification]   = useState<colors>(mainColor);  // 验证码颜色
+    const [random, setRandom]                                 = useState('' + Math.random());                 // 验证码随机数
+
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
     const handleLogin = () => {
@@ -123,6 +128,14 @@ function Login(props: Props) {
                 }
             });
     };
+
+    const handleClick = () => {
+        console.log('click');
+        setRandom('' + Math.random());
+        setUserColorVerification(mainColor)
+        setUserHelperVerification('');
+        setVerification('');
+    }
 
     return (
         <>
@@ -216,8 +229,9 @@ function Login(props: Props) {
                             setUserColorVerification(mainColor);
                         }}
                         autoComplete="none"
-                        endAdornment={<VerificationImg />}
+                        endAdornment={<VerificationImg random={random} handleClick={handleClick} />}
                         inputProps={{ maxLength: 6 }}
+                        value={verification}
                     />
                     <Button
                         type="submit"
