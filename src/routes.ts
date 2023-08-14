@@ -63,7 +63,7 @@ const routes: RouteConfig[] = [
         component: () => import(/* webpackChunkName: "CustomerList" */ './pages/Customer/lists')
     },
     {
-        // 合同户
+        // 过期合同户
         name     : 'CustomerOutdated',
         path     : '/customer_outdated',
         component: () => import(/* webpackChunkName: "CustomerOutdated" */ './pages/Customer/outdated')
@@ -82,6 +82,11 @@ const routes: RouteConfig[] = [
         name     : 'AdminDeleted',
         path     : '/admin_deleted',
         component: () => import(/* webpackChunkName: "AdminDeleted" */ './pages/Admin/Deleted')
+    },
+    {
+        name     : 'AdminGroup',
+        path     : '/admin_group',
+        component: () => import(/* webpackChunkName: "AdminGroup" */ './pages/Admin/Group')
     },
 ];
 export default routes;

@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:18:11
- * @LastEditTime: 2023-08-14 17:25:14
+ * @LastEditTime: 2023-08-14 17:39:52
  * @FilePath: /ah-admin-react/src/pages/Admin/Group.tsx
  * @Description: 
  */
@@ -28,7 +28,7 @@ const rows: rows = {
 }
 
 function Group() {
-    const [data, setData] = useState<Admin[]>([]);
+    const [data, setData] = useState<Group[]>([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount] = useState(0);
@@ -64,7 +64,7 @@ function Group() {
     const handleDeleteList = (ids: number[]) => {
         axios.post(urls.admin_delete, { ids }).then(getData);
     }
-    
+
     const openEdit = (id: number) => {
         console.log(id);
         setEditId(id);
