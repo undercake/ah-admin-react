@@ -76,12 +76,12 @@ const routes: RouteConfig[] = [
     {
         name     : 'AdminList',
         path     : '/admin_list',
-        component: () => import(/* webpackChunkName: "AdminList" */ './pages/AdminList')
+        component: () => import(/* webpackChunkName: "AdminList" */ './pages/Admin/List')
     },
     {
         name     : 'AdminDeleted',
         path     : '/admin_deleted',
-        component: () => import(/* webpackChunkName: "AdminDeleted" */ './pages/AdminDeleted')
+        component: () => import(/* webpackChunkName: "AdminDeleted" */ './pages/Admin/Deleted')
     },
 ];
 export default routes;

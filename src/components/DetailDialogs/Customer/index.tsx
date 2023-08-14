@@ -1,13 +1,14 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-07 13:41:03
- * @LastEditTime: 2023-08-09 16:53:46
+ * @LastEditTime: 2023-08-13 17:50:49
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/index.tsx
  * @Description: 
  */
 import Core from '@/components/DetailDialogs/Core';
 import Error from '@/components/Status/Error';
 import Loading from '@/components/Status/Loading';
+import ScrollView from '@/components/ScrollView';
 import Detail from './Detail';
 import HistoryList from './HistoryList';
 import { urls } from '@/config';
@@ -16,7 +17,7 @@ import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
 import type Customer from '@/pages/Customer/Customer.d';
 
-export interface HistoryList{
+export interface HistoryData{
     id: number;
     NeedServiceTime: string;
     ServiceContentName: string;
@@ -37,10 +38,11 @@ function Customer({
     const [error, setError] = useState(false);
     // @ts-ignore
     const [detail, setDetail] = useState<Customer>({});
-    const [history, setHistory] = useState<HistoryList[]>([]);
+    const [history, setHistory] = useState<HistoryData[]>([]);
     const [page, setPage] = useState(1);
     const [pageLoading, setPageLoading] = useState(true);
     const [pageError, setPageError] = useState(false);
+    const [total, setTotal] = useState(0);
 
     const onClose = (e: Event, reason: string) => {
         const is_close = handleClose(e, reason);
@@ -71,10 +73,11 @@ function Customer({
         axios
             .get(`${urls.customer_history}/id/${id}/page/${page}`)
             // @ts-ignore
-            .then((res: resListData<HistoryList>) => {
-                console.log({res});
+            .then((res: resListData<HistoryData>) => {
+                console.log({'0':1,res});
                 setHistory(res.data);
-                console.log({history})
+                console.log({'1':2,history})
+                setTotal(res.total);
             })
             .catch((e) => {
                 console.log(e);
@@ -102,19 +105,30 @@ function Customer({
         onOpen={console.log}
         open={open}
     >
-        <Box component='div' className={loading || error ? 'text-center pt-8' : ''}>
+        <Box component='div' className={(loading || error ? 'text-center pt-8' : '') + 'w-full h-full overflow-hidden'}>
             {loading ? <Loading /> : error ? <Error /> :
-            <>
-                <Detail data={detail} />
+            <div className='flex flex-wrap gap-5 h-full overflow-hidden'>
+                <Detail
+                    className='flex-1'
+                    data={detail}
+                    sx={{
+                        height: '35rem'
+                    }}
+                />
                 <HistoryList
+                    className='flex-1'
                 // @ts-ignore
                     list={history}
                     page={page}
                     setPage={setPage}
                     pageError={pageError}
                     pageLoading={pageLoading}
+                    total={total}
+                    sx={{
+                        height: '35rem'
+                    }}
                 />
-            </>}
+            </div>}
         </Box>
     </Core>;
 }

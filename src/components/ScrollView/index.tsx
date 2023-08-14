@@ -11,6 +11,7 @@ interface CustomScrollbarProps {
 const CustomScrollbar: FC<CustomScrollbarProps> = ({
     className = '',
     children,
+    sx = {},
     ...props
 }: {
     color?: string;
@@ -37,6 +38,7 @@ const CustomScrollbar: FC<CustomScrollbarProps> = ({
                 '&:hover::-webkit-scrollbar-thumb': {
                     backgroundColor: 'rgba(204,204,204,1)',
                 },
+                ...sx
             }}
             {...props}
         >

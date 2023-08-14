@@ -1,47 +1,74 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-09 13:46:25
- * @LastEditTime: 2023-08-09 14:58:43
+ * @LastEditTime: 2023-08-14 17:10:04
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/HistoryList.tsx
  * @Description: customer history list
  */
+import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
+import IconButton  from '@mui/material/IconButton';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
+import Card from '@/components/Card';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
-import type HistoryList from './index'
+import ScrollView from '@/components/ScrollView';
+import type HistoryData from './index'
 
 function HisList({
     list,
     page,
     setPage,
     pageError,
-    pageLoading
+    pageLoading,
+    total = 0,
+    ...e
 } : {
-    list: HistoryList[],
+    list: HistoryData[],
     page: number,
     setPage: any,
     pageError: boolean,
-    pageLoading: boolean
+    pageLoading: boolean,
+    [key: string]: any
 }) {
-    return <Table>
-        <TableHead>
-            <TableRow>
-                {['服务时间', '服务内容', '说明', '任务状态', '接线时间'].map((item, index) => <TableCell key={index}>{item}</TableCell>)}
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {list.map((item, index) => <TableRow key={index}>
-                <TableCell>{item.NeedServiceTime}</TableCell>
-                <TableCell>{item.ServiceContentName}</TableCell>
-                <TableCell>{item.Comment}</TableCell>
-                <TableCell>{item.TaskStatus}</TableCell>
-                <TableCell>{item.PhoneDate}</TableCell>
-            </TableRow>)}
-        </TableBody>
-    </Table>;
+    return <Card {...e}>
+        <Table sx={{'.dark & .MuiTableCell-root':{color: '#fff'}}}>
+            <TableHead>
+                <TableRow>
+                    <TableCell sx={{textAlign: 'center', fontSize: '1.25rem', fontWeight: 'bold'}} colSpan={5}>
+                        服务历史
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    {[
+                        {width:200, content: '服务时间'},
+                        {width:200, content: '服务内容'},
+                        {width:700, content: '说明'},
+                        {width:200, content: '任务状态'},
+                        {width:200, content: '接线时间'}
+                        ].map((item, index) => <TableCell width={item.width} key={index}>{item.content}</TableCell>)}
+                </TableRow>
+            </TableHead>
+        </Table>
+        <ScrollView sx={{height: '20rem'}}>
+            <Table sx={{'.dark & .MuiTableCell-root':{color: '#fff'}}}>
+                <TableBody>
+                    {list.map((item: HistoryData, index) => <TableRow key={index}>
+                        <TableCell>{item.NeedServiceTime}</TableCell>
+                        <TableCell>{item.ServiceContentName}</TableCell>
+                        <TableCell>{item.Comment}</TableCell>
+                        <TableCell>{item.TaskStatus}</TableCell>
+                        <TableCell>{item.PhoneDate}</TableCell>
+                    </TableRow>)}
+                </TableBody>
+            </Table>
+        </ScrollView>
+        <Box component="div" sx={{marginTop: '1rem'}}>
+            <IconButton sx={{'.dark &': {color:'#fff'}, '.dark &.Mui-disabled': {color: '#666'}}} disabled={page <= 1} className='border rounded' onClick={()=>setPage(page - 1)}><i className="fa-solid fa-angle-left" /></IconButton>
+            <IconButton sx={{'.dark &': {color:'#fff'}, '.dark &.Mui-disabled': {color: '#666'}}} disabled={page > total / 20} className='border rounded' onClick={()=>setPage(page + 1)}><i className="fa-solid fa-angle-right" /></IconButton>
+        </Box>
+    </Card>;
 }
 
 export default HisList;

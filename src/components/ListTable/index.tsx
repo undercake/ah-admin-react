@@ -76,12 +76,26 @@ interface EnhancedTableProps {
     error              ?: boolean;
 }
 
-const ComponentByType = ({ type, data, rowVal }: { type: 'string' | 'options' | 'avatar' | 'image'; data: any, rowVal: any }) => {
+const Highlight = ({ text, searchStr }: { text: string, searchStr: string }) => {
+    const index = text.toLowerCase().indexOf(searchStr.toLowerCase());
+    if (searchStr.trim() === '' || index === -1) {
+        return <>{text}</>;
+    }
+    return (
+        <>
+            {text.substring(0, index)}
+            <span className = "bg-yellow-500 dark:bg-yellow-200 text-gray-800 rounded border-solid p-0.5">{text.substring(index, index + searchStr.length)}</span>
+            {text.substring(index + searchStr.length)}
+        </>
+    );
+}
+
+const ComponentByType = ({ type, data, rowVal, searchStr }: { type: 'string' | 'options' | 'avatar' | 'image'; data: any, rowVal: any, searchStr: string }) => {
     switch (type) {
         case 'string': 
-            return <>{data}</>;
+            return <><Highlight text={data} searchStr={searchStr} /></>;
         case 'options': 
-            return <>{rowVal[data]}</>;
+            return <><Highlight text={rowVal[data]} searchStr={searchStr} /></>;
         case 'avatar': 
             return <Avatar alt = {data} src = {data} variant = "rounded" />
         case 'image': 
@@ -242,7 +256,12 @@ export default function ListTable({
                                                     padding   = "none"
                                                     key       = {index}
                                                 >
-                                                    <ComponentByType type = {type} data = {val} rowVal = {value} />
+                                                    <ComponentByType
+                                                        type   = {type}
+                                                        data   = {val}
+                                                        rowVal = {value}
+                                                        searchStr = {searchStr}
+                                                    />
                                                 </TableCell>
                                             );
                                         })}

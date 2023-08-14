@@ -1,15 +1,14 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-08-02 16:08:01
- * @FilePath: /ah-admin-react/src/pages/AdminList/index.tsx
+ * @LastEditTime: 2023-08-14 17:28:31
+ * @FilePath: /ah-admin-react/src/pages/Admin/List.tsx
  * @Description: Admin list page
  */
 import Card from '@/components/Card';
 import ListTable, { type editList, type rows, type editGroupList, type Actions } from "@/components/ListTable";
 import { useEffect, useState } from 'react';
 import axios, { type resListData } from '@/utils/Axios';
-import ExportExcel from '@/utils/ExportExcel';
 import { urls } from '@/config';
 // import AdminEditor from '@/components/EditDialogs/Admin';
 
@@ -25,9 +24,8 @@ interface Admin {
 const rows: rows = {
     full_name: { type: 'string', name: '姓名' },
     user_name: { type: 'string', name: '登录名' },
-    // gender: { type: 'options', name: '性别', value: { 0: '男', 1: '女' } },
     mobile: { type: 'string', name: '手机号' },
-    // age: { type: 'string', name: '年龄' },
+    group_name: { type: 'string', name: '角色' },
     // intro: { type: 'string', name: '简介' },
     // note: { type: 'string', name: '备注' },
 }
@@ -85,29 +83,12 @@ function AdminList() {
         axios.post(urls.admin_delete, { ids }).then(getData);
     }
 
-    const handleExportExcel = (ids: number[]) => {
-        console.log(ids);
-        const exportData: (string | number)[][] = [];
-        data.forEach(({ id, name, phone, id_code, birth_date, address, workee, note, gender, intro }) => {
-            if (ids.includes(id))
-                exportData.push([id, name, ["男", "女"][gender], phone, address, id_code, birth_date == '0000-00-00' ? '' : birth_date, intro, workee, note]);
-        });
-        exportData.unshift(['ID', '姓名', '性别', '电话', '地址', '身份证号码', '出生年月', '描述', '工作内容', '备注']);
-        ExportExcel(exportData, `员工列表-${page}.xlsx`);
-    }
-
-    const handleSearch = (e: string) => {
-        setSearchStr(e);
-        setPage(1);
-    }
-
     const editList: editList = [
         { label: '编辑', color: 'info', onClick: openEdit },
         { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
     ];
 
     const selectedActions: Actions[] = [
-        { name: '导出Excel', color: 'primary', onClick: handleExportExcel, icon: <i className="fa fa-solid fa-file-export" /> },
         { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
     ];
 

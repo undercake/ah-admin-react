@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-09 16:16:26
+ * @LastEditTime: 2023-08-11 10:08:04
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -174,7 +174,7 @@ function List({type = 0} : {type?: number}) {
                 id          = {editId}
             /> : null} */}
             {detailId > 0 ? <CustomerDetail
-                handleClose = {()=>setDetailId(0)}
+                handleClose = {()=>{setTimeout(()=>{setDetailId(0);}, 300); return true}}
                 id          = {detailId}
             /> : null}
         </Card>);

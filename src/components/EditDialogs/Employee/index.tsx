@@ -14,7 +14,7 @@ import type Employee from '@/pages/Employee/Employee.d';
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
   // @flow
 type Props = {
-    handleClose: any;
+    handleClose: (a:Event, b:string)=>boolean;
     id         : number;
 };
 
