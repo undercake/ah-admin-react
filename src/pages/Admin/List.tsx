@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-08-14 17:28:31
+ * @LastEditTime: 2023-08-15 10:41:11
  * @FilePath: /ah-admin-react/src/pages/Admin/List.tsx
  * @Description: Admin list page
  */
@@ -98,7 +98,7 @@ function AdminList() {
     ];
 
     return (
-        <Card variant="outlined" sx={{ minWidth: 275 }} className='p-10 dark:bg-gray-900 dark:color dark:text-gray-100'>
+        <Card variant="outlined" sx={{ minWidth: 275 }} className='p-10 dark:bg-gray-1080 dark:color dark:text-gray-100'>
             <ListTable
                 rows={rows}
                 data={data}

@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-07-15 09:46:42
- * @FilePath: /ah-admin-react/src/pages/EmployeeDeleted/index.tsx
+ * @LastEditTime: 2023-08-15 10:41:36
+ * @FilePath: /ah-admin-react/src/pages/Employee/deleted.tsx
  * @Description: employee list page
  */
 import Card from '@/components/Card';
@@ -76,7 +76,7 @@ function EmployeeList() {
     ];
 
     return (
-        <Card variant="outlined" sx={{ minWidth: 275 }} className='p-10 dark:bg-gray-900 dark:color dark:text-gray-100'>
+        <Card variant="outlined" sx={{ minWidth: 275 }} className='p-10 dark:bg-gray-1080 dark:color dark:text-gray-100'>
             <ListTable
                 rows={rows}
                 data={data}

@@ -71,7 +71,7 @@ export default function Layout(props: LayoutProps) {
                 </>
             ) : (
                 <>
-                    <Box sx={{ width: '100wh', height: '100vh' }} className="pt-10 bg-gray-200 dark:bg-gray-900">
+                    <Box sx={{ width: '100wh', height: '100vh' }} className="pt-10 bg-gray-200 dark:bg-gray-1080">
                         <CssBaseline />
                         <Header handleDrawerOpen={handleDrawerOpen} noMenu />
                         <Box sx={{ width: 500 }} className="mx-auto">

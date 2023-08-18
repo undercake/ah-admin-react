@@ -23,7 +23,8 @@ module.exports = {
                     darkest: 'rgba(94, 53, 177, .5)',
                 },
                 gray: {
-                    900: '#121212'
+                    900: '#121212',
+                    1080: 'rgb(36 36 36)'
                 }
             },
             borderRadius: {

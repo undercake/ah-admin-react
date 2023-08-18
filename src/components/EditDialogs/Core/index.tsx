@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-08-08 11:15:56
+ * @LastEditTime: 2023-08-15 10:40:24
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
@@ -55,7 +55,7 @@ function EditCore({
     return (
         <SwipeableDrawer
               // className='dark:bg-gray-900 dark:text-gray-100 p-4'
-            PaperProps = {{ className: 'dark:bg-gray-900 dark:text-gray-100 p-4' }}
+            PaperProps = {{ className: 'dark:bg-gray-1080 dark:text-gray-100 p-4' }}
             anchor     = 'right'
             open       = {open}
             onClose    = {onClose}

@@ -15,7 +15,7 @@ export default function Login() {
         // eslint-disable-next-line
     }, []);
     return (
-        <Box sx={{width:'100wh', height: '100vh'}} className='pt-10 bg-gray-200 dark:bg-gray-900'>
+        <Box sx={{width:'100wh', height: '100vh'}} className='pt-10 bg-gray-200 dark:bg-gray-1080'>
             <Box sx={{ width: 500 }} className="mx-auto">
                 <Card className="mx-auto bg-white dark:bg-gray-800 dark:text-gray-50 p-8" sx={{ borderRadius: '1rem', boxShadow: 0 }}>
                     {/* <CssBaseline /> */}

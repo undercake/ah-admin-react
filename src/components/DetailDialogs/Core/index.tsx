@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-07 13:41:03
- * @LastEditTime: 2023-08-13 17:34:39
+ * @LastEditTime: 2023-08-15 10:40:13
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Core/index.tsx
  * @Description: 
  */
@@ -37,7 +37,7 @@ function EditCore({
     return (
         <SwipeableDrawer
               // className='dark:bg-gray-900 dark:text-gray-100 p-4'
-            PaperProps = {{ className: 'dark:bg-gray-900 dark:text-gray-100 p-4' }}
+            PaperProps = {{ className: 'dark:bg-gray-1080 dark:text-gray-100 p-4' }}
             anchor     = 'bottom'
             open       = {open}
             onClose    = {onClose}

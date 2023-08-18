@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-09 13:46:25
- * @LastEditTime: 2023-08-14 17:10:04
+ * @LastEditTime: 2023-08-15 10:26:36
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/HistoryList.tsx
  * @Description: customer history list
  */
@@ -58,7 +58,7 @@ function HisList({
                         <TableCell>{item.NeedServiceTime}</TableCell>
                         <TableCell>{item.ServiceContentName}</TableCell>
                         <TableCell>{item.Comment}</TableCell>
-                        <TableCell>{item.TaskStatus}</TableCell>
+                        <TableCell>{({0:'空闲（待分配）',100: '已经分配（待派单）',200:'执行完毕'})[item.TaskStatus]}</TableCell>
                         <TableCell>{item.PhoneDate}</TableCell>
                     </TableRow>)}
                 </TableBody>

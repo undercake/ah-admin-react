@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:18:11
- * @LastEditTime: 2023-08-14 17:39:52
+ * @LastEditTime: 2023-08-15 10:40:56
  * @FilePath: /ah-admin-react/src/pages/Admin/Group.tsx
  * @Description: 
  */
@@ -84,7 +84,7 @@ function Group() {
         { name: '刷新', color: 'primary', onClick: () => getData(), icon: <i className="fa-solid fa-arrows-rotate" /> },
     ];
 
-    return <Card variant="outlined" sx={{ minWidth: 275 }} className='p-10 dark:bg-gray-900 dark:color dark:text-gray-100'>
+    return <Card variant="outlined" sx={{ minWidth: 275 }} className='p-10 dark:bg-gray-1080 dark:color dark:text-gray-100'>
         <ListTable
             rows={rows}
             data={data}

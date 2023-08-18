@@ -1,5 +1,5 @@
 $bg-grey: rgb(243, 244, 246);
-$bg-black: #121212;
+$bg-black: rgb(36 36 36);
 $border-grey: #ddd;
 $border-white: #fff;
 $color-white: #fff;
@@ -8,7 +8,7 @@ $color-black: rgb(17, 24, 39);
 html.dark,
 .dark .css-12i7wg6-MuiPaper-root-MuiDrawer-paper,
 .dark main {
-    background-color: $bg-black;
+    // background-color: $bg-black;
     color: $color-white;
 }
 body {

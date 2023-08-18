@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-11 10:08:04
+ * @LastEditTime: 2023-08-15 10:36:55
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -150,7 +150,7 @@ function List({type = 0} : {type?: number}) {
     ];
 
     return (
-        <Card variant = "outlined" sx = {{ minWidth: 275 }} className = 'p-10 dark:bg-gray-900 dark:color dark:text-gray-100'>
+        <Card variant = "outlined" sx = {{ minWidth: 275 }} className = 'p-10 dark:bg-gray-1080 dark:color dark:text-gray-100'>
             <ListTable
                 rows                = {rows}
                 data                = {data}

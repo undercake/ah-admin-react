@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:46
- * @LastEditTime: 2023-08-01 17:29:19
+ * @LastEditTime: 2023-08-15 10:40:41
  * @FilePath: /ah-admin-react/src/Layout/Header.tsx
  * @Description: header
  */
@@ -27,7 +27,7 @@ function Header({ handleDrawerOpen, noMenu = false }: { handleDrawerOpen: () => 
         setTitle(getRouteName(get()));
     }, []);
     return (
-        <AppBar className="dark:bg-gray-900 dark:color dark:text-gray-100 py-3 px-6" color="inherit" sx={{ boxShadow: 0 }}>
+        <AppBar className="dark:bg-gray-1080 dark:color dark:text-gray-100 py-3 px-6" color="inherit" sx={{ boxShadow: 0 }}>
             <Toolbar className='flex'>
                 <Box className="flex-none flex w-56">
                     <Box className="flex-auto"></Box>

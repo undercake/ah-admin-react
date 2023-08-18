@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-08-05 16:41:50
+ * @LastEditTime: 2023-08-15 10:48:30
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -165,11 +165,14 @@ function Side({ open }: { open: boolean }) {
     return (
         <Drawer
             className={
-                'main-layout transition-width duration-400 ' +
+                'main-layout transition-width duration-400' +
                 (open ? (menuList.length > 0 ? 'open w-62' : 'w-0') : 'closed w-16')
             }
             sx={{
                 paddingTop: '5.6rem',
+                '.dark &,.dark &>.css-12i7wg6-MuiPaper-root-MuiDrawer-paper':{
+                    backgroundColor: 'rgb(36 36 36)',
+                }
             }}
             variant="permanent"
         >

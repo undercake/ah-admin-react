@@ -1,8 +1,8 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-06-01 04:49:16
- * @FilePath: /ah-admin-react/src/pages/CustomerDeleted/index.tsx
+ * @LastEditTime: 2023-08-15 10:41:19
+ * @FilePath: /ah-admin-react/src/pages/Admin/Deleted.tsx
  * @Description : Customer list page
  */
 import Card from '@/components/Card';
@@ -88,7 +88,7 @@ function CustomerList() {
     ];
 
     return (
-        <Card variant = "outlined" sx = {{ minWidth: 275 }} className = 'p-10 dark:bg-gray-900 dark:color dark:text-gray-100'>
+        <Card variant = "outlined" sx = {{ minWidth: 275 }} className = 'p-10 dark:bg-gray-1080 dark:color dark:text-gray-100'>
             <ListTable
                 rows                = {rows}
                 data                = {data}
