@@ -8,6 +8,7 @@ import Massager from './Massager';
 import Login from '@/components/Login';
 import checkLogin from '@/utils/checkLogin';
 import MittBus from '@/utils/MittBus';
+import {hashChange} from '@/utils/Router';
 import RouteView from '@/components/RouteView';
 import ScrollView from '@/components/ScrollView';
 import Loading from '@/components/Status/Loading';
@@ -37,10 +38,13 @@ export default function Layout(props: LayoutProps) {
     const [open, setOpen] = useState(true);
 
     const [is_login, setIsLogin] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        window.addEventListener('hashchange', hashChange);
         MittBus.on('is_login', (i: boolean) => setIsLogin(i));
-        checkLogin((e: boolean) => setIsLogin(e));
+        checkLogin((e: boolean) => {setIsLogin(e); setLoading(false)});
+        console.log({is_login});
         // eslint-disable-next-line
     }, []);
 
@@ -75,12 +79,14 @@ export default function Layout(props: LayoutProps) {
                         <CssBaseline />
                         <Header handleDrawerOpen={handleDrawerOpen} noMenu />
                         <Box sx={{ width: 500 }} className="mx-auto">
+                        {loading ? <Loading /> :
                             <Card
                                 className="mt-20 mx-auto bg-white dark:bg-gray-800 dark:text-gray-50 p-8"
                                 sx={{ borderRadius: '1rem', boxShadow: 0 }}
                             >
                                 <Login onLogin={() => setIsLogin(true)} />
                             </Card>
+                            }
                         </Box>
                     </Box>
                 </>

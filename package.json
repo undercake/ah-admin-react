@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "export": "next export",
     "server": "ts-node --project tsconfig.server.json server/index.ts"
   },
   "dependencies": {
@@ -30,9 +31,6 @@
     "react-icons": "^4.8.0",
     "xlsx": "^0.18.5",
     "yup": "^1.1.1"
-  },
-  "proxy": {
-    "midas": "http://test.kmahjz.com.cn/"
   },
   "devDependencies": {
     "@types/md5": "^2.3.2",

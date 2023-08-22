@@ -2,7 +2,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import './index.scss';
+// import './index.scss';
 
 interface FormInputProps {
     label: string;
@@ -56,7 +56,18 @@ function FormInput({
     ...e
 }: FormInputProps) {
     return (
-        <FormControl sx={{ marginTop: margin, marginBottom: margin, ...sx }} required={required} fullWidth={fullWidth} variant={variant} color={color} className={'my-form-control-input ' + className}>
+        <FormControl sx={{
+            marginTop: margin,
+            marginBottom: margin,
+            '& fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline': {
+                borderColor: 'rgb(107 114 128 / 500)'
+                }, ...sx }}
+            required={required}
+            fullWidth={fullWidth}
+            variant={variant}
+            color={color}
+            className={'my-form-control-input ' + className}
+        >
             <InputLabel className={"dark:text-gray-50 dark:border-gray-50 " + labelClassName} sx={{ '.dark &': { borderColor: 'rgb(249 250 251)' }, marginTop: size == 'small' ? '-8px' : '' }} htmlFor={id} error={error}>
                 {label}
             </InputLabel>

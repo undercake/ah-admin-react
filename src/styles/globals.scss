@@ -36,3 +36,13 @@ body {
 .dark .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
     color: $color-white;
 }
+
+button.MuiButton-containedPrimary,
+[type='button'].MuiButton-containedPrimary,
+[type='reset'].MuiButton-containedPrimary,
+[type='submit'].MuiButton-containedPrimary{
+    background-color: #1976d2;
+    .dark & {
+        background-color: #134f8b;
+    }
+}

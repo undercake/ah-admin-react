@@ -319,7 +319,7 @@ export default function ListTable({
                                                             <Fragment key={ed_index}>
                                                                 <Button
                                                                     key       = {ed_index}
-                                                                    className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
+                                                                    // className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
                                                                     // @ts-ignore
                                                                     onClick   = {(e)=>handlePopOver(e, `${ind}-${ed_index}`)}
                                                                     // variant="contained"
@@ -347,7 +347,7 @@ export default function ListTable({
                                                     return (
                                                         <Button
                                                             key       = {ed_index}
-                                                            className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
+                                                            // className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
                                                             // @ts-ignore
                                                             onClick   = {() => onClick(row.id)}
                                                               // variant="contained"

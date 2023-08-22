@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-08-15 10:48:30
+ * @LastEditTime: 2023-08-19 12:03:46
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -312,7 +312,7 @@ function Side({ open }: { open: boolean }) {
                         </ListItemIcon>
                         <ListItemText primary="退出登录" />
                     </ListItemButton>
-                    {open ? null : <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit'}} />}
+                    {open ? null : <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit',detail:'', icon:'', id:0,sort:0, type:0, parent:0, children:[]}} />}
                 </List>
             </ScrollView> : null}
         </Drawer>

@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-09 13:46:25
- * @LastEditTime: 2023-08-15 10:26:36
+ * @LastEditTime: 2023-08-19 12:05:25
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/HistoryList.tsx
  * @Description: customer history list
  */
@@ -14,7 +14,7 @@ import Card from '@/components/Card';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import ScrollView from '@/components/ScrollView';
-import type HistoryData from './index'
+import {type HistoryData} from './index'
 
 function HisList({
     list,

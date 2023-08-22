@@ -42,8 +42,11 @@ export default function LocalizationDayjs({ value,
             {/* <Stack spacing={3} sx={{ width: 'auto', paddingTop: margin, paddingBottom: margin, display: 'block' }}> */}
             <div         className = "w-full">
             <FormControl sx        = {{ marginTop: margin, marginBottom: margin, ...sx }} required = {required} fullWidth = {fullWidth} variant = {variant} color = {color} className = {'my-form-control-input ' + className}>
+                {/* @ts-ignore */}
                     {(type == 'time') && <TimePicker slotProps={{ textField: { size } }} label={label} format="hh:mm" value={dayjs(value)} onChange={onChange} />}
+                    {/* @ts-ignore */}
                     {(type == 'date') && <DatePicker slotProps={{ textField: { size } }} label={label} format="YYYY-MM-DD" value={dayjs(value)} onChange={onChange} />}
+                    {/* @ts-ignore */}
                     {(type == 'datetime') && <DateTimePicker slotProps={{ textField: { size } }} label={label} format='YYYY-MM-DD hh:mm' value={value} onChange={onChange} />}
                 </FormControl></div>
             {/* </Stack> */}

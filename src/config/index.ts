@@ -1,7 +1,11 @@
+import { env } from "process";
+
 interface url {
     [index: string]: string;
 }
-const BaseUri: string = '/midas';
+const BaseUri: string =
+'/midas';
+// 'https://manage.kmahjz.com.cn/midas';
 export const urls: url = {
     BaseUri,
     captcha               : BaseUri + '/cap/get',

@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-07 13:41:03
- * @LastEditTime: 2023-08-13 17:50:49
+ * @LastEditTime: 2023-08-19 12:05:55
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/index.tsx
  * @Description: 
  */
@@ -77,6 +77,7 @@ function Customer({
                 console.log({'0':1,res});
                 setHistory(res.data);
                 console.log({'1':2,history})
+                // @ts-ignore
                 setTotal(res.total);
             })
             .catch((e) => {

@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-15 10:36:55
+ * @LastEditTime: 2023-08-19 16:10:54
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -135,17 +135,17 @@ function List({type = 0} : {type?: number}) {
 
     const editList: editList = [
         { label: '详情', color: 'info', onClick: setDetailId },
-        { label: '编辑', color: 'info', onClick: setEditId },
-        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        // { label: '编辑', color: 'info', onClick: setEditId },
+        // { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
     ];
 
     const selectedActions: Actions[] = [
         { name: '导出Excel', color: 'primary', onClick: handleExportExcel, icon: <i className="fa fa-solid fa-file-export" /> },
-        { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
+        // { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
     ];
 
     const nonSelectedActions: Actions[] = [
-        { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> },
+        // { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> },
         { name: '刷新', color: 'primary', onClick: () => getData(), icon: <i className="fa-solid fa-arrows-rotate" /> },
     ];
 

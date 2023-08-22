@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-29 08:48:09
- * @LastEditTime: 2023-08-05 17:26:56
+ * @LastEditTime: 2023-08-20 13:49:11
  * @FilePath: /ah-admin-react/src/utils/checkLogin.ts
  * @Description: check if login
  */
@@ -15,10 +15,11 @@ interface ICheckLogin {
 
 let is_login = false;
 
-const checkLogin: ICheckLogin = (fun: Function | undefined) => {
-    axios.get(urls.isLogged).then((res: any) => {
-        fun && fun(res.is_login);
-    });
+const checkLogin: ICheckLogin = (fun = ()=>{}) => {
+    axios
+    .get(urls.isLogged)
+    .then((res: any) => fun(res.is_login))
+    .catch((err: any) => fun(false));
 };
 
 const heart_beat = ()=>{
