@@ -32,6 +32,9 @@ export default function EnhancedTableHead({
                         inputProps={{
                             'aria-label': 'select all desserts',
                         }}
+                        sx={{
+                            '.dark & svg': {color: '#ccc'}
+                        }}
                     />
                 </TableCell>
                 {Object.keys(titles).map((key, ind) => (

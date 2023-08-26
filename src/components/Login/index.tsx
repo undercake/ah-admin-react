@@ -9,13 +9,13 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Visibility from '@mui/icons-material/Visibility';        // 密码可见
 import VisibilityOff from '@mui/icons-material/VisibilityOff';  // 密码不可见
-import mittBus from '@/utils/MittBus';
-import axios from '@/utils/Axios';
-import FormInput from '@/components/FormComponents/FormInput';
-import Image from 'next/image';
+import mittBus from '../../utils/MittBus';
+import axios from '../../utils/Axios';
+import FormInput from '../../components/FormComponents/FormInput';
+// import Image from 'next/image';
 import md5 from 'md5';
 
-import { urls } from '@/config';
+import { urls } from '../../config';
 import * as Yup from 'yup';
 
 interface Props {
@@ -46,7 +46,7 @@ function VerificationImg({random, handleClick}: {random: string, handleClick: ()
         setSrc('/midas/cap/get?_=' + random);
     }, [random]);
     return (
-        <Image
+        <img
             src={src}
             alt="verification"
             className="w-1/2 h-1/2"
@@ -54,7 +54,7 @@ function VerificationImg({random, handleClick}: {random: string, handleClick: ()
             width="250"
             height="62"
             style={{ cursor: 'pointer', marginRight: '-.78rem' }}
-            priority
+            // priority
         />
     );
 }

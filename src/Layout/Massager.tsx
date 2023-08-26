@@ -2,7 +2,7 @@ import { useEffect, useState, forwardRef } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Stack from '@mui/material/Stack';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import mittBus from '@/utils/MittBus';
+import mittBus from '../utils/MittBus';
 
 interface Msg {
     type: 'success' | 'error' | 'warning' | 'info';

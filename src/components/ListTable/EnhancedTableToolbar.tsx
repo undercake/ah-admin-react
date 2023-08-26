@@ -3,7 +3,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 // import LoadingButton from '@mui/lab/LoadingButton';
-import LoadingButton from '@/components/LoadingButton';
+import LoadingButton from '../../components/LoadingButton';
 
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';

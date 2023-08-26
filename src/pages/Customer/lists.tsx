@@ -1,18 +1,18 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-19 16:10:54
- * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
+ * @LastEditTime: 2023-08-22 17:04:48
+ * @FilePath: /ah-admin-react-from-next/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
-import Card from '@/components/Card';
-import ListTable, { type editList, type rows, type editGroupList, type Actions } from "@/components/ListTable";
+import Card from '../../components/Card';
+import ListTable, { type editList, type rows, type editGroupList, type Actions } from "../../components/ListTable";
 import { useEffect, useState } from 'react';
-import axios, { type resListData } from '@/utils/Axios';
-import ExportExcel from '@/utils/ExportExcel';
-import { urls } from '@/config';
+import axios, { type resListData } from '../../utils/Axios';
+import ExportExcel from '../../utils/ExportExcel';
+import { urls } from '../../config';
 import type Customer from './Customer'
-import CustomerDetail from '@/components/DetailDialogs/Customer';
+import CustomerDetail from '../../components/DetailDialogs/Customer';
 
 const rows: rows = {
     FullName  : { type: 'string', name: '顾客姓名' },
@@ -34,7 +34,7 @@ function List({type = 0} : {type?: number}) {
     const [page, setPage]               = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount]             = useState(0);
-    const [editId, setEditId]           = useState(-1);
+    // const [editId, setEditId]           = useState(-1);
     const [detailId, setDetailId]       = useState(-1);
     const [searchStr, setSearchStr]     = useState('');
     const [Loading, setLoading]         = useState(true);
@@ -69,33 +69,33 @@ function List({type = 0} : {type?: number}) {
         });
     }
 
-    const handleEditorClose = (e: Event, reason: string) => {
-        console.log(e, reason);
-        (reason == 'button' || reason == 'submit') && setTimeout(() => {
-            setEditId(-1);
-        }, 300);
-        return reason == 'button' || reason == 'submit';
-    }
+    // const handleEditorClose = (e: Event, reason: string) => {
+    //     console.log(e, reason);
+    //     (reason == 'button' || reason == 'submit') && setTimeout(() => {
+    //         setEditId(-1);
+    //     }, 300);
+    //     return reason == 'button' || reason == 'submit';
+    // }
 
     useEffect(getData, [page, rowsPerPage, searchStr]);
 
-    const openEdit = (id: number) => {
-        console.log(id);
-        setEditId(id);
-    }
+    // const openEdit = (id: number) => {
+    //     console.log(id);
+    //     setEditId(id);
+    // }
 
-    const openDetail = (id: number) => {
-        console.log(id);
-        setDetailId(id);
-    }
+    // const openDetail = (id: number) => {
+    //     console.log(id);
+    //     setDetailId(id);
+    // }
 
-    const handleDelete = (id: number) => {
-        axios.delete(urls.customer_delete + `/id/${id}`).then(getData);
-    }
+    // const handleDelete = (id: number) => {
+    //     axios.delete(urls.customer_delete + `/id/${id}`).then(getData);
+    // }
 
-    const handleDeleteList = (ids: number[]) => {
-        axios.post(urls.customer_delete, { ids }).then(getData);
-    }
+    // const handleDeleteList = (ids: number[]) => {
+    //     axios.post(urls.customer_delete, { ids }).then(getData);
+    // }
 
     const handleExportExcel = (ids: number[]) => {
         console.log(ids);

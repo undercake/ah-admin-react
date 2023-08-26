@@ -14,11 +14,11 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-import Image from 'next/image';
-import Card from '@/components/Card';
-import Loading from '@/components/Status/Loading';
-import Empty from '@/components/Status/Empty';
-import Error from '@/components/Status/Error';
+// import Image from 'next/image';
+import Card from '../../components/Card';
+import Loading from '../../components/Status/Loading';
+import Empty from '../../components/Status/Empty';
+import Error from '../../components/Status/Error';
 
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar, { type Actions as Action } from './EnhancedTableToolbar';
@@ -99,7 +99,7 @@ const ComponentByType = ({ type, data, rowVal, searchStr }: { type: 'string' | '
         case 'avatar': 
             return <Avatar alt = {data} src = {data} variant = "rounded" />
         case 'image': 
-            return <Image src = {data} alt = "" className = 'w-10 h-10' />;
+            return <img src = {data} alt = "" className = 'w-10 h-10' />;
         default: 
             return <></>;
     }
@@ -175,7 +175,7 @@ export default function ListTable({
             <Card>
                 <EnhancedTableToolbar
                     numSelected        = {selected.size}
-                    selected           = {[...selected]}
+                    selected           = {Array.from(selected)}
                     selectedActions    = {selectedActions}
                     nonSelectedActions = {nonSelectedActions}
                     showSearch         = {showSearch}
@@ -241,6 +241,9 @@ export default function ListTable({
                                                 checked    = {isItemSelected}
                                                 inputProps = {{
                                                     'aria-labelledby': labelId,
+                                                }}
+                                                sx={{
+                                                    '.dark & svg': {color: '#ccc'}
                                                 }}
                                             />
                                         </TableCell>

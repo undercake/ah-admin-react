@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:46
- * @LastEditTime: 2023-08-15 10:40:41
- * @FilePath: /ah-admin-react/src/Layout/Header.tsx
+ * @LastEditTime: 2023-08-26 14:52:05
+ * @FilePath: /ah-admin-react-from-next/src/Layout/Header.tsx
  * @Description: header
  */
 
@@ -14,15 +14,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 
 import SwitchDark from './SwitchDark';
-import { onPathChange, get } from '@/utils/Router';
-import { getRouteName } from '@/utils/Rights';
+import { onPathChange, get } from '../utils/Router';
+import { getRouteName } from '../utils/Rights';
 import { useEffect, useState } from 'react';
 
 function Header({ handleDrawerOpen, noMenu = false }: { handleDrawerOpen: () => void, noMenu?: boolean }) {
     const [title, setTitle] = useState<string>('');
     useEffect(() => {
         onPathChange((path) => {
-            setTitle(getRouteName(path));
+            const t = getRouteName(path);
+            setTitle(t);
+            document.title = `阿惠家政管理系统-${t}`;
         });
         setTitle(getRouteName(get()));
     }, []);

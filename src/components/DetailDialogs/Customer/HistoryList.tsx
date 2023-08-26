@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-09 13:46:25
- * @LastEditTime: 2023-08-19 12:05:25
- * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/HistoryList.tsx
+ * @LastEditTime: 2023-08-22 16:58:04
+ * @FilePath: /ah-admin-react-from-next/src/components/DetailDialogs/Customer/HistoryList.tsx
  * @Description: customer history list
  */
 import Box from '@mui/material/Box';
@@ -10,10 +10,10 @@ import Table from '@mui/material/Table';
 import IconButton  from '@mui/material/IconButton';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import Card from '@/components/Card';
+import Card from '../../../components/Card';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
-import ScrollView from '@/components/ScrollView';
+import ScrollView from '../../../components/ScrollView';
 import {type HistoryData} from './index'
 
 function HisList({

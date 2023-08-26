@@ -1,21 +1,21 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-07 13:41:03
- * @LastEditTime: 2023-08-19 12:05:55
- * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/index.tsx
+ * @LastEditTime: 2023-08-22 17:07:54
+ * @FilePath: /ah-admin-react-from-next/src/components/DetailDialogs/Customer/index.tsx
  * @Description: 
  */
-import Core from '@/components/DetailDialogs/Core';
-import Error from '@/components/Status/Error';
-import Loading from '@/components/Status/Loading';
-import ScrollView from '@/components/ScrollView';
+import Core from '../../../components/DetailDialogs/Core';
+import Error from '../../../components/Status/Error';
+import Loading from '../../../components/Status/Loading';
+import ScrollView from '../../../components/ScrollView';
 import Detail from './Detail';
 import HistoryList from './HistoryList';
-import { urls } from '@/config';
-import axios, {type resData, type resListData} from '@/utils/Axios';
+import { urls } from '../../../config';
+import axios, {type resData, type resListData} from '../../../utils/Axios';
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
-import type Customer from '@/pages/Customer/Customer.d';
+import type CustomerType from '../../../pages/Customer/Customer.d';
 
 export interface HistoryData{
     id: number;
@@ -37,7 +37,7 @@ function Customer({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     // @ts-ignore
-    const [detail, setDetail] = useState<Customer>({});
+    const [detail, setDetail] = useState<CustomerType>({});
     const [history, setHistory] = useState<HistoryData[]>([]);
     const [page, setPage] = useState(1);
     const [pageLoading, setPageLoading] = useState(true);

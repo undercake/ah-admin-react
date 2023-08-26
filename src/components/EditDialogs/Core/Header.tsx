@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-17 03:24:41
- * @LastEditTime: 2023-05-28 09:14:49
- * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/Header.tsx
+ * @LastEditTime: 2023-08-26 15:07:07
+ * @FilePath: /ah-admin-react-from-next/src/components/EditDialogs/Core/Header.tsx
  * @Description: edit core Drawer Header
  */
 
@@ -17,7 +17,14 @@ function Header({ className = '', sx = {}, onClick, title = '修改' }: { classN
         <Box className="flex w-full mb-2 shadow-md" sx={{marginLeft:'-1rem', marginRight: '-1rem', paddingLeft: '1rem', paddingRight: '1rem'}}>
             <IconButton
                 className={'cursor-pointer mr-10 ' + className}
-                sx={{ borderRadius: '.7rem', width: '34px', height: '34px', ...sx}}
+                sx={{
+                    borderRadius: '.7rem',
+                    width: '34px',
+                    height: '34px',
+                    '.dark & svg':{
+                        color: '#ccc'
+                    },
+                    ...sx}}
                 onClick={onClick as unknown as MouseEventHandler<HTMLButtonElement>}
             >
                 <CloseIcon />
@@ -28,6 +35,5 @@ function Header({ className = '', sx = {}, onClick, title = '修改' }: { classN
         </Box>
     );
 }
-
 
 export default Header;

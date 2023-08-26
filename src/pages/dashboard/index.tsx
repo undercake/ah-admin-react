@@ -2,16 +2,16 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 12:38:31
- * @LastEditTime: 2023-08-01 17:22:07
- * @FilePath: /ah-admin-react/src/pages/dashboard/index.tsx
+ * @LastEditTime: 2023-08-26 11:19:12
+ * @FilePath: /ah-admin-react-from-next/src/pages/dashboard/index.tsx
  * @Description:
  */
 import Typography from '@mui/material/Typography';
-// import Layout from '@/components/Layout';
+// import Layout from '../components/Layout';
 export default function Dashboard() {
     return (
         <>
-            <Typography paragraph sx={{marginTop: '.5rem'}}>
+            <Typography className="dark:text-gray-50" paragraph sx={{marginTop: '.5rem'}}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
                 aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper
                 risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id donec
@@ -21,7 +21,7 @@ export default function Dashboard() {
                 dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et
                 molestie ac.
             </Typography>
-            <Typography paragraph>
+            <Typography className="dark:text-gray-50" paragraph>
                 Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam.
                 Pulvinar elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus
                 sit amet volutpat consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed vulputate

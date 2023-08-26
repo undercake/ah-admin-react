@@ -1,17 +1,17 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-08-15 10:41:46
- * @FilePath: /ah-admin-react/src/pages/Employee/list.tsx
+ * @LastEditTime: 2023-08-22 17:05:28
+ * @FilePath: /ah-admin-react-from-next/src/pages/Employee/list.tsx
  * @Description: employee list page
  */
-import Card from '@/components/Card';
-import ListTable, { type editList, type rows, type editGroupList, type Actions } from "@/components/ListTable";
+import Card from '../../components/Card';
+import ListTable, { type editList, type rows, type editGroupList, type Actions } from "../../components/ListTable";
 import { useEffect, useState } from 'react';
-import axios, { type resListData } from '@/utils/Axios';
-import ExportExcel from '@/utils/ExportExcel';
-import { urls } from '@/config';
-import EmployeeEditor from '@/components/EditDialogs/Employee';
+import axios, { type resListData } from '../../utils/Axios';
+import ExportExcel from '../../utils/ExportExcel';
+import { urls } from '../../config';
+import EmployeeEditor from '../../components/EditDialogs/Employee';
 import type Employee from './Employee.d';
 
 const rows: rows = {

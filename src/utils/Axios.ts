@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { urls } from '@/config';
+import { urls } from '../config';
 
 import mittBus from './MittBus';
 

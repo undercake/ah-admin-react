@@ -2,11 +2,12 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-08-19 12:03:46
- * @FilePath: /ah-admin-react/src/Layout/Side.tsx
+ * @LastEditTime: 2023-08-26 15:28:30
+ * @FilePath: /ah-admin-react-from-next/src/Layout/Side.tsx
  * @Description: side menu
  */
 import { useState, useEffect, MouseEvent, Fragment } from 'react';
+import { Link, useLocation } from "react-router-dom";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -19,13 +20,13 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Popover from '@mui/material/Popover';
-import ScrollView from '@/components/ScrollView';
-import { getLists, right } from '@/utils/Rights';
-import MittBus from '@/utils/MittBus';
+import ScrollView from '../components/ScrollView';
+import { getLists, right } from '../utils/Rights';
+import MittBus from '../utils/MittBus';
 import './styles/side.scss';
-import { onPathChange, get, push } from '@/utils/Router';
-import { urls } from '@/config';
-import axios from '@/utils/Axios';
+import { onPathChange, get, push } from '../utils/Router';
+import { urls } from '../config';
+import axios from '../utils/Axios';
 
 const activeMenu = 'text-purple-dark dark:text-purple-light bg-purple-light dark:bg-purple-dark';
 const activeSubMenu = 'text-purple-dark dark:text-purple-lighter';
@@ -35,13 +36,15 @@ const handleChildMap = ({
     path,
     index,
     open,
-    type = '0'
+    type = '0',
+    // push
 }: {
     child: right[];
     path: string;
     index: number;
     open: boolean;
     type?: string;
+    // push?:any
 }): JSX.Element => (
     <List component="div" disablePadding>
         {child.map((child: right, ind: number) => (
@@ -51,23 +54,32 @@ const handleChildMap = ({
                 }
                 sx={{ paddingLeft: type == 'pop' ? '0' : '3.1rem' }}
                 key={`${index}-${ind}`}
-                onClick={() => {
-                    push(child.path);
-                }}
+                // onClick={() => {
+                //     push(child.path);
+                // }}
             >
-                <ListItemIcon sx={{ minWidth: '1.5rem' }}>
-                    {type == '0' ? (
-                        <FiberManualRecordIcon
-                            className=" dark:text-white"
-                            sx={path == child.path ? { width: '8px', height: '8px' } : { width: '6px', height: '6px' }}
-                        />
-                    ) : null}
-                </ListItemIcon>
-                {open ?
-                    <ListItemText primary={<span style={{ fontWeight: path == child.path ? 600 : 400 }}>{child.name}</span>} /> :
-                    type == 'pop' ?
+                <Link to={child.path} style={{display: 'flex'}}>
+                    <ListItemIcon sx={{ minWidth: '1.5rem' }}>
+                        {type == '0' ? (
+                            <FiberManualRecordIcon
+                                className=" dark:text-white"
+                                sx={{
+                                    // '& svg':{
+                                    //     height: '2rem'
+                                    // },
+                                    ...(path === child.path ?
+                                    { width: '8px', height: '2rem' } :
+                                    { width: '6px', height: '2rem' })
+                                }}
+                            />
+                        ) : null}
+                    </ListItemIcon>
+                    {open ?
                         <ListItemText primary={<span style={{ fontWeight: path == child.path ? 600 : 400 }}>{child.name}</span>} /> :
-                        null}
+                        type == 'pop' ?
+                            <ListItemText primary={<span style={{ fontWeight: path == child.path ? 600 : 400 }}>{child.name}</span>} /> :
+                            null}
+                </Link>
             </ListItem>
         ))}
     </List>
@@ -103,6 +115,9 @@ function Side({ open }: { open: boolean }) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [currentTarget, setCurrentTarget] = useState<string>('');
     const [popoverCondition, setPopoverCondition] = useState<string>('');
+    const [syncTime, setSyncTime] = useState<string>('');
+
+    let location = useLocation();
 
     const findHoverTarget = (e: HTMLElement): HTMLElement | null => {
         const className = 'MuiButtonBase-root';
@@ -149,16 +164,25 @@ function Side({ open }: { open: boolean }) {
         });
     }
 
+    const hashRouteChange = (path: string)=>{
+        console.log({path});
+        setPath(path);
+        tongleCol(path2target(path));
+    }
+
+    useEffect(() => {
+        // Google Analytics
+        hashRouteChange(get());
+    }, [location]);
 
     useEffect(() => {
         getLists(setMenuList);
-        onPathChange((path: string) => {
-            setPath(path);
-            tongleCol(path2target(path));
-        });
+        // onPathChange((path: string) => {
+        // });
         window && window.addEventListener('click', handlePopoverClose);
         tongleCol(path2target(get()));
         setPath(get());
+        MittBus.on('lastSync', (e:string)=>{setSyncTime(e);console.log(e);})
         MittBus.on('getLists', () => getLists(setMenuList, true));
     }, []);
 
@@ -168,20 +192,26 @@ function Side({ open }: { open: boolean }) {
                 'main-layout transition-width duration-400' +
                 (open ? (menuList.length > 0 ? 'open w-62' : 'w-0') : 'closed w-16')
             }
+            // style={{...(open ? {} : {width: '3.5rem'})}}
             sx={{
-                paddingTop: '5.6rem',
-                '.dark &,.dark &>.css-12i7wg6-MuiPaper-root-MuiDrawer-paper':{
-                    backgroundColor: 'rgb(36 36 36)',
-                }
+                '&, &>div' :{marginTop: '5.6rem'},
+                '.dark &,.dark &>div':{
+                    backgroundColor: 'rgb(36 36 36)'
+                },
+                '.dark & .MuiListItemText-primary, .dark & .css-i4bv87-MuiSvgIcon-root':{
+                    color: '#ccc',
+                },
             }}
             variant="permanent"
         >
-            {menuList.length > 0 ? <ScrollView
+            {menuList.length > 0 ?
+            <ScrollView
                 style={{
                     height: 'calc(100vh - 5.6rem)',
                     paddingLeft: '10px',
                     paddingRight: '10px',
                     minWidth: '2rem',
+                    // ...(open ? {} : {width: '3.5rem'})
                 }}
             >
                 <List className={'mt-16 ' + (open ? (menuList.length > 0 ? 'open w-56' : 'w-0') : 'closed w-12')} sx={{ paddingLeft: '.5rem' }}>
@@ -195,7 +225,7 @@ function Side({ open }: { open: boolean }) {
                                 onMouseEnter={(e) => showTips(e, item.path)}
                                 onMouseLeave={closeTips}
                                 className={
-                                    (path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path
+                                    (path.startsWith(item.path) || path == item.path || currentTarget == item.path
                                         ? activeMenu
                                         : 'hover:bg-purple-light dark:hover:bg-purple-darkest') + ' h-12 rounded-xl mb-2'
                                 }
@@ -204,8 +234,8 @@ function Side({ open }: { open: boolean }) {
                                     paddingLeft: open ? '1rem' : 0,
                                     marginBottom: '.5rem',
                                     borderRadius: '.75rem',
-                                    backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
-                                    color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                    backgroundColor: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
+                                    color: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
                                     '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
                                     '&:hover': { backgroundColor: 'rgb(237 231 246)' }
                                 }}
@@ -215,17 +245,17 @@ function Side({ open }: { open: boolean }) {
                                         className={
                                             item.icon +
                                             ' dark:text-white ' +
-                                            (path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path
+                                            (path.startsWith(item.path) || path == item.path || currentTarget == item.path
                                                 ? activeMenu
                                                 : '')
                                         }
                                     />
                                 </ListItemIcon>
-                                <ListItemText primary={item.name} />
-                                {open ? currentTarget == item.path || currentTarget.indexOf(item.path) == 0 ? <ExpandLess /> : <ExpandMore /> : null}
+                                {open ? <ListItemText primary={item.name} /> : null}
+                                {open ? currentTarget == item.path || currentTarget.startsWith(item.path) ? <ExpandLess /> : <ExpandMore /> : null}
                             </ListItemButton>
                             {open ? (
-                                <Collapse key={`col-${index}`} in={currentTarget == item.path || currentTarget.indexOf(item.path) == 0} className='transition-height duration-300' timeout={200}>
+                                <Collapse key={`col-${index}`} in={currentTarget == item.path || currentTarget.startsWith(item.path)}  className='transition-height duration-300' timeout={200}>
                                     {handleChildMap({ child: item.children, path, index, open })}
                                 </Collapse>
                             ) : (<>
@@ -233,7 +263,11 @@ function Side({ open }: { open: boolean }) {
                                 <Popover
                                     key={`pop-${index}`}
                                     sx={{
-                                        marginLeft: '3.5rem'
+                                        marginLeft: '3.5rem',
+                                        '.dark &':{
+                                            backgroundColor: 'rgb(36 36 36)',
+                                            color: '#ccc',
+                                        }
                                     }}
                                     anchorEl={anchorEl}
                                     open={popoverCondition == item.path}
@@ -255,20 +289,21 @@ function Side({ open }: { open: boolean }) {
                         </Fragment>
                         :
                         <Fragment key={index}>
+                            <Link to={item.path}>
                             <ListItemButton
                                 key={index}
                                 className={
-                                    (path.indexOf(item.path) == 0 || path == item.path ? activeMenu : '') + ' h-12 rounded-xl mb-2'
+                                    (path.startsWith(item.path) || path == item.path ? activeMenu : '') + ' h-12 rounded-xl mb-2'
                                 }
-                                onClick={() => push(item.path)}
+                                // onClick={() => push(item.path)}
                                 onMouseEnter={(e) => showTips(e, item.path)}
                                 onMouseLeave={closeTips}
                                 sx={{
                                     paddingLeft: open ? '1rem' : 0,
                                     marginBottom: '.5rem',
                                     borderRadius: '.75rem',
-                                    backgroundColor: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
-                                    color: path.indexOf(item.path) > -1 || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                    backgroundColor: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
+                                    color: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
                                     '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
                                     '&:hover': { backgroundColor: 'rgb(237 231 246)' }
                                 }}
@@ -278,13 +313,14 @@ function Side({ open }: { open: boolean }) {
                                         className={
                                             item.icon +
                                             ' dark:text-white ' +
-                                            (path.indexOf(item.path) == 0 || path == item.path ? activeMenu : '')
+                                            (path.startsWith(item.path) || path == item.path ? activeMenu : '')
                                         }
                                     />
                                 </ListItemIcon>
-                                <ListItemText primary={item.name} />
+                                {open ? <ListItemText primary={item.name} /> : null}
                             </ListItemButton>
                             {open ? null : <Tips key={`tips-1-${index}`} index={index} tipsEl={tipsEl} tips={tips} item={item} />}
+                        </Link>
                         </Fragment>)
                     }
 
@@ -310,11 +346,15 @@ function Side({ open }: { open: boolean }) {
                                 }
                             />
                         </ListItemIcon>
-                        <ListItemText primary="退出登录" />
+                        {open ? <ListItemText primary="退出登录" /> : null}
                     </ListItemButton>
                     {open ? null : <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit',detail:'', icon:'', id:0,sort:0, type:0, parent:0, children:[]}} />}
                 </List>
             </ScrollView> : null}
+            {syncTime === '' || !open ? 'null' : <div className='text-center dark:text-gray-500' style={{marginBottom: '6rem'}}>
+                数据同步时间：<br />
+                {syncTime}
+                </div>}
         </Drawer>
     );
 }

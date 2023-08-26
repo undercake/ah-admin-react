@@ -1,15 +1,15 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-15 10:36:38
- * @FilePath: /ah-admin-react/src/pages/Customer/deleted.tsx
+ * @LastEditTime: 2023-08-22 17:04:35
+ * @FilePath: /ah-admin-react-from-next/src/pages/Customer/deleted.tsx
  * @Description : Customer list page
  */
-import Card from '@/components/Card';
-import ListTable, { type editList, type rows, type Actions } from "@/components/ListTable";
+import Card from '../../components/Card';
+import ListTable, { type editList, type rows, type Actions } from "../../components/ListTable";
 import { useEffect, useState } from 'react';
-import axios, { type resListData } from '@/utils/Axios';
-import { urls } from '@/config';
+import axios, { type resListData } from '../../utils/Axios';
+import { urls } from '../../config';
 import type Customer from './Customer.d'
 
 const rows: rows = {

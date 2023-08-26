@@ -5,12 +5,12 @@
  * @FilePath: /ah-admin-react/src/pages/Admin/List.tsx
  * @Description: Admin list page
  */
-import Card from '@/components/Card';
-import ListTable, { type editList, type rows, type editGroupList, type Actions } from "@/components/ListTable";
+import Card from '../../components/Card';
+import ListTable, { type editList, type rows, type editGroupList, type Actions } from "../../components/ListTable";
 import { useEffect, useState } from 'react';
-import axios, { type resListData } from '@/utils/Axios';
-import { urls } from '@/config';
-// import AdminEditor from '@/components/EditDialogs/Admin';
+import axios, { type resListData } from '../../utils/Axios';
+import { urls } from '../../config';
+// import AdminEditor from '../../components/EditDialogs/Admin';
 
 interface Admin {
     full_name : string;

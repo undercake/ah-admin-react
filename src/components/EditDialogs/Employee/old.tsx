@@ -1,13 +1,13 @@
-import Core from '@/components/EditDialogs/Core';
+import Core from '../../../components/EditDialogs/Core';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormInput from '@/components/FormComponents/FormInput';
-import FormSelect from '@/components/FormComponents/Select';
-import DatePicker from '@/components/FormComponents/DatePicker';
+import FormInput from '../../../components/FormComponents/FormInput';
+import FormSelect from '../../../components/FormComponents/Select';
+import DatePicker from '../../../components/FormComponents/DatePicker';
 import { pinyin } from "pinyin-pro";
 import { Component, FormEventHandler } from 'react';
-import { urls } from '@/config';
-import axios from '@/utils/Axios';
+import { urls } from '../../../config';
+import axios from '../../../utils/Axios';
 
 interface Employee {
     id         : number;

@@ -1,15 +1,15 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:18:11
- * @LastEditTime: 2023-08-15 10:40:56
- * @FilePath: /ah-admin-react/src/pages/Admin/Group.tsx
+ * @LastEditTime: 2023-08-22 17:03:58
+ * @FilePath: /ah-admin-react-from-next/src/pages/Admin/Group.tsx
  * @Description: 
  */
-import Card from '@/components/Card';
-import ListTable, { type editList, type rows, type Actions } from "@/components/ListTable";
+import Card from '../../components/Card';
+import ListTable, { type editList, type rows, type Actions } from "../../components/ListTable";
 import { useEffect, useState } from 'react';
-import axios, { type resListData } from '@/utils/Axios';
-import { urls } from '@/config';
+import axios, { type resListData } from '../../utils/Axios';
+import { urls } from '../../config';
 
 interface Group {
     id        : number;

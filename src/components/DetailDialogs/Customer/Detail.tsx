@@ -1,13 +1,13 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-09 13:45:55
- * @LastEditTime: 2023-08-11 15:24:03
- * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/Detail.tsx
+ * @LastEditTime: 2023-08-22 16:57:54
+ * @FilePath: /ah-admin-react-from-next/src/components/DetailDialogs/Customer/Detail.tsx
  * @Description: customer detail dialog
  */
-import ScrollView from '@/components/ScrollView';
-import Card from '@/components/Card';
-import type Customer from "@/pages/Customer/Customer.d";
+import ScrollView from '../../../components/ScrollView';
+import Card from '../../../components/Card';
+import type Customer from "../../../pages/Customer/Customer.d";
 import Box from "@mui/material/Box";
 
 const Dvd = () => <span style={{ display: 'inline-block', width: '1.5rem' }} />

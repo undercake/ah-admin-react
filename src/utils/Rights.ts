@@ -1,6 +1,7 @@
 import axios from './Axios';
-import { urls } from '@/config'; // 导入接口网址列表
+import { urls } from '../config'; // 导入接口网址列表
 import { localSet, localGet } from './index';
+import mittBus from './MittBus';
 
 interface req_data {
     code: 0 | -1 | -2 | -3;
@@ -23,6 +24,7 @@ export interface right {
 
 interface rights extends req_data {
     rights: right[];
+    last_sync: string
 }
 
 interface group {
@@ -77,6 +79,7 @@ const getUserRights = (fun: Function = () => {}) => {
                             initRights(1);
                             gur_arr.forEach((f) => f(user_rights));
                             gur_arr = [];
+                            mittBus.emit('lastSync', data.last_sync);
                         }
                     )
                     .catch((e: any) => {

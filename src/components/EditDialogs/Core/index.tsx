@@ -1,19 +1,19 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-08-15 10:40:24
- * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
+ * @LastEditTime: 2023-08-22 17:00:09
+ * @FilePath: /ah-admin-react-from-next/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
 import { type ReactNode, useEffect, useState } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import ScrollView from '@/components/ScrollView';
+import ScrollView from '../../../components/ScrollView';
 import Header from './Header';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormInput from '@/components/FormComponents/FormInput';
-import FormSelect from '@/components/FormComponents/Select';
-import DatePicker from '@/components/FormComponents/DatePicker';
+import FormInput from '../../../components/FormComponents/FormInput';
+import FormSelect from '../../../components/FormComponents/Select';
+import DatePicker from '../../../components/FormComponents/DatePicker';
 import { FormEventHandler } from 'react';
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;

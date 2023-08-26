@@ -1,14 +1,14 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-07 13:41:03
- * @LastEditTime: 2023-08-15 10:40:13
- * @FilePath: /ah-admin-react/src/components/DetailDialogs/Core/index.tsx
+ * @LastEditTime: 2023-08-22 16:57:36
+ * @FilePath: /ah-admin-react-from-next/src/components/DetailDialogs/Core/index.tsx
  * @Description: 
  */
 import { type ReactNode, useEffect, useState } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Box from '@mui/material/Box';
-import Header from "@/components/EditDialogs/Core/Header";
+import Header from "../../../components/EditDialogs/Core/Header";
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
 interface types {

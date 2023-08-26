@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import SwitchDark from '@/Layout/SwitchDark';
+import SwitchDark from '../../Layout/SwitchDark';
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
-import CLogin from '@/components/Login';
-import checkLogin from '@/utils/checkLogin';
-import { push } from '@/utils/Router';
+import CLogin from '../../components/Login';
+import checkLogin from '../../utils/checkLogin';
+import { push } from '../../utils/Router';
 // import './login.css'
 
 export default function Login() {

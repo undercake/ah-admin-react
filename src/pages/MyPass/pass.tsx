@@ -1,9 +1,9 @@
 import { Component, FormEventHandler } from 'react'; import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import FormInput from '@/components/FormComponents/FormInput';
-import axios from '@/utils/Axios';
-import { urls } from '@/config';
+import FormInput from '../../components/FormComponents/FormInput';
+import axios from '../../utils/Axios';
+import { urls } from '../../config';
 import md5 from 'md5';
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
