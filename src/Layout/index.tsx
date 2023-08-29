@@ -15,6 +15,7 @@ import ScrollView from '../components/ScrollView';
 import Loading from '../components/Status/Loading';
 // import { urls } from '../config';
 import './styles/main.scss';
+import { CompoundComponentContext } from '@mui/base/utils/useCompound';
 // import axios from '../utils/Axios';
 
 interface CastLoginProps {
@@ -31,11 +32,32 @@ function Layout(props: LayoutProps) {
     const [is_login, setIsLogin] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const china_to_show = ["❤富强❤", "❤民主❤", "❤文明❤", "❤和谐❤", "❤自由❤", "❤平等❤", "❤公正❤", "❤法治❤", "❤爱国❤", "❤敬业❤", "❤诚信❤", "❤友善❤"];
+    let index = 0;
+    const click_to_show = (e: any) => {
+            let showSpan = document.createElement('span');
+            showSpan.innerHTML = china_to_show[index++ % china_to_show.length];
+            showSpan.style.position = 'fixed';
+            showSpan.style.top = e.clientY + 'px';
+            showSpan.style.left = e.clientX + 'px';
+            console.log(e.clientX, e.clientY);
+            let color_list = ["#ff3333", "#ff8000", "#f9f906", "#b9f20d", "#00ff00", "#00ff80", "#00ffff", "#007fff", "#0000ff", "#7f00ff", "#ff00ff", "#ff0080"];
+          showSpan.style.color = color_list[Math.floor(Math.random() * color_list.length)];
+        document.body.appendChild(showSpan);
+        let t = showSpan.offsetTop;
+        let tim = setInterval(function() {
+            showSpan.style.top = showSpan.offsetTop - 1 + 'px';
+            if (Math.abs(t - showSpan.offsetTop) > 100) {
+                clearInterval(tim);
+                document.body.removeChild(showSpan);
+            }
+        }, 10)
+    }
+
     useEffect(() => {
-        // window.addEventListener('hashchange', () => {console.log('hash__change');hashChange()});
         MittBus.on('is_login', (i: boolean) => setIsLogin(i));
         checkLogin((e: boolean) => {setIsLogin(e); setLoading(false)});
-        console.log({is_login});
+        window && window.addEventListener('click', click_to_show);
         // eslint-disable-next-line
     }, []);
 

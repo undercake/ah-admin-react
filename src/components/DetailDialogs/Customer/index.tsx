@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-07 13:41:03
- * @LastEditTime: 2023-08-22 17:07:54
- * @FilePath: /ah-admin-react-from-next/src/components/DetailDialogs/Customer/index.tsx
+ * @LastEditTime: 2023-08-29 12:13:36
+ * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/index.tsx
  * @Description: 
  */
 import Core from '../../../components/DetailDialogs/Core';
@@ -88,11 +88,22 @@ function Customer({
             });
     }
 
+    const loadMapScript = () => {
+        const hasScript = document.getElementById("mapScript");
+        if (hasScript) return;
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.id = "mapScript";
+        script.src = "https://map.qq.com/api/gljs?v=1.exp&key=DMGBZ-6GSKU-TTHVU-B54EM-QVHZJ-VUFNZ&callback=initMap";
+        document.body.appendChild(script);
+    }
+
     useEffect(() => {
         // console.log('CustomerEditor');
         setOpen(true);
         getDetail();
         getHistory();
+        loadMapScript();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
