@@ -1,8 +1,8 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-22 17:04:48
- * @FilePath: /ah-admin-react-from-next/src/pages/Customer/lists.tsx
+ * @LastEditTime: 2023-08-30 11:24:10
+ * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
 import Card from '../../components/Card';
@@ -48,7 +48,6 @@ function List({type = 0} : {type?: number}) {
             urls.customer_other,
             urls.customer_past
         ];
-        console.log(cus_urls[type])
         const url = cus_urls[type] + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
           // @ts-ignore
         const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(urls.customer_search + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : ''), { search: searchStr });
@@ -58,12 +57,10 @@ function List({type = 0} : {type?: number}) {
             setData(res.data.map((d: Customer) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
-            setCount(res.count)
-            console.log(res);
+            setCount(res.count);
             setLoading(false);
             setError(false);
         }).catch((e) => {
-            console.log(e);
             setLoading(false);
             setError(true);
         });
@@ -98,10 +95,8 @@ function List({type = 0} : {type?: number}) {
     // }
 
     const handleExportExcel = (ids: number[]) => {
-        console.log(ids);
         const exportData: (string | number)[][] = [];
         data.forEach(({id, FullName, Tel1, Tel2, Tel3, TotalCount, HouseArea, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate }) => {
-            console.log({id, FullName, Tel1, Tel2, Tel3, TotalCount, HouseArea, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate })
             const baseData:any[] = [
                     FullName,
                     `${Tel1} ${Tel2} ${Tel3}`,

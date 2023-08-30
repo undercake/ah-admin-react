@@ -1,8 +1,8 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-22 16:57:17
- * @FilePath: /ah-admin-react-from-next/src/pages/Admin/Deleted.tsx
+ * @LastEditTime: 2023-08-30 11:24:21
+ * @FilePath: /ah-admin-react/src/pages/Admin/Deleted.tsx
  * @Description : Customer list page
  */
 import Card from '../../components/Card';
@@ -51,7 +51,6 @@ function CustomerList() {
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
-            console.log(res);
         });
     }
 

@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-08-22 17:05:28
- * @FilePath: /ah-admin-react-from-next/src/pages/Employee/list.tsx
+ * @LastEditTime: 2023-08-30 11:24:04
+ * @FilePath: /ah-admin-react/src/pages/Employee/list.tsx
  * @Description: employee list page
  */
 import Card from '../../components/Card';
@@ -49,9 +49,7 @@ function EmployeeList() {
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
-            console.log(res);
         }).catch((e) => {
-            console.log(e);
             setError(true);
         }).finally(() => {
             setLoading(false);
@@ -59,7 +57,6 @@ function EmployeeList() {
     }
 
     const handleEditorClose = (e: Event, reason: string) => {
-        console.log(e, reason);
         (reason == 'button' || reason == 'submit') && setTimeout(() => {
             setEditId(-1);
         }, 300);
@@ -69,7 +66,6 @@ function EmployeeList() {
     useEffect(getData, [page, rowsPerPage, searchStr]);
 
     const openEdit = (id: number) => {
-        console.log(id);
         setEditId(id);
     }
 
@@ -82,7 +78,6 @@ function EmployeeList() {
     }
 
     const handleExportExcel = (ids: number[]) => {
-        console.log(ids);
         const exportData: (string | number)[][] = [];
         data.forEach(({ id, FullName, Tel, IDCode, Birthday, Address, Department, Comment, Sex }) => {
             if (ids.includes(id))

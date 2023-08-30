@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-08-22 17:05:14
- * @FilePath: /ah-admin-react-from-next/src/pages/Employee/deleted.tsx
+ * @LastEditTime: 2023-08-30 11:24:08
+ * @FilePath: /ah-admin-react/src/pages/Employee/deleted.tsx
  * @Description: employee list page
  */
 import Card from '../../components/Card';
@@ -39,7 +39,6 @@ function EmployeeList() {
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
-            console.log(res);
         });
     }
 

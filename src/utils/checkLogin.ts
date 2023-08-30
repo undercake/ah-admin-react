@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-29 08:48:09
- * @LastEditTime: 2023-08-26 15:19:51
- * @FilePath: /ah-admin-react-from-next/src/utils/checkLogin.ts
+ * @LastEditTime: 2023-08-30 11:26:43
+ * @FilePath: /ah-admin-react/src/utils/checkLogin.ts
  * @Description: check if login
  */
 import { urls } from '../config';
@@ -23,11 +23,10 @@ const checkLogin: ICheckLogin = (fun = ()=>{}) => {
 };
 
 const heart_beat = ()=>{
-    console.log('heart_beat');
     // @ts-ignore
     axios.get(urls.heartbeat).then((d:{message:string;last_sync: string;})=>{
-        console.log('heart_beat', d);
         MittBus.emit('lastSync', d.last_sync);
+        // TODO: 完善提示
     }).catch(console.log);
 }
 // @ts-ignore

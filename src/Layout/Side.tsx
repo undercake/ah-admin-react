@@ -2,8 +2,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-08-26 15:28:30
- * @FilePath: /ah-admin-react-from-next/src/Layout/Side.tsx
+ * @LastEditTime: 2023-08-30 11:28:01
+ * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
 import { useState, useEffect, MouseEvent, Fragment } from 'react';
@@ -165,7 +165,6 @@ function Side({ open }: { open: boolean }) {
     }
 
     const hashRouteChange = (path: string)=>{
-        console.log({path});
         setPath(path);
         tongleCol(path2target(path));
     }
@@ -182,7 +181,7 @@ function Side({ open }: { open: boolean }) {
         window && window.addEventListener('click', handlePopoverClose);
         tongleCol(path2target(get()));
         setPath(get());
-        MittBus.on('lastSync', (e:string)=>{setSyncTime(e);console.log(e);})
+        MittBus.on('lastSync', (e:string)=>{setSyncTime(e);})
         MittBus.on('getLists', () => getLists(setMenuList, true));
     }, []);
 

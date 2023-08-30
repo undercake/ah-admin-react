@@ -1,5 +1,4 @@
 import { useEffect, useState, forwardRef } from 'react';
-import Snackbar from '@mui/material/Snackbar';
 import Stack from '@mui/material/Stack';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import mittBus from '../utils/MittBus';
@@ -33,7 +32,6 @@ function Massager() {
                 }, 2);
             setMsg(msg);
             setOpen(true);
-            console.log(msg);
             clearTimeout(timer);
             timer = setTimeout(() => {
                 handleClose();

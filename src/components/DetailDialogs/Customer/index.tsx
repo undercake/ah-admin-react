@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-07 13:41:03
- * @LastEditTime: 2023-08-29 12:13:36
+ * @LastEditTime: 2023-08-30 11:20:00
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/index.tsx
  * @Description: 
  */
@@ -56,12 +56,9 @@ function Customer({
             .get(`${urls.customer_detail}/id/${id}`)
             // @ts-ignore
             .then((res: resData<Customer>) => {
-                console.log(res);
                 setDetail(res.data);
-                console.log({detail})
             })
             .catch((e) => {
-                console.log(e);
                 setError(true);
             }).finally(() => {
                 setLoading(false);
@@ -74,14 +71,11 @@ function Customer({
             .get(`${urls.customer_history}/id/${id}/page/${page}`)
             // @ts-ignore
             .then((res: resListData<HistoryData>) => {
-                console.log({'0':1,res});
                 setHistory(res.data);
-                console.log({'1':2,history})
                 // @ts-ignore
                 setTotal(res.total);
             })
             .catch((e) => {
-                console.log(e);
                 setPageError(true);
             }).finally(() => {
                 setPageLoading(false);
@@ -89,17 +83,22 @@ function Customer({
     }
 
     const loadMapScript = () => {
+        const key = 'DMGBZ-6GSKU-TTHVU-B54EM-QVHZJ-VUFNZ';
         const hasScript = document.getElementById("mapScript");
         if (hasScript) return;
+        const MapScript = document.createElement("script");
+        MapScript.charset = "utf-8";
+        MapScript.type = "text/javascript";
+        MapScript.src = `https://map.qq.com/api/gljs?v=1.exp&key=${key}`;
         const script = document.createElement("script");
+        script.charset = "utf-8";
         script.type = "text/javascript";
         script.id = "mapScript";
-        script.src = "https://map.qq.com/api/gljs?v=1.exp&key=DMGBZ-6GSKU-TTHVU-B54EM-QVHZJ-VUFNZ&callback=initMap";
+        script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${key}&callback=initMap`;
         document.body.appendChild(script);
     }
 
     useEffect(() => {
-        // console.log('CustomerEditor');
         setOpen(true);
         getDetail();
         getHistory();

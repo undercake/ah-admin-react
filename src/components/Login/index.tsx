@@ -12,6 +12,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';  // 密码不可�
 import mittBus from '../../utils/MittBus';
 import axios from '../../utils/Axios';
 import FormInput from '../../components/FormComponents/FormInput';
+import QRLogin from './QRLogin';
 // import Image from 'next/image';
 import md5 from 'md5';
 
@@ -61,16 +62,17 @@ function VerificationImg({random, handleClick}: {random: string, handleClick: ()
 
 function Login(props: Props) {
     const [showPassword, setShowPassword]                     = useState(false);
-    const [username, setUsername]                             = useState('');                 // 用户名
-    const [password, setPassword]                             = useState('');                 // 密码
-    const [verification, setVerification]                     = useState('');                 // 验证码
-    const [userHelperName, setUserHelperName]                 = useState('');                 // 用户名提示
-    const [userHelperPassword, setUserHelperPassword]         = useState('');                 // 密码提示
-    const [userHelperVerification, setUserHelperVerification] = useState('');                 // 验证码提示
-    const [userColorName, setUserColorName]                   = useState<colors>(mainColor);  // 用户名颜色
-    const [userColorPassword, setUserColorPassword]           = useState<colors>(mainColor);  // 密码颜色
-    const [userColorVerification, setUserColorVerification]   = useState<colors>(mainColor);  // 验证码颜色
-    const [random, setRandom]                                 = useState('' + Math.random());                 // 验证码随机数
+    const [username, setUsername]                             = useState('');                  // 用户名
+    const [password, setPassword]                             = useState('');                  // 密码
+    const [verification, setVerification]                     = useState('');                  // 验证码
+    const [userHelperName, setUserHelperName]                 = useState('');                  // 用户名提示
+    const [userHelperPassword, setUserHelperPassword]         = useState('');                  // 密码提示
+    const [userHelperVerification, setUserHelperVerification] = useState('');                  // 验证码提示
+    const [userColorName, setUserColorName]                   = useState<colors>(mainColor);   // 用户名颜色
+    const [userColorPassword, setUserColorPassword]           = useState<colors>(mainColor);   // 密码颜色
+    const [userColorVerification, setUserColorVerification]   = useState<colors>(mainColor);   // 验证码颜色
+    const [random, setRandom]                                 = useState('' + Math.random());  // 验证码随机数
+    const [isQRLogin, setisQRLogin] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
@@ -91,7 +93,6 @@ function Login(props: Props) {
                 verification
             })
             .then(() => {
-                console.log('Validation successful');
                 return axios.post(urls.login, {
                     username,
                     passwordMd5: md5(password),
@@ -105,7 +106,6 @@ function Login(props: Props) {
                 }
             })
             .catch((err) => {
-                console.log(err);
                 if ('msg' in err) {
                     if (err.msg.indexOf('验证码') !== -1) {
                         setUserHelperVerification(err.msg);
@@ -123,37 +123,18 @@ function Login(props: Props) {
                     const [setHelper, setUserColor] = kvObj[err.params.path];
                     setHelper(err.message);
                     setUserColor('error');
-                } else {
-                    console.log(err);
                 }
             });
     };
 
     const handleClick = () => {
-        console.log('click');
         setRandom('' + Math.random());
         setUserColorVerification(mainColor)
         setUserHelperVerification('');
         setVerification('');
     }
 
-    return (
-        <>
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center'
-                }}
-            >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    昆明阿惠家政
-                </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    const FormLogin = ()=> <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <FormInput
                         label='用户名'
                         id='outlined-adornment-username'
@@ -245,6 +226,48 @@ function Login(props: Props) {
                         登录
                     </Button>
                 </Box>
+
+    return (
+        <>
+            <Box
+                sx={{
+                    marginTop: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                }}
+            >
+                <Avatar sx={{ m: 1, width: '6.3rem', height: '6rem'}} variant='square' src='/static/logo.gif'>
+                    {/* <LockOutlinedIcon /> */}
+                </Avatar>
+                <Typography component="h1" variant="h5" sx={{marginBottom: '1rem'}}>
+                    阿惠家政
+                </Typography>
+                {
+                    isQRLogin ?
+                    <>
+                    <QRLogin></QRLogin>
+                        <Button
+                            color="primary"
+                            size="medium"
+                            variant="text"
+                            onClick={()=>setisQRLogin(false)}
+                        >
+                            账号密码登录
+                        </Button>
+                    </>:
+                    <>
+                        <FormLogin />
+                        <Button
+                            color="primary"
+                            size="medium"
+                            variant="text"
+                            onClick={()=>setisQRLogin(true)}
+                        >
+                            企业微信扫码登录
+                        </Button>
+                    </>
+                }
             </Box>
             <Copyright sx={{ mt: 3, mb: 4 }} />
         </>
@@ -252,3 +275,4 @@ function Login(props: Props) {
 }
 
 export default Login;
+

@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-08-15 10:41:11
+ * @LastEditTime: 2023-08-30 11:24:16
  * @FilePath: /ah-admin-react/src/pages/Admin/List.tsx
  * @Description: Admin list page
  */
@@ -51,17 +51,14 @@ function AdminList() {
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
-            console.log(res);
             setLoading(false);
         }).catch(e => {
-            console.log(e);
             setError(true);
             setLoading(false);
         });
     }
 
     const handleEditorClose = (e: Event, reason: string) => {
-        console.log(e, reason);
         (reason == 'button' || reason == 'submit') && setTimeout(() => {
             setEditId(-1);
         }, 300);
@@ -71,7 +68,6 @@ function AdminList() {
     useEffect(getData, [page, rowsPerPage, searchStr]);
 
     const openEdit = (id: number) => {
-        console.log(id);
         setEditId(id);
     }
 

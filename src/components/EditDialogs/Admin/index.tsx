@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:27:03
- * @LastEditTime: 2023-08-22 16:59:43
- * @FilePath: /ah-admin-react-from-next/src/components/EditDialogs/Admin/index.tsx
+ * @LastEditTime: 2023-08-30 11:24:49
+ * @FilePath: /ah-admin-react/src/components/EditDialogs/Admin/index.tsx
  * @Description: 
  */
 
@@ -30,11 +30,9 @@ function Admin({id, handleClose}:Props) {
 
     const handleSubmit = (e: SubmitEvent) => {
         e.preventDefault();
-        console.log('submit');
     }
 
     const onChange = (val: string | number, name: string) => {
-        console.log(val, name);
     }
 
     const colors = {};

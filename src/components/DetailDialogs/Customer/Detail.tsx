@@ -1,13 +1,14 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-09 13:45:55
- * @LastEditTime: 2023-08-29 17:38:02
+ * @LastEditTime: 2023-08-30 15:56:19
  * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/Detail.tsx
  * @Description: customer detail dialog
  */
 import ScrollView from '../../../components/ScrollView';
 import Card from '../../../components/Card';
 import FormInput from '../../../components/FormComponents/FormInput';
+import { Highlight } from '../../ListTable'
 import type Customer from "../../../pages/Customer/Customer.d";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from 'react';
@@ -33,39 +34,47 @@ interface TMapLocation {
 }
 
 const Dvd = () => <span style={{ display: 'inline-block', width: '1.5rem' }} />
+let timer:number|NodeJS.Timeout = 0;
 
 function Detail({ data, ...e }: { data: Customer, [key: string]: any }) {
 
     const [locations, setLocations] = useState<TMapLocation[]>([]);
     const [loadingLocation, setLoadingLocation] = useState(true);
     const [errorLocation, setErrorLocation] = useState(false);
+    const [searchStr, setSearchStr] = useState('');
 
     const searchMaps = () => {
-        axios.post(urls.customer_get_map, {
-            addr: (data.Address.split('（')[0].split(/0-9/)[0])
-            // @ts-ignore
-        }).then((e: {
-            count:number;
-            message: string;
-            data: TMapLocation[];
-            request_id:string;
-            status: number;
-        }) => {
-            console.log(e);
-            if (e.status === 0) {
-                setLocations(e.data);
-            } else {
-                setLocations([]);
-            }
-        }).catch(e=>
-            setErrorLocation(true)
-        ).finally(() => {
-            setLoadingLocation(false);
-        });
+        clearTimeout(timer);
+        timer = setTimeout(()=>{
+            setErrorLocation(false);
+            setLoadingLocation(true);
+            axios.post(urls.customer_get_map, {
+                addr: searchStr
+                // @ts-ignore
+            }).then((e: {
+                count:number;
+                message: string;
+                data: TMapLocation[];
+                request_id:string;
+                status: number;
+            }) => {
+                if (e.status === 0) {
+                    setLocations(e.data);
+                } else {
+                    setLocations([]);
+                }
+            }).catch(e=>
+                setErrorLocation(true)
+            ).finally(() => {
+                setLoadingLocation(false);
+            });
+        }, 1000);
     }
 
+    useEffect(searchMaps, [searchStr]);
+
     useEffect(() => {
-        console.log(data);
+        setSearchStr(data.Address.split(' ')[0].split('（')[0].split(/[0-9]/)[0]);
         searchMaps();
     }, []);
     return <ScrollView {...e}>
@@ -95,9 +104,9 @@ function Detail({ data, ...e }: { data: Customer, [key: string]: any }) {
                         name='search_maps'
                         label='地址搜索'
                         placeholder='请输入地址'
+                        value={searchStr}
                         onChange={(e) => {
-                            console.log(e.target.value);
-                            searchMaps();
+                            setSearchStr(e.target.value);
                         }}
                     />
                 </div>
@@ -113,7 +122,7 @@ function Detail({ data, ...e }: { data: Customer, [key: string]: any }) {
                 </div> :
                 locations.length === 0 ?
                 <p className="text-center">暂无</p> :
-                locations.map((m, i)=><p key={i} style={{marginTop: '1rem'}}>{m.address}</p>)
+                locations.map((m, i)=><p key={i} style={{marginTop: '1rem'}}><Highlight text={m.address} searchStr={searchStr}></Highlight></p>)
                 }
             </Box>
         </Card>

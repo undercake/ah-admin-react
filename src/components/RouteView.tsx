@@ -16,7 +16,6 @@ function RouteView({DefaultComponent = () => <span />}: RouteViewProps) {
 
     const handleHashChange = (e: string) => {
         setReady(false);
-        console.log({e});
         setTimeout(() => setReady(true), 300);
         setHash(e);
     };

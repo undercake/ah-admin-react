@@ -48,10 +48,10 @@ class Info extends Component<InfoProps, InfoState> {
     };
 
     handleSubmit = (e: SubmitEvent) => {
-        console.log(e);
         e.preventDefault();
         const { oldPass, newPass, repeatPass } = this.state;
         axios.post(urls.my_set_pass, { oldpass: md5(oldPass), newpass: md5(newPass), newpass_repeat: md5(repeatPass) }).then((res) => {
+            // TODO: 完善提示
             console.log(res);
         });
     }

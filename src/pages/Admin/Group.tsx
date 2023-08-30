@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:18:11
- * @LastEditTime: 2023-08-22 17:03:58
- * @FilePath: /ah-admin-react-from-next/src/pages/Admin/Group.tsx
+ * @LastEditTime: 2023-08-30 11:24:18
+ * @FilePath: /ah-admin-react/src/pages/Admin/Group.tsx
  * @Description: 
  */
 import Card from '../../components/Card';
@@ -46,10 +46,8 @@ function Group() {
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
-            console.log(res);
             setLoading(false);
         }).catch(e => {
-            console.log(e);
             setError(true);
             setLoading(false);
         });
@@ -66,7 +64,6 @@ function Group() {
     }
 
     const openEdit = (id: number) => {
-        console.log(id);
         setEditId(id);
     }
 

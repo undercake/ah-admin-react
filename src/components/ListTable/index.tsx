@@ -76,7 +76,7 @@ interface EnhancedTableProps {
     error              ?: boolean;
 }
 
-const Highlight = ({ text, searchStr }: { text: string, searchStr: string }) => {
+export const Highlight = ({ text, searchStr }: { text: string, searchStr: string }) => {
     const index = text.toLowerCase().indexOf(searchStr.toLowerCase());
     if (searchStr.trim() === '' || index === -1) {
         return <>{text}</>;
@@ -131,14 +131,12 @@ export default function ListTable({
 
     useEffect(() => {
         setCurrentPage(page);
-        console.log(page);
     }, [page]);
 
 
     const handlePopOver = (e:MouseEvent, index:string) => {
         setAnchorEl(e.currentTarget as HTMLElement);
         setPopIndex(index);
-        console.log({anchorEl});
     }
 
     const handleClose = () => {
@@ -277,7 +275,6 @@ export default function ListTable({
                                             <ButtonGroup size = "small" aria-label = "small button group">
                                                 {editList.map(({ label, onClick, color = 'primary', showConfirm, ...e }, ed_index) => {
                                                     // const { label, onClick, color = 'primary', showConfirm, ...e } = editList[ed_key];
-                                                    // console.log({ed_key, ed_index});
                                                     const colors = {
                                                         primary: {
                                                             backgroundColor: 'rgba(25, 141, 255, 0.04)',

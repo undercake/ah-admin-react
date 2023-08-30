@@ -135,12 +135,10 @@ export class EmployeeEditor extends Component<Props, State>{
     }
 
     componentDidMount(): void {
-        console.log('EmployeeEditor');
         setTimeout(() => {
             this.setState({ open: true });
         }, 10);
         this.props.id > 0 && axios.get(`${urls.employee_detail}/id/${this.props.id}`).then((res) => {
-            console.log(res);
               // @ts-ignore
             this.setState({ formData: res.detail });
         });
@@ -156,15 +154,12 @@ export class EmployeeEditor extends Component<Props, State>{
 
     handleSubmit = (e: SubmitEvent) => {
         e.preventDefault();
-        console.log(e);
     }
 
     onChange = (val: string | number, name: string) => {
         const formData = { ...this.state.formData, [name]: val };
-        console.log(formData, name, val);
           // @ts-ignore
         this.setState({ formData });
-        console.log(this.state.formData);
     }
 
     render() {

@@ -33,7 +33,6 @@ axios.interceptors.response.use(
     (res) => {
         let data = res;
         if (('status' in res) && ('statusText' in res)) data = res.data;
-        // console.log('res', data);
 
         if (typeof data !== 'object') {
             mittBus.emit('msgEmit', { type: 'error', msg: '服务端异常！' });
@@ -59,7 +58,6 @@ axios.interceptors.response.use(
         return Promise.resolve(data);
     },
     (error, ...e) => {
-        console.log({error, e})
         // 处理失败响应
         let msg = '';
         if (error.response?.status === 404) {

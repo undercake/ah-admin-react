@@ -83,5 +83,9 @@ export const urls: url = {
     order_get_remain      : BaseUri + '/order/get_remain',
     order_get_emp         : BaseUri + '/order/get_emp',
     customer_quick_blk    : BaseUri + '/customer/quick_black',
-    customer_quick_rec_blk: BaseUri + '/customer/quick_rec_black'
+    customer_quick_rec_blk: BaseUri + '/customer/quick_rec_black',
+    login_qr              : BaseUri + '/user/wx_login',
+    login_qr_is_scanned   : BaseUri + '/user/is_wx_scanned',
 };
+
+export const version = '0.9.1';

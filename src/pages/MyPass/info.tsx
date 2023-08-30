@@ -56,16 +56,15 @@ class Info extends Component<InfoProps, InfoState> {
 
     componentDidMount(): void {
         axios.get(urls.my_get).then((res) => {
-            console.log(res);
             const { full_name, user_name, mobile, email } = res.data;
             this.setState({ nickname: full_name, userName: user_name, mobile, email });
         });
     }
 
     handleSubmit = (e: SubmitEvent) => {
-        console.log(e);
         e.preventDefault();
         const { nickname, userName, mobile, email } = this.state;
+        // TODO: 完善提示
         axios.post(urls.my_set, { full_name: nickname, user_name: userName, mobile, email }).then((res) => {
             console.log(res);
         });

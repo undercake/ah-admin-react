@@ -1,8 +1,8 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-22 17:04:35
- * @FilePath: /ah-admin-react-from-next/src/pages/Customer/deleted.tsx
+ * @LastEditTime: 2023-08-30 11:24:13
+ * @FilePath: /ah-admin-react/src/pages/Customer/deleted.tsx
  * @Description : Customer list page
  */
 import Card from '../../components/Card';
@@ -35,8 +35,7 @@ function CustomerList() {
             setData(res.data.map((d: Customer) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
-            setCount(res.count)
-            console.log(res);
+            setCount(res.count);
         });
     }
 

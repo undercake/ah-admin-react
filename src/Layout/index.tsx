@@ -8,14 +8,11 @@ import Massager from './Massager';
 import Login from '../components/Login';
 import checkLogin from '../utils/checkLogin';
 import MittBus from '../utils/MittBus';
-import {hashChange} from '../utils/Router';
-import RouteView from '../components/RouteView';
 import Route from '../Routes';
 import ScrollView from '../components/ScrollView';
 import Loading from '../components/Status/Loading';
-// import { urls } from '../config';
+import { version } from '../config';
 import './styles/main.scss';
-import { CompoundComponentContext } from '@mui/base/utils/useCompound';
 // import axios from '../utils/Axios';
 
 interface CastLoginProps {
@@ -34,13 +31,12 @@ function Layout(props: LayoutProps) {
 
     const china_to_show = ["❤富强❤", "❤民主❤", "❤文明❤", "❤和谐❤", "❤自由❤", "❤平等❤", "❤公正❤", "❤法治❤", "❤爱国❤", "❤敬业❤", "❤诚信❤", "❤友善❤"];
     let index = 0;
-    const click_to_show = (e: any) => {
+    const click_to_show = (e: MouseEvent) => {
             let showSpan = document.createElement('span');
             showSpan.innerHTML = china_to_show[index++ % china_to_show.length];
             showSpan.style.position = 'fixed';
             showSpan.style.top = e.clientY + 'px';
-            showSpan.style.left = e.clientX + 'px';
-            console.log(e.clientX, e.clientY);
+            showSpan.style.left = (e.clientX + 20) + 'px';
             let color_list = ["#ff3333", "#ff8000", "#f9f906", "#b9f20d", "#00ff00", "#00ff80", "#00ffff", "#007fff", "#0000ff", "#7f00ff", "#ff00ff", "#ff0080"];
           showSpan.style.color = color_list[Math.floor(Math.random() * color_list.length)];
         document.body.appendChild(showSpan);
@@ -83,6 +79,7 @@ function Layout(props: LayoutProps) {
                             <ScrollView style={{ height: 'calc(100vh - 8rem)', overflowY: 'auto', borderRadius: '1rem' }}>
                                 {/* <RouteView DefaultComponent={Loading} /> */}
                                 <Route />
+                                <span style={{position: 'fixed', bottom: '1rem', right: '1rem'}}>版本号：{version}</span>
                             </ScrollView>
                         </Box>
                     </Box>

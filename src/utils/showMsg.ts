@@ -9,7 +9,6 @@ export function success(msg:string) {
 }
 
 export function warning(msg:string) {
-    console.log('warning', msg);
     mittBus.emit('msgEmit', {type: 'warning', msg});
 }
 
