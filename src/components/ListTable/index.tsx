@@ -39,7 +39,7 @@ export type editList =
     }[];
 
 export interface itemInRows {
-        type  : 'string' | 'options' | 'avatar' | 'image';
+        type  : 'string' | 'options' | 'avatar' | 'image' | 'others';
         name  : string;
         value?: any;
 }
@@ -90,16 +90,18 @@ export const Highlight = ({ text, searchStr }: { text: string, searchStr: string
     );
 }
 
-const ComponentByType = ({ type, data, rowVal, searchStr }: { type: 'string' | 'options' | 'avatar' | 'image'; data: any, rowVal: any, searchStr: string }) => {
+const ComponentByType = ({ type, data, rowVal, searchStr }: { type: itemInRows["type"]; data: any, rowVal: any, searchStr: string }) => {
     switch (type) {
         case 'string': 
-            return <><Highlight text={data} searchStr={searchStr} /></>;
+            return <Highlight text={data} searchStr={searchStr} />;
         case 'options': 
-            return <><Highlight text={rowVal[data]} searchStr={searchStr} /></>;
+            return <Highlight text={rowVal[data]} searchStr={searchStr} />;
         case 'avatar': 
             return <Avatar alt = {data} src = {data} variant = "rounded" />
         case 'image': 
             return <img src = {data} alt = "" className = 'w-10 h-10' />;
+        case 'others': 
+            return <>{rowVal(data)}</>;
         default: 
             return <></>;
     }
@@ -197,28 +199,21 @@ export default function ListTable({
                         />
                         <TableBody>
                             {loading ?
-
-                            <tr style={{width: '100%'}}>
-                                <td colSpan={Object.keys(rows).length + 1}>
-                                    <Loading />
+                                <tr style={{width: '100%'}}>
+                                    <td colSpan={Object.keys(rows).length + 1}>
+                                        <Loading />
                                     </td>
                                 </tr>
                                 :
-                                data.length === 0 ?
+                                data.length === 0  || error ?
                                     <tr style={{width: '100%'}}>
                                         <td colSpan={Object.keys(rows).length + 1} className='text-center'>
-                                            <Empty />
-                                            什么都没有了
+                                            {(data.length === 0 && !error) && (<><Empty />
+                                            什么都没有了</>)}
+                                            {error && (<><Error />
+                                                出错了</>)}
                                         </td>
                                     </tr>
-                                    :
-                                    error ?
-                                        <tr style={{width: '100%'}}>
-                                            <td colSpan={Object.keys(rows).length + 1} className='text-center'>
-                                                <Error />
-                                                出错了
-                                            </td>
-                                        </tr>
                                         :
                                 data.map((row, ind) => {
                                 const isItemSelected = isSelected(row.id);

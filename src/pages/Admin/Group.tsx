@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:18:11
- * @LastEditTime: 2023-08-30 11:24:18
+ * @LastEditTime: 2023-09-20 12:17:15
  * @FilePath: /ah-admin-react/src/pages/Admin/Group.tsx
  * @Description: 
  */
@@ -12,19 +12,15 @@ import axios, { type resListData } from '../../utils/Axios';
 import { urls } from '../../config';
 
 interface Group {
-    id        : number;
-    rights    : string;
-    user_group: number;
-    name      : string;
+    id            : number;
+    rights        : string;
+    name          : string;
+    group_describe: string;
 }
 
 const rows: rows = {
-    full_name: { type: 'string', name: '姓名' },
-    user_name: { type: 'string', name: '登录名' },
-    mobile: { type: 'string', name: '手机号' },
-    group_name: { type: 'string', name: '角色' },
-    // intro: { type: 'string', name: '简介' },
-    // note: { type: 'string', name: '备注' },
+    name: { type: 'string', name: '组名' },
+    rights: { type: 'others', name: '权限', value: (e:string) => `${e.split(',').length}项` },
 }
 
 function Group() {
@@ -33,27 +29,30 @@ function Group() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount] = useState(0);
     const [editId, setEditId] = useState(-1);
-    const [searchStr, setSearchStr] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const getData = () => {
-        const url = urls.admin_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
+        setLoading(true);
+        setError(false);
+        const url = urls.group_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
         // @ts-ignore
-        axios.get(url).then((res: resListData<Admin>) => {
+        axios.get(url).then((res: resListData<Group>) => {
+            console.log(res);
             // @ts-ignore
-            setData(res.data.map((d: Admin) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
+            setData(res.grp);
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
             setLoading(false);
         }).catch(e => {
+            console.log(e)
             setError(true);
             setLoading(false);
         });
     }
 
-    useEffect(getData, [page, rowsPerPage, searchStr]);
+    useEffect(getData, [page, rowsPerPage]);
 
     const handleDelete = (id: number) => {
         axios.delete(urls.admin_delete + `/id/${id}`).then(getData);

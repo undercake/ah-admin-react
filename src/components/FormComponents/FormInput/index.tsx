@@ -61,7 +61,11 @@ function FormInput({
             marginBottom: margin,
             '& fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline': {
                 borderColor: 'rgb(107 114 128 / 500)'
-                }, ...sx }}
+                },
+            '.dark & fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline': {
+                borderColor: 'rgb(107 114 128 / 200)'
+                },
+                ...sx }}
             required={required}
             fullWidth={fullWidth}
             variant={variant}

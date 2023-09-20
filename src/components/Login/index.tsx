@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from 'react';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -41,7 +40,7 @@ const schema = Yup.object().shape({
     verification: Yup.string().required('验证码不能为空').length(5, '验证码必须为5位')
 });
 
-function VerificationImg({random, handleClick}: {random: string, handleClick: () => void}) {
+function VerificationImg({ random, handleClick }: { random: string, handleClick: () => void }) {
     const [src, setSrc] = useState('/midas/cap/get?_=' + random);
     useEffect(() => {
         setSrc('/midas/cap/get?_=' + random);
@@ -55,23 +54,23 @@ function VerificationImg({random, handleClick}: {random: string, handleClick: ()
             width="250"
             height="62"
             style={{ cursor: 'pointer', marginRight: '-.78rem' }}
-            // priority
+        // priority
         />
     );
 }
 
 function Login(props: Props) {
-    const [showPassword, setShowPassword]                     = useState(false);
-    const [username, setUsername]                             = useState('');                  // 用户名
-    const [password, setPassword]                             = useState('');                  // 密码
-    const [verification, setVerification]                     = useState('');                  // 验证码
-    const [userHelperName, setUserHelperName]                 = useState('');                  // 用户名提示
-    const [userHelperPassword, setUserHelperPassword]         = useState('');                  // 密码提示
+    const [showPassword, setShowPassword] = useState(false);
+    const [username, setUsername] = useState('');                  // 用户名
+    const [password, setPassword] = useState('');                  // 密码
+    const [verification, setVerification] = useState('');                  // 验证码
+    const [userHelperName, setUserHelperName] = useState('');                  // 用户名提示
+    const [userHelperPassword, setUserHelperPassword] = useState('');                  // 密码提示
     const [userHelperVerification, setUserHelperVerification] = useState('');                  // 验证码提示
-    const [userColorName, setUserColorName]                   = useState<colors>(mainColor);   // 用户名颜色
-    const [userColorPassword, setUserColorPassword]           = useState<colors>(mainColor);   // 密码颜色
-    const [userColorVerification, setUserColorVerification]   = useState<colors>(mainColor);   // 验证码颜色
-    const [random, setRandom]                                 = useState('' + Math.random());  // 验证码随机数
+    const [userColorName, setUserColorName] = useState<colors>(mainColor);   // 用户名颜色
+    const [userColorPassword, setUserColorPassword] = useState<colors>(mainColor);   // 密码颜色
+    const [userColorVerification, setUserColorVerification] = useState<colors>(mainColor);   // 验证码颜色
+    const [random, setRandom] = useState('' + Math.random());  // 验证码随机数
     const [isQRLogin, setisQRLogin] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -134,99 +133,6 @@ function Login(props: Props) {
         setVerification('');
     }
 
-    const FormLogin = ()=> <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <FormInput
-                        label='用户名'
-                        id='outlined-adornment-username'
-                        color={userColorName}
-                        helperColor={userColorName}
-                        name="username"
-                        required
-                        fullWidth
-                        size='large'
-                        variant="outlined"
-                        error={userColorName == 'error'}
-                        helperText={userHelperName}
-                        onChange={(e) => {
-                            setUsername(e.target.value);
-                            setUserHelperVerification('');
-                            setUserColorVerification(mainColor);
-                            setUserColorPassword(mainColor);
-                        }}
-                        inputProps={{ maxLength: 6 }}
-                    />
-                    <FormInput
-                        label='密码'
-                        id='outlined-adornment-password'
-                        sx={{ mt: 3 }}
-                        color={userColorPassword}
-                        helperColor ={userColorPassword}
-                        type={showPassword ? 'text' : 'password'}
-                        name="password"
-                        required
-                        fullWidth
-                        size='large'
-                        variant="outlined"
-                        error={userColorPassword == 'error'}
-                        helperText={userHelperPassword}
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                            setUserHelperPassword('');
-                            setUserColorPassword(mainColor);
-                            setUserColorVerification(mainColor);
-                        }}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    className="dark:text-gray-50"
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                >
-                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                        inputProps={{ maxLength: 6 }}
-                    />
-                    <FormInput
-                        label='验证码'
-                        id='outlined-adornment-verification'
-                        sx={{ mt: 3 }}
-                        color={userColorVerification}
-                        helperColor ={userColorVerification}
-                        type='text'
-                        name="password"
-                        required
-                        fullWidth
-                        size='large'
-                        variant="outlined"
-                        helperText={userHelperVerification}
-                        error={userColorVerification == 'error'}
-                        onChange={(e) => {
-                            setVerification(e.target.value);
-                            setUserHelperVerification('');
-                            setUserColorVerification(mainColor);
-                        }}
-                        autoComplete="none"
-                        endAdornment={<VerificationImg random={random} handleClick={handleClick} />}
-                        inputProps={{ maxLength: 6 }}
-                        value={verification}
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        className='bg-purple-dark hover:bg-purple-lighter'
-                        color="secondary"
-                        size="large"
-                        sx={{ mt: 3, mb: 2, border: 0, boxShadow: 0, '&:hover': { border: 0, boxShadow: 0 } }}
-                    >
-                        登录
-                    </Button>
-                </Box>
-
     return (
         <>
             <Box
@@ -237,37 +143,132 @@ function Login(props: Props) {
                     alignItems: 'center'
                 }}
             >
-                <Avatar sx={{ m: 1, width: '6.3rem', height: '6rem'}} variant='square' src='/static/logo.gif'>
-                    {/* <LockOutlinedIcon /> */}
+                {/* <Avatar vatar sx={{ m: 1, width: '6.3rem', height: '6rem' }} variant='square' src='/static/logo.gif'>
                 </Avatar>
-                <Typography component="h1" variant="h5" sx={{marginBottom: '1rem'}}>
+                <Typography component="h1" variant="h5" sx={{ marginBottom: '1rem' }}>
                     阿惠家政
-                </Typography>
-                {
+                </Typography>*/}
+                {/* {
                     isQRLogin ?
-                    <>
-                    <QRLogin></QRLogin>
+                    <> */}
+                <Box className='flex'>
+                    <QRLogin className='basis-2/5' handleLogin={handleLogin}></QRLogin>
+                    {/* <Button
+                                color="primary"
+                                size="medium"
+                                variant="text"
+                                onClick={()=>setisQRLogin(false)}
+                            >
+                                账号密码登录
+                            </Button> */}
+                    {/* </>:
+                        <> */}
+                    <Box component="form" className='flex-1' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <Typography className='mb-2 text-center' variant="h5" sx={{ marginBottom: '.5rem' }}>
+                            账号登录
+                        </Typography>
+                        <FormInput
+                            label='用户名'
+                            id='outlined-adornment-username'
+                            color={userColorName}
+                            helperColor={userColorName}
+                            name="username"
+                            required
+                            fullWidth
+                            size='large'
+                            variant="outlined"
+                            error={userColorName === 'error'}
+                            helperText={userHelperName}
+                            onChange={(e) => {
+                                setUsername(e.target.value);
+                                setUserHelperVerification('');
+                                setUserColorVerification(mainColor);
+                                setUserColorPassword(mainColor);
+                            }}
+                            inputProps={{ maxLength: 6 }}
+                        />
+                        <FormInput
+                            label='密码'
+                            id='outlined-adornment-password'
+                            sx={{ mt: 3 }}
+                            color={userColorPassword}
+                            helperColor={userColorPassword}
+                            type={showPassword ? 'text' : 'password'}
+                            name="password"
+                            required
+                            fullWidth
+                            size='large'
+                            variant="outlined"
+                            error={userColorPassword === 'error'}
+                            helperText={userHelperPassword}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                setUserHelperPassword('');
+                                setUserColorPassword(mainColor);
+                                setUserColorVerification(mainColor);
+                            }}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        className="dark:text-gray-50"
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            inputProps={{ maxLength: 6 }}
+                        />
+                        <FormInput
+                            label='验证码'
+                            id='outlined-adornment-verification'
+                            sx={{ mt: 3 }}
+                            color={userColorVerification}
+                            helperColor={userColorVerification}
+                            type='text'
+                            name="password"
+                            required
+                            fullWidth
+                            size='large'
+                            variant="outlined"
+                            helperText={userHelperVerification}
+                            error={userColorVerification === 'error'}
+                            onChange={(e) => {
+                                setVerification(e.target.value);
+                                setUserHelperVerification('');
+                                setUserColorVerification(mainColor);
+                            }}
+                            autoComplete="none"
+                            endAdornment={<VerificationImg random={random} handleClick={handleClick} />}
+                            inputProps={{ maxLength: 6 }}
+                            value={verification}
+                        />
                         <Button
-                            color="primary"
-                            size="medium"
-                            variant="text"
-                            onClick={()=>setisQRLogin(false)}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            className='bg-purple-dark hover:bg-purple-lighter'
+                            color="secondary"
+                            size="large"
+                            sx={{ mt: 3, mb: 2, border: 0, boxShadow: 0, '&:hover': { border: 0, boxShadow: 0 } }}
                         >
-                            账号密码登录
+                            登录
                         </Button>
-                    </>:
-                    <>
-                        <FormLogin />
-                        <Button
+                    </Box>
+                </Box>
+                {/* <Button
                             color="primary"
                             size="medium"
                             variant="text"
                             onClick={()=>setisQRLogin(true)}
                         >
                             企业微信扫码登录
-                        </Button>
-                    </>
-                }
+                        </Button> */}
+                {/* </>
+                } */}
             </Box>
             <Copyright sx={{ mt: 3, mb: 4 }} />
         </>

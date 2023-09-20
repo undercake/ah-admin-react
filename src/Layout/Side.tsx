@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-08-30 11:28:01
+ * @LastEditTime: 2023-09-19 17:24:07
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -24,8 +24,10 @@ import ScrollView from '../components/ScrollView';
 import { getLists, right } from '../utils/Rights';
 import MittBus from '../utils/MittBus';
 import './styles/side.scss';
-import { onPathChange, get, push } from '../utils/Router';
-import { urls } from '../config';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import { get, push } from '../utils/Router';
+import { urls, version } from '../config';
 import axios from '../utils/Axios';
 
 const activeMenu = 'text-purple-dark dark:text-purple-light bg-purple-light dark:bg-purple-dark';
@@ -50,9 +52,9 @@ const handleChildMap = ({
         {child.map((child: right, ind: number) => (
             <ListItem
                 className={
-                    (path == child.path ? activeSubMenu : 'hover:text-purple-lighter dark:hover:text-purple-light') + ' cursor-pointer'
+                    (path === child.path ? activeSubMenu : 'hover:text-purple-lighter dark:hover:text-purple-light') + ' cursor-pointer'
                 }
-                sx={{ paddingLeft: type == 'pop' ? '0' : '3.1rem' }}
+                sx={{ paddingLeft: type === 'pop' ? '0' : '3.1rem' }}
                 key={`${index}-${ind}`}
                 // onClick={() => {
                 //     push(child.path);
@@ -60,7 +62,7 @@ const handleChildMap = ({
             >
                 <Link to={child.path} style={{display: 'flex'}}>
                     <ListItemIcon sx={{ minWidth: '1.5rem' }}>
-                        {type == '0' ? (
+                        {type === '0' ? (
                             <FiberManualRecordIcon
                                 className=" dark:text-white"
                                 sx={{
@@ -75,9 +77,9 @@ const handleChildMap = ({
                         ) : null}
                     </ListItemIcon>
                     {open ?
-                        <ListItemText primary={<span style={{ fontWeight: path == child.path ? 600 : 400 }}>{child.name}</span>} /> :
-                        type == 'pop' ?
-                            <ListItemText primary={<span style={{ fontWeight: path == child.path ? 600 : 400 }}>{child.name}</span>} /> :
+                        <ListItemText primary={<span style={{ fontWeight: path === child.path ? 600 : 400 }}>{child.name}</span>} /> :
+                        type === 'pop' ?
+                            <ListItemText primary={<span style={{ fontWeight: path === child.path ? 600 : 400 }}>{child.name}</span>} /> :
                             null}
                 </Link>
             </ListItem>
@@ -99,7 +101,7 @@ const Tips = ({ index, tipsEl, tips, item }: { index: number; tipsEl: HTMLElemen
             vertical: 'top',
             horizontal: 'left'
         }}
-        open={tips == item.path}
+        open={tips === item.path}
     >
         <Typography className="p-4" sx={{ p: 1 }}>
             {item.name}
@@ -115,7 +117,6 @@ function Side({ open }: { open: boolean }) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [currentTarget, setCurrentTarget] = useState<string>('');
     const [popoverCondition, setPopoverCondition] = useState<string>('');
-    const [syncTime, setSyncTime] = useState<string>('');
 
     let location = useLocation();
 
@@ -148,11 +149,11 @@ function Side({ open }: { open: boolean }) {
         setPopoverCondition('');
     };
 
-    const tongleCol = (target: string) => (currentTarget == target ? setCurrentTarget('') : setCurrentTarget(target));
+    const tongleCol = (target: string) => (currentTarget === target ? setCurrentTarget('') : setCurrentTarget(target));
 
     const path2target = (path: string) => {
         let target = '';
-        path == '/' || path == '' ? (target = '/index') : (target = '/' + get().split('/')[1]);
+        path === '/' || path === '' ? (target = '/index') : (target = '/' + get().split('/')[1]);
         return target;
     };
 
@@ -170,7 +171,6 @@ function Side({ open }: { open: boolean }) {
     }
 
     useEffect(() => {
-        // Google Analytics
         hashRouteChange(get());
     }, [location]);
 
@@ -181,7 +181,6 @@ function Side({ open }: { open: boolean }) {
         window && window.addEventListener('click', handlePopoverClose);
         tongleCol(path2target(get()));
         setPath(get());
-        MittBus.on('lastSync', (e:string)=>{setSyncTime(e);})
         MittBus.on('getLists', () => getLists(setMenuList, true));
     }, []);
 
@@ -224,7 +223,7 @@ function Side({ open }: { open: boolean }) {
                                 onMouseEnter={(e) => showTips(e, item.path)}
                                 onMouseLeave={closeTips}
                                 className={
-                                    (path.startsWith(item.path) || path == item.path || currentTarget == item.path
+                                    (path.startsWith(item.path) || path === item.path || currentTarget === item.path
                                         ? activeMenu
                                         : 'hover:bg-purple-light dark:hover:bg-purple-darkest') + ' h-12 rounded-xl mb-2'
                                 }
@@ -233,8 +232,8 @@ function Side({ open }: { open: boolean }) {
                                     paddingLeft: open ? '1rem' : 0,
                                     marginBottom: '.5rem',
                                     borderRadius: '.75rem',
-                                    backgroundColor: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
-                                    color: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                    backgroundColor: path.startsWith(item.path) || path === item.path || currentTarget === item.path ? 'rgb(237 231 246)' : '',
+                                    color: path.startsWith(item.path) || path === item.path || currentTarget === item.path ? 'rgb(103 58 183)' : '',
                                     '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
                                     '&:hover': { backgroundColor: 'rgb(237 231 246)' }
                                 }}
@@ -244,17 +243,17 @@ function Side({ open }: { open: boolean }) {
                                         className={
                                             item.icon +
                                             ' dark:text-white ' +
-                                            (path.startsWith(item.path) || path == item.path || currentTarget == item.path
+                                            (path.startsWith(item.path) || path === item.path || currentTarget === item.path
                                                 ? activeMenu
                                                 : '')
                                         }
                                     />
                                 </ListItemIcon>
                                 {open ? <ListItemText primary={item.name} /> : null}
-                                {open ? currentTarget == item.path || currentTarget.startsWith(item.path) ? <ExpandLess /> : <ExpandMore /> : null}
+                                {open ? currentTarget === item.path || currentTarget.startsWith(item.path) ? <ExpandLess /> : <ExpandMore /> : null}
                             </ListItemButton>
                             {open ? (
-                                <Collapse key={`col-${index}`} in={currentTarget == item.path || currentTarget.startsWith(item.path)}  className='transition-height duration-300' timeout={200}>
+                                <Collapse key={`col-${index}`} in={currentTarget === item.path || currentTarget.startsWith(item.path)}  className='transition-height duration-300' timeout={200}>
                                     {handleChildMap({ child: item.children, path, index, open })}
                                 </Collapse>
                             ) : (<>
@@ -269,7 +268,7 @@ function Side({ open }: { open: boolean }) {
                                         }
                                     }}
                                     anchorEl={anchorEl}
-                                    open={popoverCondition == item.path}
+                                    open={popoverCondition === item.path}
                                     anchorOrigin={{
                                         vertical: 'bottom',
                                         horizontal: 'right'
@@ -292,7 +291,7 @@ function Side({ open }: { open: boolean }) {
                             <ListItemButton
                                 key={index}
                                 className={
-                                    (path.startsWith(item.path) || path == item.path ? activeMenu : '') + ' h-12 rounded-xl mb-2'
+                                    (path.startsWith(item.path) || path === item.path ? activeMenu : '') + ' h-12 rounded-xl mb-2'
                                 }
                                 // onClick={() => push(item.path)}
                                 onMouseEnter={(e) => showTips(e, item.path)}
@@ -301,8 +300,8 @@ function Side({ open }: { open: boolean }) {
                                     paddingLeft: open ? '1rem' : 0,
                                     marginBottom: '.5rem',
                                     borderRadius: '.75rem',
-                                    backgroundColor: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(237 231 246)' : '',
-                                    color: path.startsWith(item.path) || path == item.path || currentTarget == item.path ? 'rgb(103 58 183)' : '',
+                                    backgroundColor: path.startsWith(item.path) || path === item.path || currentTarget === item.path ? 'rgb(237 231 246)' : '',
+                                    color: path.startsWith(item.path) || path === item.path || currentTarget === item.path ? 'rgb(103 58 183)' : '',
                                     '.dark &:hover': { backgroundColor: 'rgba(94, 53, 177, .5)' },
                                     '&:hover': { backgroundColor: 'rgb(237 231 246)' }
                                 }}
@@ -312,7 +311,7 @@ function Side({ open }: { open: boolean }) {
                                         className={
                                             item.icon +
                                             ' dark:text-white ' +
-                                            (path.startsWith(item.path) || path == item.path ? activeMenu : '')
+                                            (path.startsWith(item.path) || path === item.path ? activeMenu : '')
                                         }
                                     />
                                 </ListItemIcon>
@@ -349,11 +348,9 @@ function Side({ open }: { open: boolean }) {
                     </ListItemButton>
                     {open ? null : <Tips index={9999} tipsEl={tipsEl} tips={tips} item={{name: '退出登录', path: '/exit',detail:'', icon:'', id:0,sort:0, type:0, parent:0, children:[]}} />}
                 </List>
+                <Box sx={{textAlign:'center'}}><Chip sx={{'.dark &': {background: '#bdbdbd'}}} label={version} /></Box>
+
             </ScrollView> : null}
-            {syncTime === '' || !open ? 'null' : <div className='text-center dark:text-gray-500' style={{marginBottom: '6rem'}}>
-                数据同步时间：<br />
-                {syncTime}
-                </div>}
         </Drawer>
     );
 }

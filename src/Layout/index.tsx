@@ -11,13 +11,8 @@ import MittBus from '../utils/MittBus';
 import Route from '../Routes';
 import ScrollView from '../components/ScrollView';
 import Loading from '../components/Status/Loading';
-import { version } from '../config';
 import './styles/main.scss';
-// import axios from '../utils/Axios';
 
-interface CastLoginProps {
-    handleLogin: () => void;
-}
 
 interface LayoutProps {
     children?: React.ReactNode;
@@ -28,6 +23,7 @@ function Layout(props: LayoutProps) {
 
     const [is_login, setIsLogin] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
+    const [syncTime, setSyncTime] = useState<string>('');
 
     const china_to_show = ["❤富强❤", "❤民主❤", "❤文明❤", "❤和谐❤", "❤自由❤", "❤平等❤", "❤公正❤", "❤法治❤", "❤爱国❤", "❤敬业❤", "❤诚信❤", "❤友善❤"];
     let index = 0;
@@ -37,6 +33,7 @@ function Layout(props: LayoutProps) {
             showSpan.style.position = 'fixed';
             showSpan.style.top = e.clientY + 'px';
             showSpan.style.left = (e.clientX + 20) + 'px';
+            showSpan.style.zIndex = '1300';
             let color_list = ["#ff3333", "#ff8000", "#f9f906", "#b9f20d", "#00ff00", "#00ff80", "#00ffff", "#007fff", "#0000ff", "#7f00ff", "#ff00ff", "#ff0080"];
           showSpan.style.color = color_list[Math.floor(Math.random() * color_list.length)];
         document.body.appendChild(showSpan);
@@ -54,6 +51,7 @@ function Layout(props: LayoutProps) {
         MittBus.on('is_login', (i: boolean) => setIsLogin(i));
         checkLogin((e: boolean) => {setIsLogin(e); setLoading(false)});
         window && window.addEventListener('click', click_to_show);
+        MittBus.on('lastSync', (e:string)=>{setSyncTime(e);});
         // eslint-disable-next-line
     }, []);
 
@@ -68,7 +66,7 @@ function Layout(props: LayoutProps) {
                     {/* @ts-ignore */}
                     <Box sx={{ display: 'flex' }}>
                         <CssBaseline />
-                        <Header handleDrawerOpen={handleDrawerOpen} />
+                        <Header handleDrawerOpen={handleDrawerOpen} is_login />
                         <Side open={open} />
 
                         <Box
@@ -79,7 +77,9 @@ function Layout(props: LayoutProps) {
                             <ScrollView style={{ height: 'calc(100vh - 8rem)', overflowY: 'auto', borderRadius: '1rem' }}>
                                 {/* <RouteView DefaultComponent={Loading} /> */}
                                 <Route />
-                                <span style={{position: 'fixed', bottom: '1rem', right: '1rem'}}>版本号：{version}</span>
+                                {syncTime === '' || !open ? 'null' : <div className='text-center dark:text-gray-500'>
+                                    数据同步时间：{syncTime}
+                                    </div>}
                             </ScrollView>
                         </Box>
                     </Box>
@@ -89,8 +89,8 @@ function Layout(props: LayoutProps) {
                     <Box sx={{ width: '100wh', height: '100vh' }} className="pt-10 bg-gray-200 dark:bg-gray-1080">
                         <CssBaseline />
                         <Header handleDrawerOpen={handleDrawerOpen} noMenu />
-                        <Box sx={{ width: 500 }} className="mx-auto">
-                        {loading ? <Loading /> :
+                        <Box sx={{ width: 800 }} className="mx-auto">
+                        {loading ? <Loading sx={{marginTop: '4rem'}} /> :
                             <Card
                                 className="mt-20 mx-auto bg-white dark:bg-gray-800 dark:text-gray-50 p-8"
                                 sx={{ borderRadius: '1rem', boxShadow: 0 }}

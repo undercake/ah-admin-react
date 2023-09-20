@@ -86,6 +86,7 @@ export const urls: url = {
     customer_quick_rec_blk: BaseUri + '/customer/quick_rec_black',
     login_qr              : BaseUri + '/user/wx_login',
     login_qr_is_scanned   : BaseUri + '/user/is_wx_scanned',
+    login_qr_is_loggedin  : BaseUri + '/user/is_wx_loggedin',
 };
 
-export const version = '0.9.1';
+export const version = 'v0.9.5';

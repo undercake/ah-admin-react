@@ -48,7 +48,7 @@ axios.interceptors.response.use(
             mittBus.emit('msgEmit', { msg: res.data.message, type: 'error' });
             // @ts-ignore
             if (data.message) return Promise.reject({ msg: data.message, res });
-            if (data.code == -2) {
+            if (data.code === -2) {
                 mittBus.emit('msgEmit', { type: 'error', msg: '您尚未登陆' });
                 mittBus.emit('is_login', false);
             }

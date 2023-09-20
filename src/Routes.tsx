@@ -60,6 +60,12 @@ export const routes: RouteConfig[] = [
         Component: lazy(() => import(/* webpackChunkName: "EmployeeDeleted" */ './pages/Employee/deleted'))
     },
     {
+        name: 'EmployeeSalary',
+        path: '/employee_salary',
+        // @ts-ignore
+        Component: lazy(() => import(/* webpackChunkName: "EmployeeSalary" */ './pages/Employee/salary'))
+    },
+    {
         // 散户
         name: 'CustomerOther',
         path: '/customer_other',
@@ -108,28 +114,6 @@ export const routes: RouteConfig[] = [
 
 function Routero() {
     return useRoutes(routes);
-
-        // <Route path = '/dashboard' index Component   = {lazy(() => import(/* webpackChunkName: "Home" */ './pages/dashboard'))} />
-        // <Route path = '/my_pass' Component           = {lazy(() => import(/* webpackChunkName: "MyPass" */ './pages/MyPass'))} />
-        // <Route path = '/employee_list' Component     = {lazy(() => import(/* webpackChunkName: "EmployeeList" */ './pages/Employee/list'))} />
-        // <Route path = '/employee_deleted' Component  = {lazy(() => import(/* webpackChunkName: "EmployeeDeleted" */ './pages/Employee/deleted'))} />
-        // <Route path = '/customer_other' Component    = {lazy(() => import(/* webpackChunkName: "CustomerOther" */ './pages/Customer/others'))} />
-        // <Route path = '/customer_contract' Component = {lazy(() => import(/* webpackChunkName: "CustomerList" */ './pages/Customer/lists'))} />
-        // <Route path = '/customer_outdated' Component = {lazy(() => import(/* webpackChunkName: "CustomerOutdated" */ './pages/Customer/outdated'))} />
-        // <Route path = '/customer_deleted' Component  = {lazy(() => import(/* webpackChunkName: "CustomerOutdated" */ './pages/Customer/outdated'))} />
-        // <Route path = '/admin_list' Component        = {lazy(() => import(/* webpackChunkName: "AdminList" */ './pages/Admin/List'))} />
-        // <Route path = '/admin_deleted' Component     = {lazy(() => import(/* webpackChunkName: "AdminDeleted" */ './pages/Admin/Deleted'))} />
-        // <Route path = '/admin_group' Component       = {lazy(() => import(/* webpackChunkName: "AdminGroup" */ './pages/Admin/Group'))} />
-    return <Routes>
-            {routes.map((route, index) => {
-                return <Route
-                    key={index}
-                    path={route.path}
-                    // @ts-ignore
-                    Component={lazy(route.Component)}
-                />;
-            })}
-        </Routes>;
 }
 
 export default Routero;
