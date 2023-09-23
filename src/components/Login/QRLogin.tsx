@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-30 17:18:35
- * @LastEditTime: 2023-09-20 09:35:30
+ * @LastEditTime: 2023-09-23 16:34:25
  * @FilePath: /ah-admin-react/src/components/Login/QRLogin.tsx
  * @Description: 
  */
@@ -79,7 +79,7 @@ function QRLogin({ handleLogin, ...e }: { handleLogin: () => void,[key:string]:a
         borderRadius: '50%'
     };
 
-    return <Box sx={{ textAlign: 'center',paddingRight: '2rem', paddingTop: '.75rem', marginRight: '2rem', borderRight: '0.5px solid rgb(196, 203, 215)' }} {...e}>
+    return <Box sx={{ textAlign: 'center',paddingRight: '2rem', paddingTop: '.75rem', marginRight: '2rem', borderRight: '0.5px solid rgb(196, 203, 215)', height: '24.2rem' }} {...e}>
         <Typography className='mb-2' variant="h5" sx={{marginBottom: '.5rem'}}>
             扫码登陆
         </Typography>
@@ -89,15 +89,15 @@ function QRLogin({ handleLogin, ...e }: { handleLogin: () => void,[key:string]:a
         </Typography>
 
         {(isScanned || isExpired || isError) && <><div style={{
-            width: '20rem',
-            height: '20rem',
+            width: '17rem',
+            height: '16rem',
             position: 'relative',
             left: 0,
-            top: '-20rem',
+            top: '-18rem',
             background: 'rgba(0,0,0,.5)',
             backdropFilter: 'blur(6px)',
             textAlign: 'center',
-            lineHeight: '19rem',
+            lineHeight: '16rem',
             cursor: 'pointer'
         }}
             onMouseEnter={handlePopoverOpen}
@@ -117,7 +117,8 @@ function QRLogin({ handleLogin, ...e }: { handleLogin: () => void,[key:string]:a
                 sx={sx}
                 htmlColor={isError ? 'red' : 'gray'}
             />}
-        </div><Popover
+        </div>
+        <Popover
             id="mouse-over-popover"
             sx={{
                 pointerEvents: 'none',
