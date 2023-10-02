@@ -7,7 +7,7 @@ import LoadingButton from '../../components/LoadingButton';
 
 import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
-import SaveIcon from '@mui/icons-material/Save';
+// import SaveIcon from '@mui/icons-material/Save';
 import { type ReactNode, useState, useEffect, Fragment } from 'react';
 
 export interface Actions {
@@ -18,15 +18,16 @@ export interface Actions {
     showConfirm?: boolean;
 }
 interface EnhancedTableToolbarProps {
-    numSelected        : number;
-    selectedActions   ?: Actions[];
-    nonSelectedActions?: Actions[];
-    selected          ?: number[];
-    showSearch        ?: boolean;
-    onSearch          ?: (s: string) => void;
-    searchLabel       ?: string;
-    searchStr         ?: string;
-    loading           ?: boolean;
+    numSelected            : number;
+    selectedActions       ?: Actions[];
+    nonSelectedActions    ?: Actions[];
+    selected              ?: number[];
+    showSearch            ?: boolean;
+    onSearch              ?: (s: string) => void;
+    searchLabel           ?: string;
+    searchStr             ?: string;
+    loading               ?: boolean;
+    selectedActionsLoading?: boolean
 }
 
 let timer: NodeJS.Timeout | 0 = 0;
@@ -40,7 +41,8 @@ export default function EnhancedTableToolbar({
     loading = false,
     onSearch = () => { },
     searchLabel = '搜索',
-    searchStr=''
+    searchStr='',
+    selectedActionsLoading = false
 }: EnhancedTableToolbarProps) {
     const [search, setSearch] = useState('');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -145,7 +147,7 @@ export default function EnhancedTableToolbar({
                         onChange={handleSearch}
                         size="small"
                         variant="outlined"
-                        onKeyDown={e => e.key == 'Enter' && handleOnSearch()}
+                        onKeyDown={e => e.key === 'Enter' && handleOnSearch()}
                     />}
                 </Typography>
             )}
@@ -159,7 +161,17 @@ export default function EnhancedTableToolbar({
                         {selectedActions?.map(({ color = 'primary', name, icon, onClick, showConfirm }, index) =>
                             showConfirm ?
                             <Fragment key={index}>
-                                <Button variant="contained" color={color} onClick={(e) => {setPopIndex(index); setAnchorEl(e.target as HTMLElement)}} sx={{marginRight: '.5rem'}}><span style={{ marginRight: '.3rem' }}>{icon}</span> {name}</Button>
+                                <LoadingButton
+                                    variant="contained"
+                                    color={color}
+                                    onClick={(e:MouseEvent) => {setPopIndex(index); setAnchorEl(e.target as HTMLElement)}}
+                                    sx={{marginRight: '.5rem'}}
+                                    loading={selectedActionsLoading}
+                                    loadingPosition="start"
+                                    startIcon={<span style={{ marginRight: '.3rem' }}>{icon}</span>}
+                                >
+                                    {name}
+                                </LoadingButton>
                                 <Popover
                                     open={popIndex === index}
                                     anchorEl={anchorEl}
@@ -174,7 +186,17 @@ export default function EnhancedTableToolbar({
                                     <Button color='info' size='small' variant="text" onClick={handleClose}>取消</Button>
                                 </Popover>
                             </Fragment> :
-                            <Button key={index} variant="contained" color={color} onClick={() => onClick(selected as number[])} sx={{marginRight: '.5rem'}}><span style={{ marginRight: '.3rem' }}>{icon}</span> {name}</Button>
+                            <LoadingButton
+                                key={index}
+                                variant="contained"
+                                color={color}
+                                loading={selectedActionsLoading}
+                                loadingPosition="start"
+                                onClick={() => onClick(selected as number[])} sx={{marginRight: '.5rem'}}
+                                startIcon={<span style={{ marginRight: '.3rem' }}>{icon}</span>}
+                            >
+                                {name}
+                            </LoadingButton>
                             )}
                 </Typography>)}
         </Toolbar>

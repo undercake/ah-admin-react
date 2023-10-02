@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-30 11:24:10
+ * @LastEditTime: 2023-10-02 16:44:56
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -14,8 +14,23 @@ import { urls } from '../../config';
 import type Customer from './Customer'
 import CustomerDetail from '../../components/DetailDialogs/Customer';
 
+
+const current_date = new Date();
+
+function List({type = 0} : {type?: number}) {
+        // const [editId, setEditId]           = useState(-1);
+    const [data, setData]                                     = useState<Customer[]>([]);
+    const [page, setPage]                                     = useState(0);
+    const [rowsPerPage, setRowsPerPage]                       = useState(10);
+    const [count, setCount]                                   = useState(0);
+    const [detailId, setDetailId]                             = useState(-1);
+    const [searchStr, setSearchStr]                           = useState('');
+    const [Loading, setLoading]                               = useState(true);
+    const [error, setError]                                   = useState(false);
+    const [selectedActionsLoading, setSelectedActionsLoading] = useState<boolean>(false)
+
 const rows: rows = {
-    FullName  : { type: 'string', name: '顾客姓名' },
+    FullName  : { type: 'string', name: '顾客姓名', onClick: e=>setDetailId(e.id) },
     HouseArea : { type: 'string', name: '住房面积' },
     Tel1      : {type: 'string',name: ''},
     Tel2      : {type: 'string',name: '电话'},
@@ -27,19 +42,6 @@ const rows: rows = {
     CreateDate: { type: 'string', name: '录入时间' },
 }
 
-const current_date = new Date();
-
-function List({type = 0} : {type?: number}) {
-    const [data, setData]               = useState<Customer[]>([]);
-    const [page, setPage]               = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [count, setCount]             = useState(0);
-    // const [editId, setEditId]           = useState(-1);
-    const [detailId, setDetailId]       = useState(-1);
-    const [searchStr, setSearchStr]     = useState('');
-    const [Loading, setLoading]         = useState(true);
-    const [error, setError]             = useState(false);
-
     const getData = () => {
         setLoading(true);
         setError(false);
@@ -50,7 +52,7 @@ function List({type = 0} : {type?: number}) {
         ];
         const url = cus_urls[type] + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
           // @ts-ignore
-        const $axios = searchStr.trim() == "" ? axios.get(url) : axios.post(urls.customer_search + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : ''), { search: searchStr });
+        const $axios = searchStr.trim() === '' ? axios.get(url) : axios.post(urls.customer_search + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : ''), { search: searchStr });
           // @ts-ignore
         $axios.then((res: resListData<Customer>) => {
               // @ts-ignore
@@ -120,7 +122,10 @@ function List({type = 0} : {type?: number}) {
         type !== 1 && baseTitle.push('剩余次数', '余额', '开始时间', '到期时间', '客户类型');
         baseTitle.push('录入日期');
         exportData.unshift(baseTitle);
-        ExportExcel(exportData, `${['合同户', '散户', '过期合同户'][type]}列表-${page}.xlsx`);
+        setSelectedActionsLoading(true);
+        ExportExcel(exportData, `${['合同户', '散户', '过期合同户'][type]}列表-${page}.xlsx`, () => {
+            setSelectedActionsLoading(false);
+        });
     }
 
     const handleSearch = (e: string) => {
@@ -147,22 +152,23 @@ function List({type = 0} : {type?: number}) {
     return (
         <Card variant = "outlined" sx = {{ minWidth: 275 }} className = 'p-10 dark:bg-gray-1080 dark:color dark:text-gray-100'>
             <ListTable
-                rows                = {rows}
-                data                = {data}
-                count               = {count}
-                page                = {page}
-                rowsPerPage         = {rowsPerPage}
-                editList            = {editList}
-                onChangePage        = {setPage}
-                onChangeRowsPerPage = {e => { setPage(1); setRowsPerPage(e) }}
-                selectedActions     = {selectedActions}
-                nonSelectedActions  = {nonSelectedActions}
                 showSearch
-                onSearch    = {handleSearch}
-                searchStr   = {searchStr}
-                searchLabel = '搜索客户'
-                loading     = {Loading}
-                error       = {error}
+                rows                   = {rows}
+                data                   = {data}
+                count                  = {count}
+                page                   = {page}
+                rowsPerPage            = {rowsPerPage}
+                editList               = {editList}
+                onChangePage           = {setPage}
+                onChangeRowsPerPage    = {e => { setPage(1); setRowsPerPage(e) }}
+                selectedActions        = {selectedActions}
+                nonSelectedActions     = {nonSelectedActions}
+                onSearch               = {handleSearch}
+                searchStr              = {searchStr}
+                searchLabel            = '搜索客户'
+                loading                = {Loading}
+                error                  = {error}
+                selectedActionsLoading = {selectedActionsLoading}
             />
             {/* {editId >= 0 ? <CustomerEditor
                 handleClose = {handleEditorClose}

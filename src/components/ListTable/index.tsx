@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment, type ChangeEvent, MouseEventHandler } from 'react';
+import { useState, useEffect, Fragment, type ChangeEvent, type MouseEvent, MouseEventHandler } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,7 +14,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
-// import Image from 'next/image';
+    // import Image from 'next/image';
 import Card from '../../components/Card';
 import Loading from '../../components/Status/Loading';
 import Empty from '../../components/Status/Empty';
@@ -29,7 +29,7 @@ export interface tableData {
     [key: string]: any;
 }
 
-export type editList =
+export type editList = 
     {
         label         : string,
         color         : 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined,
@@ -39,9 +39,10 @@ export type editList =
     }[];
 
 export interface itemInRows {
-        type  : 'string' | 'options' | 'avatar' | 'image' | 'others';
-        name  : string;
-        value?: any;
+    type    : 'string' | 'options' | 'avatar' | 'image' | 'others';
+    name    : string;
+    value  ?: any;
+    onClick?: (data:any, e:MouseEvent<any, any>) => void
 }
 
 export interface rows {
@@ -58,22 +59,23 @@ export interface editGroupList {
 }
 
 interface EnhancedTableProps {
-    data                : readonly tableData[];
-    count               : number;
-    page                : number;
-    rows                : rows;
-    rowsPerPage         : number;
-    editList            : editList;
-    onChangePage        : (newPage: number) => void;
-    onChangeRowsPerPage : (count: number) => void;
-    selectedActions    ?: Actions[];
-    nonSelectedActions ?: Actions[];
-    showSearch         ?: boolean;
-    onSearch           ?: (s: string) => void;
-    searchLabel        ?: string;
-    searchStr          ?: string;
-    loading            ?: boolean;
-    error              ?: boolean;
+    data                   : readonly tableData[];
+    count                  : number;
+    page                   : number;
+    rows                   : rows;
+    rowsPerPage            : number;
+    editList               : editList;
+    onChangePage           : (newPage: number) => void;
+    onChangeRowsPerPage    : (count: number) => void;
+    selectedActions       ?: Actions[];
+    nonSelectedActions    ?: Actions[];
+    showSearch            ?: boolean;
+    onSearch              ?: (s: string) => void;
+    searchLabel           ?: string;
+    searchStr             ?: string;
+    loading               ?: boolean;
+    selectedActionsLoading?: boolean;
+    error                 ?: boolean;
 }
 
 export const Highlight = ({ text, searchStr }: { text: string, searchStr: string }) => {
@@ -93,9 +95,9 @@ export const Highlight = ({ text, searchStr }: { text: string, searchStr: string
 const ComponentByType = ({ type, data, rowVal, searchStr }: { type: itemInRows["type"]; data: any, rowVal: any, searchStr: string }) => {
     switch (type) {
         case 'string': 
-            return <Highlight text={data} searchStr={searchStr} />;
+            return <Highlight text = {data} searchStr = {searchStr} />;
         case 'options': 
-            return <Highlight text={rowVal[data]} searchStr={searchStr} />;
+            return <Highlight text = {rowVal[data]} searchStr = {searchStr} />;
         case 'avatar': 
             return <Avatar alt = {data} src = {data} variant = "rounded" />
         case 'image': 
@@ -111,32 +113,42 @@ export default function ListTable({
     data,
     count,
     page,
+    rows,
     rowsPerPage,
     editList,
     onChangePage,
     onChangeRowsPerPage,
-    selectedActions    = [],
-    nonSelectedActions = [],
-    rows,
-    showSearch  = false,
-    loading     = false,
-    error       = false,
-    onSearch    = () => { },
-    searchStr   = '',
-    searchLabel = '搜索'
+    selectedActions        = [],
+    nonSelectedActions     = [],
+    showSearch             = false,
+    loading                = false,
+    selectedActionsLoading = false,
+    error                  = false,
+    onSearch               = () => { },
+    searchStr              = '',
+    searchLabel            = '搜索'
 }: EnhancedTableProps) {
     const [selected, setSelected]       = useState<Set<number>>(new Set());
     const [currentPage, setCurrentPage] = useState<number>(page);
     const [anchorEl, setAnchorEl]       = useState<null | HTMLElement>(null);
     const [popIndex, setPopIndex]       = useState<string>('');
-    const maxPage                       = count % rowsPerPage == 0 ? count / rowsPerPage : Math.ceil(count / rowsPerPage);
 
+    const maxPage = count % rowsPerPage === 0 ? count / rowsPerPage : Math.ceil(count / rowsPerPage);
+
+        // useEffect(()=>{
+        //     // @ts-ignore
+        //     if (undefined === window.XLSX) {
+        //         const script = document.createElement('script');
+        //         script.src = 'https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js';
+        //         document.body.appendChild(script);
+        //     }
+        // });
     useEffect(() => {
         setCurrentPage(page);
     }, [page]);
 
 
-    const handlePopOver = (e:MouseEvent, index:string) => {
+    const handlePopOver = (e: MouseEvent, index: string) => {
         setAnchorEl(e.currentTarget as HTMLElement);
         setPopIndex(index);
     }
@@ -174,15 +186,16 @@ export default function ListTable({
         <>
             <Card>
                 <EnhancedTableToolbar
-                    numSelected        = {selected.size}
-                    selected           = {Array.from(selected)}
-                    selectedActions    = {selectedActions}
-                    nonSelectedActions = {nonSelectedActions}
-                    showSearch         = {showSearch}
-                    onSearch           = {onSearch}
-                    searchLabel        = {searchLabel}
-                    searchStr          = {searchStr}
-                    loading            = {loading}
+                    numSelected            = {selected.size}
+                    selected               = {Array.from(selected)}
+                    selectedActions        = {selectedActions}
+                    nonSelectedActions     = {nonSelectedActions}
+                    showSearch             = {showSearch}
+                    onSearch               = {onSearch}
+                    searchLabel            = {searchLabel}
+                    searchStr              = {searchStr}
+                    loading                = {loading}
+                    selectedActionsLoading = {selectedActionsLoading}
                 />
                 <TableContainer>
                     <Table
@@ -195,177 +208,182 @@ export default function ListTable({
                             onSelectAllClick = {handleSelectAllClick}
                             rowCount         = {length}
                             titles           = {rows}
-                            loading          = {loading || data.length === 0}
+                            loading          = {loading || data.length === 0 || selectedActionsLoading}
                         />
                         <TableBody>
                             {loading ?
-                                <tr style={{width: '100%'}}>
-                                    <td colSpan={Object.keys(rows).length + 1}>
+                                <tr style   = {{ width: '100%' }}>
+                                <td colSpan = {Object.keys(rows).length + 1}>
                                         <Loading />
                                     </td>
                                 </tr>
-                                :
-                                data.length === 0  || error ?
-                                    <tr style={{width: '100%'}}>
-                                        <td colSpan={Object.keys(rows).length + 1} className='text-center'>
+                                : 
+                                    data.length === 0 || error ?
+                                <tr style         = {{ width: '100%' }}>
+                                <td colSpan       = {Object.keys(rows).length + 1} className = 'text-center'>
                                             {(data.length === 0 && !error) && (<><Empty />
-                                            什么都没有了</>)}
+                                                什么都没有了</>)}
                                             {error && (<><Error />
                                                 出错了</>)}
                                         </td>
                                     </tr>
-                                        :
-                                data.map((row, ind) => {
-                                const isItemSelected = isSelected(row.id);
-                                const labelId        = `enhanced-table-checkbox-${ind}`;
-                                const borderBottom   = length == ind + 1 ? 'none' : '1px solid rgba(224, 224, 224, 1)';
-                                return (
-                                    <TableRow
-                                        hover
-                                        role         = "checkbox"
-                                        aria-checked = {isItemSelected}
-                                        tabIndex     = {-1}
-                                        key          = {row.id}
-                                        selected     = {isItemSelected}
-                                    >
-                                        <TableCell sx = {{ borderBottom, cursor: 'pointer' }} padding = "checkbox" onClick = {(event) => handleSelect(row.id)}>
-                                            <Checkbox
-                                                color      = "primary"
-                                                checked    = {isItemSelected}
-                                                inputProps = {{
-                                                    'aria-labelledby': labelId,
-                                                }}
-                                                sx={{
-                                                    '.dark & svg': {color: '#ccc'}
-                                                }}
-                                            />
-                                        </TableCell>
-                                        {Object.keys(rows).map((key, index) => {
-                                            const { type, value } = rows[key];
-                                            const val             = row[key] === undefined || row[key] === null ? '' : row[key];
-                                            return (
+                                    : 
+                                    data.map((row, ind) => {
+                                        const isItemSelected = isSelected(row.id);
+                                        const labelId        = `enhanced-table-checkbox-${ind}`;
+                                        const borderBottom   = length === ind + 1 ? 'none' : '1px solid rgba(224, 224, 224, 1)';
+                                        return (
+                                            <TableRow
+                                                hover
+                                                role         = "checkbox"
+                                                aria-checked = {isItemSelected}
+                                                tabIndex     = {-1}
+                                                key          = {row.id}
+                                                selected     = {isItemSelected}
+                                            >
                                                 <TableCell
-                                                    sx        = {{ borderBottom, padding: '1rem 0' }}
-                                                    className = 'text-gray-500 dark:text-gray-200'
-                                                    component = "td"
-                                                    scope     = "row"
-                                                    padding   = "none"
-                                                    key       = {index}
+                                                    sx      = {{ borderBottom, cursor: selectedActionsLoading ? 'not-allowed' :'pointer' }}
+                                                    padding = "checkbox" onClick = {(event) => !selectedActionsLoading && handleSelect(row.id)}
                                                 >
-                                                    <ComponentByType
-                                                        type   = {type}
-                                                        data   = {val}
-                                                        rowVal = {value}
-                                                        searchStr = {searchStr}
+                                                    <Checkbox
+                                                        color      = "primary"
+                                                        checked    = {isItemSelected}
+                                                        disabled   = {selectedActionsLoading}
+                                                        inputProps = {{
+                                                            'aria-labelledby': labelId,
+                                                        }}
+                                                        sx={{
+                                                            '.dark & svg': { color: '#ccc' }
+                                                        }}
                                                     />
                                                 </TableCell>
-                                            );
-                                        })}
-                                        <TableCell
-                                            sx        = {{ borderBottom }}
-                                            component = "th"
-                                            scope     = "row"
-                                            padding   = "none"
-                                        >
-                                            <ButtonGroup size = "small" aria-label = "small button group">
-                                                {editList.map(({ label, onClick, color = 'primary', showConfirm, ...e }, ed_index) => {
-                                                    // const { label, onClick, color = 'primary', showConfirm, ...e } = editList[ed_key];
-                                                    const colors = {
-                                                        primary: {
-                                                            backgroundColor: 'rgba(25, 141, 255, 0.04)',
-                                                            color: 'rgb(25, 141, 255)',
-                                                            border: '1px solid rgb(25, 141, 255)',
-                                                            '&:hover': {backgroundColor: 'rgba(25, 141, 255, 0.2)'}
-                                                        },
-                                                        secondary: {
-                                                            backgroundColor: 'rgba(218, 54, 246, 0.04)',
-                                                            color: 'rgb(218, 54, 246)',
-                                                            border: '1px solid rgb(218, 54, 246)',
-                                                            '&:hover': {backgroundColor: 'rgba(218, 54, 246, 0.2)'}
-                                                        },
-                                                        warning: {
-                                                            backgroundColor: 'rgba(255, 135, 40, 0.04)',
-                                                            color: 'rgb(255, 135, 40)',
-                                                            border: '1px solid rgb(255, 135, 40)',
-                                                            '&:hover': {backgroundColor: 'rgba(255, 135, 40, 0.2)'}
-                                                        },
-                                                        error: {
-                                                            backgroundColor: 'rgba(240, 83, 83, 0.04)',
-                                                            border: '1px solid rgb(240, 83, 83)',
-                                                            color: 'rgb(240, 83, 83)',
-                                                            '&:hover': {backgroundColor: 'rgba(240, 83, 83, 0.2)'}
-                                                        },
-                                                        success: {
-                                                            backgroundColor: 'rgba(94, 203, 100, 0.04)',
-                                                            border: '1px solid rgb(94, 203, 100)',
-                                                            color: 'rgb(94, 203, 100)',
-                                                            '&:hover': {backgroundColor: 'rgba(94, 203, 100, 0.2)'}
-                                                        },
-                                                        info: {
-                                                            backgroundColor: 'rgba(92, 197, 255, 0.04)',
-                                                            border: '1px solid rgb(92, 197, 255)',
-                                                            color: 'rgb(92, 197, 255)',
-                                                            '&:hover': {backgroundColor: 'rgba(92, 197, 255, 0.2)'}
-                                                        },
-                                                    }
-                                                    const sx = { '.dark &':colors[color]};
-                                                    if (showConfirm)
-                                                        return (
-                                                            <Fragment key={ed_index}>
+                                                {Object.keys(rows).map((key, index) => {
+                                                    const { type, value, onClick } = rows[key];
+                                                    const val             = row[key] === undefined || row[key] === null ? '' : row[key];
+                                                    return (
+                                                        <TableCell
+                                                            sx        = {{ borderBottom, padding: '1rem 0', cursor:onClick !== undefined ? 'pointer' : 'auto'}}
+                                                            className = 'text-gray-500 dark:text-gray-200'
+                                                            component = "td"
+                                                            scope     = "row"
+                                                            padding   = "none"
+                                                            key       = {index}
+                                                            onClick   = {(e)=>{onClick !== undefined && onClick(row, e)}}
+                                                        >
+                                                            <ComponentByType
+                                                                type      = {type}
+                                                                data      = {val}
+                                                                rowVal    = {value}
+                                                                searchStr = {searchStr}
+                                                            />
+                                                        </TableCell>
+                                                    );
+                                                })}
+                                                <TableCell
+                                                    sx        = {{ borderBottom }}
+                                                    component = "th"
+                                                    scope     = "row"
+                                                    padding   = "none"
+                                                >
+                                                    <ButtonGroup size = "small" aria-label = "small button group">
+                                                        {editList.map(({ label, onClick, color = 'primary', showConfirm, ...e }, ed_index) => {
+                                                                // const { label, onClick, color = 'primary', showConfirm, ...e } = editList[ed_key];
+                                                            const colors = {
+                                                                primary: {
+                                                                    backgroundColor: 'rgba(25, 141, 255, 0.04)',
+                                                                    color          : 'rgb(25, 141, 255)',
+                                                                    border         : '1px solid rgb(25, 141, 255)',
+                                                                    '&:hover'      : { backgroundColor: 'rgba(25, 141, 255, 0.2)' }
+                                                                },
+                                                                secondary: {
+                                                                    backgroundColor: 'rgba(218, 54, 246, 0.04)',
+                                                                    color          : 'rgb(218, 54, 246)',
+                                                                    border         : '1px solid rgb(218, 54, 246)',
+                                                                    '&:hover'      : { backgroundColor: 'rgba(218, 54, 246, 0.2)' }
+                                                                },
+                                                                warning: {
+                                                                    backgroundColor: 'rgba(255, 135, 40, 0.04)',
+                                                                    color          : 'rgb(255, 135, 40)',
+                                                                    border         : '1px solid rgb(255, 135, 40)',
+                                                                    '&:hover'      : { backgroundColor: 'rgba(255, 135, 40, 0.2)' }
+                                                                },
+                                                                error: {
+                                                                    backgroundColor: 'rgba(240, 83, 83, 0.04)',
+                                                                    border         : '1px solid rgb(240, 83, 83)',
+                                                                    color          : 'rgb(240, 83, 83)',
+                                                                    '&:hover'      : { backgroundColor: 'rgba(240, 83, 83, 0.2)' }
+                                                                },
+                                                                success: {
+                                                                    backgroundColor: 'rgba(94, 203, 100, 0.04)',
+                                                                    border         : '1px solid rgb(94, 203, 100)',
+                                                                    color          : 'rgb(94, 203, 100)',
+                                                                    '&:hover'      : { backgroundColor: 'rgba(94, 203, 100, 0.2)' }
+                                                                },
+                                                                info: {
+                                                                    backgroundColor: 'rgba(92, 197, 255, 0.04)',
+                                                                    border         : '1px solid rgb(92, 197, 255)',
+                                                                    color          : 'rgb(92, 197, 255)',
+                                                                    '&:hover'      : { backgroundColor: 'rgba(92, 197, 255, 0.2)' }
+                                                                },
+                                                            }
+                                                            const sx = { '.dark &': colors[color] };
+                                                            if (showConfirm)
+                                                                return (
+                                                                    <Fragment key = {ed_index}>
+                                                                        <Button
+                                                                            key = {ed_index}
+                                                                                // className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
+                                                                                // @ts-ignore
+                                                                            onClick = {(e) => handlePopOver(e, `${ind}-${ed_index}`)}
+                                                                                // variant="contained"
+                                                                            color = {color}
+                                                                            sx    = {sx}
+                                                                            {...e}
+                                                                        >
+                                                                            {label}
+                                                                        </Button>
+                                                                        <Popover
+                                                                            open         = {popIndex === `${ind}-${ed_index}`}
+                                                                            anchorEl     = {anchorEl}
+                                                                            onClose      = {handleClose}
+                                                                            anchorOrigin = {{
+                                                                                vertical  : 'bottom',
+                                                                                horizontal: 'left',
+                                                                            }}
+                                                                        >
+                                                                            <Typography sx    = {{ p: 2 }}>确定要{label}吗？</Typography>
+                                                                            <Button     color = 'error' size = 'small' variant = "text" onClick = {() => { onClick(row.id); handleClose() }}>确定</Button>
+                                                                            <Button     color = 'info' size  = 'small' variant = "text" onClick = {handleClose}>取消</Button>
+                                                                        </Popover>
+                                                                    </Fragment>
+                                                                );
+                                                            return (
                                                                 <Button
-                                                                    key       = {ed_index}
-                                                                    // className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
-                                                                    // @ts-ignore
-                                                                    onClick   = {(e)=>handlePopOver(e, `${ind}-${ed_index}`)}
-                                                                    // variant="contained"
-                                                                    color={color}
-                                                                    sx={sx}
+                                                                    key = {ed_index}
+                                                                        // className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
+                                                                        // @ts-ignore
+                                                                    onClick = {() => onClick(row.id)}
+                                                                        // variant="contained"
+                                                                    color = {color}
+                                                                    sx    = {sx}
                                                                     {...e}
                                                                 >
                                                                     {label}
                                                                 </Button>
-                                                                <Popover
-                                                                    open={popIndex === `${ind}-${ed_index}`}
-                                                                    anchorEl={anchorEl}
-                                                                    onClose={handleClose}
-                                                                    anchorOrigin={{
-                                                                    vertical: 'bottom',
-                                                                    horizontal: 'left',
-                                                                    }}
-                                                                >
-                                                                    <Typography sx={{ p: 2 }}>确定要{label}吗？</Typography>
-                                                                    <Button color='error' size='small' variant="text" onClick={() => {onClick(row.id); handleClose()}}>确定</Button>
-                                                                    <Button color='info' size='small' variant="text" onClick={handleClose}>取消</Button>
-                                                                </Popover>
-                                                            </Fragment>
-                                                        );
-                                                    return (
-                                                        <Button
-                                                            key       = {ed_index}
-                                                            // className = 'bg-purple-dark hover:bg-purple-lighter text-white font-bold py-2 px-4 rounded'
-                                                            // @ts-ignore
-                                                            onClick   = {() => onClick(row.id)}
-                                                              // variant="contained"
-                                                            color={color}
-                                                            sx={sx}
-                                                            {...e}
-                                                        >
-                                                            {label}
-                                                        </Button>
-                                                    );
-                                                })
-                                                }
-                                            </ButtonGroup>
-                                        </TableCell>
-                                    </TableRow>);
-                            })}
+                                                            );
+                                                        })
+                                                        }
+                                                    </ButtonGroup>
+                                                </TableCell>
+                                            </TableRow>);
+                                    })}
                         </TableBody>
                     </Table>
                 </TableContainer>
             </Card>
             <div        className = "flex">
             <div        className = "flex-initial w-auto">
-            <Pagination count     = {maxPage} onChange = {(e, n) => onChangePage(n)} page = {page} color = "secondary" sx={{'.dark & button': {color: '#eee'}}} />
+            <Pagination count     = {maxPage} onChange = {(e, n) => onChangePage(n)} page = {page} color = "secondary" sx = {{ '.dark & button': { color: '#eee' } }} />
                 </div>
                 <div className = "flex-none w-14 leading-10 text-right pr-2">
                     每页
@@ -379,16 +397,16 @@ export default function ListTable({
                         autoWidth
                         label = ""
                         size  = 'small'
-                        sx={{
-                            '.dark & svg': {color: '#eee'},
-                            '.dark &': {color: '#eee'},
-                            '.dark & fieldset': {borderColor: '#aaa'},
-                            '.dark &:hover fieldset': {borderColor: '#eee'},
-                            '.dark & .MuiSelect-root': {color: '#eee'},
-                            '.dark & .MuiSelect-icon': {color: '#eee'},
-                            '.dark & .MuiInputBase-root': {color: '#eee'},
-                            '.dark & .MuiInput-underline:before': {borderBottomColor: '#eee'},
-                            '.dark & .MuiInput-underline:after': {borderBottomColor: '#eee'},
+                        sx    = {{
+                            '.dark & svg'                       : { color: '#eee' },
+                            '.dark &'                           : { color: '#eee' },
+                            '.dark & fieldset'                  : { borderColor: '#aaa' },
+                            '.dark &:hover fieldset'            : { borderColor: '#eee' },
+                            '.dark & .MuiSelect-root'           : { color: '#eee' },
+                            '.dark & .MuiSelect-icon'           : { color: '#eee' },
+                            '.dark & .MuiInputBase-root'        : { color: '#eee' },
+                            '.dark & .MuiInput-underline:before': { borderBottomColor: '#eee' },
+                            '.dark & .MuiInput-underline:after' : { borderBottomColor: '#eee' },
                         }}
                     >
                         <MenuItem value = {10}>10</MenuItem>
@@ -415,15 +433,15 @@ export default function ListTable({
                         onChange   = {inputChangePage}
                         inputProps = {{ inputMode: 'numeric', pattern: '[0-9]*', min: 1, max: maxPage }}
                         size       = 'small'
-                        onKeyDown  = {e => e.key == 'Enter' && onChangePage(currentPage)}
-                        sx={{
-                            '.dark & .MuiInputBase-root': {color: '#eee'},
-                            '.dark & .MuiInput-underline:before': {borderBottomColor: '#aaa'},
-                            '.dark & .MuiInput-underline:after': {borderBottomColor: '#aaa'},
-                            '.dark &:hover .MuiInput-underline:before': {borderBottomColor: '#eee'},
-                            '.dark &:hover .MuiInput-underline:after': {borderBottomColor: '#eee'},
-                            '.dark & fieldset': {borderColor: '#aaa'},
-                            '.dark &:hover fieldset': {borderColor: '#eee'},
+                        onKeyDown  = {e => e.key === 'Enter' && onChangePage(currentPage)}
+                        sx         = {{
+                            '.dark & .MuiInputBase-root'              : { color: '#eee' },
+                            '.dark & .MuiInput-underline:before'      : { borderBottomColor: '#aaa' },
+                            '.dark & .MuiInput-underline:after'       : { borderBottomColor: '#aaa' },
+                            '.dark &:hover .MuiInput-underline:before': { borderBottomColor: '#eee' },
+                            '.dark &:hover .MuiInput-underline:after' : { borderBottomColor: '#eee' },
+                            '.dark & fieldset'                        : { borderColor: '#aaa' },
+                            '.dark &:hover fieldset'                  : { borderColor: '#eee' },
                         }}
                     />
                 </div>

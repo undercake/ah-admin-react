@@ -1,7 +1,7 @@
-
 import * as XLSX from 'xlsx';
+import mittBus from './MittBus';
 
-export default function a(exportData: (string | number)[][], name: string) {
+export default function exportXlsx(exportData: (string | number)[][], name: string, cb=()=>{}) {
     const worksheet = XLSX.utils.aoa_to_sheet(exportData, {});
     let widths: any[] = [];
     exportData.forEach(w => w.forEach((o, i) => {
@@ -43,7 +43,7 @@ export default function a(exportData: (string | number)[][], name: string) {
             border, font: { bold: true }, alignment: {
                 horizontal: 'center',
                 vertical: 'center'
-            }
+            },o
         }
         worksheet[key] = { ...worksheet[key], s };
     }
@@ -51,5 +51,9 @@ export default function a(exportData: (string | number)[][], name: string) {
     const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(workbook, worksheet, '0');
-    XLSX.writeFile(workbook, name);
+    // XLSX.writeFileAsync( name, workbook, cb);
+    mittBus.emit('msgEmit', {type: 'success', msg: '文件准备中，将在稍后自动下载'});
+    const f = XLSX.writeFile(workbook, name, {type: 'string'});
+    // console.log({f});
+    cb();
 }
