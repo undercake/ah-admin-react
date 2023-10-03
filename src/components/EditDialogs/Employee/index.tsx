@@ -1,4 +1,4 @@
-import Core from '../../../components/EditDialogs/Core';
+import Core, { type types } from '../../../components/EditDialogs/Core';
 import { pinyin } from "pinyin-pro";
 import { Component } from 'react';
 import { urls } from '../../../config';
@@ -7,39 +7,29 @@ import type Employee from '../../../pages/Employee/Employee.d';
 
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
-type Props = {
-    handleClose: (a:Event, b:string)=>boolean;
+type Props  = {
+    handleClose: (a: Event, b: string) => boolean;
     id         : number;
 };
 
-interface types {
-    [key: string]: {
-        type     : 'input' | 'select' | 'date' | 'datetime' | 'time' | 'image' | 'avatar' | 'textfield';
-        required : boolean;
-        label    : string;
-        options ?: { label: string, value: string | number }[];
-        related ?: ((v: string) => void)[];
-    };
-}
+  // interface types {
+  //     [key: string]: {
+  //         type     : 'input' | 'select' | 'date' | 'datetime' | 'time' | 'image' | 'avatar' | 'textfield';
+  //         required : boolean;
+  //         label    : string;
+  //         options ?: { label: string, value: string | number }[];
+  //         related ?: ((v: string) => void)[];
+  //     };
+  // }
 
 interface State {
     open    : boolean;
     formData: Employee;
     colors  : {
-        name   : colors;
-        phone  : colors;
-        id_code: colors;
-        address: colors;
-        intro  : colors;
-        note   : colors;
+        [key:string]: colors
     };
     helperText: {
-        name   : string;
-        phone  : string;
-        id_code: string;
-        address: string;
-        intro  : string;
-        note   : string;
+        [key:string]: string;
     };
 };
 
@@ -66,37 +56,31 @@ export class EmployeeEditor extends Component<Props, State>{
             pym         : '',
         },
         colors: {
-            name   : 'primary' as colors,
-            phone  : 'primary' as colors,
-            id_code: 'primary' as colors,
-            address: 'primary' as colors,
-            intro  : 'primary' as colors,
-            note   : 'primary' as colors,
         },
         helperText: {
-            name   : '',
-            phone  : '',
-            id_code: '',
-            address: '',
-            intro  : '',
-            note   : '',
         },
+        errors: [
+
+        ]
     };
 
-    updatePym    = (input: string) => this.setState({ formData: { ...this.state.formData, pym: pinyin(input, { mode: "surname", pattern: "first", toneType: "none", nonZh: "removed", v: true }).replaceAll(" ", "") } });
+    updatePym = (input: string) => this.setState({ formData: { ...this.state.formData, pym: pinyin(input, { mode: "surname", pattern: "first", toneType: "none", nonZh: "removed", v: true }).replaceAll(" ", "") } });
 
     types: types = {
-        FullName  : { type: 'input', required: true, label: '姓名', related: [this.updatePym] },
-        Tel       : { type: 'input', required: true, label: '电话' },
-        Sex       : { type: 'select', required: false, label: '性别', options:[{ label: '男', value: '男' }, { label: '女', value: '女' }] },
-        IDCode    : { type: 'input', required: true, label: '身份证号' },
-        Address   : { type: 'input', required: false, label: '地址' },
-        Birthday  : { type: 'input', required: false, label: '出生日期' },
-        Workday   : { type: 'input', required: false, label: '参工日期' },
-        ItemLevel : { type: 'input', required: false, label: '员工等级' },
-        Department: { type: 'input', required: false, label: '所在部门' },
-        pym       : { type: 'input', required: false, label: '拼音码' },
-        Comment   : { type: 'textfield', required: false, label: '说明' },
+        ItemCode    : { type: 'input', required: false, label: '编号' },
+        FullName    : { type: 'input', required: true, label: '姓名', related: [this.updatePym] },
+        pym         : { type: 'input', required: false, label: '拼音码' },
+        Tel         : { type: 'input', required: true, label: '电话' },
+        HomeTel     : { type: 'input', required: false, label: '家庭电话' },
+        WarrantorTel: { type: 'input', required: false, label: '担保人电话' },
+        Sex         : { type: 'select', required: false, label: '性别', options: [{ label: '男', value: '男' }, { label: '女', value: '女' }] },
+        IDCode      : { type: 'input', required: true, label: '身份证号' },
+        Address     : { type: 'input', required: false, label: '地址' },
+        Birthday    : { type: 'input', required: false, label: '出生日期' },
+        Workday     : { type: 'input', required: false, label: '参工日期' },
+        ItemLevel   : { type: 'input', required: false, label: '员工等级' },
+        Department  : { type: 'input', required: false, label: '所在部门' },
+        Comment     : { type: 'textfield', required: false, label: '说明' },
     }
 
     componentDidMount(): void {
@@ -120,6 +104,35 @@ export class EmployeeEditor extends Component<Props, State>{
 
     handleSubmit = (e: SubmitEvent) => {
         e.preventDefault();
+        const url = `${urls.employee_alter}/id/${this.props.id}`;
+        axios.post(url, {
+            ...this.state.formData
+        })
+            .then(console.log)
+            .catch(err => {
+                if (err.msg === undefined) return;
+                const tips = {
+                    "姓名不能为空"     : "FullName",
+                    "姓名长度不正确"    : "FullName",
+                    "地址长度过长"     : "Address",
+                    "电话格式不正确"    : "Tel",
+                    "担保人电话格式不正确" : "WarrantorTel",
+                    "家庭电话格式不正确"  : "HomeTel",
+                    "出生日期长度过长"   : "Birthday",
+                    "参工日期长度过长"   : "Workday",
+                    "过失记录长度过长"   : "BlameRecord",
+                    "说明长度过长"     : "Comment",
+                    "拼音码必填"      : "pym",
+                    "拼音码不能包含其他字符": "pym",
+                    "拼音码过长"      : "pym",
+                    "身份证格式不正确"   : "IDCode",
+                    "编号过长"       : "ItemCode",
+                    "员工等级过长"     : "ItemLevel"
+                };
+                // @ts-ignore
+                const tip = tips[err.msg];
+                this.setState({colors: {[tip]: 'error'}, helperText:{[tip]: err.msg}});
+            })
     }
 
     onChange = (val: string | number, name: string) => {
@@ -132,15 +145,15 @@ export class EmployeeEditor extends Component<Props, State>{
         const { colors, formData, helperText } = this.state;
         return (
             <Core
-                open    = {this.state.open}
-                onClose = {this.onClose}
-                onOpen  = {this.onOpen}
-                handleSubmit={this.handleSubmit}
-                onChange={this.onChange}
-                colors={colors}
-                formData={formData}
-                helperText={helperText}
-                types={this.types}
+                open         = {this.state.open}
+                onClose      = {this.onClose}
+                onOpen       = {this.onOpen}
+                handleSubmit = {this.handleSubmit}
+                onChange     = {this.onChange}
+                colors       = {colors}
+                formData     = {formData}
+                helperText   = {helperText}
+                types        = {this.types}
             />
         );
     };

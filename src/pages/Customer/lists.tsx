@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-10-02 16:44:56
+ * @LastEditTime: 2023-10-03 09:53:20
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -13,12 +13,13 @@ import ExportExcel from '../../utils/ExportExcel';
 import { urls } from '../../config';
 import type Customer from './Customer'
 import CustomerDetail from '../../components/DetailDialogs/Customer';
+import CustomerEditor from '../../components/EditDialogs/Customer';
 
 
 const current_date = new Date();
 
 function List({type = 0} : {type?: number}) {
-        // const [editId, setEditId]           = useState(-1);
+        const [editId, setEditId]           = useState(-1);
     const [data, setData]                                     = useState<Customer[]>([]);
     const [page, setPage]                                     = useState(0);
     const [rowsPerPage, setRowsPerPage]                       = useState(10);
@@ -68,13 +69,13 @@ const rows: rows = {
         });
     }
 
-    // const handleEditorClose = (e: Event, reason: string) => {
-    //     console.log(e, reason);
-    //     (reason == 'button' || reason == 'submit') && setTimeout(() => {
-    //         setEditId(-1);
-    //     }, 300);
-    //     return reason == 'button' || reason == 'submit';
-    // }
+    const handleEditorClose = (e: Event, reason: string) => {
+        console.log(e, reason);
+        (reason === 'button' || reason === 'submit') && setTimeout(() => {
+            setEditId(-1);
+        }, 300);
+        return reason === 'button' || reason === 'submit';
+    }
 
     useEffect(getData, [page, rowsPerPage, searchStr]);
 
@@ -135,7 +136,7 @@ const rows: rows = {
 
     const editList: editList = [
         { label: '详情', color: 'info', onClick: setDetailId },
-        // { label: '编辑', color: 'info', onClick: setEditId },
+        { label: '编辑', color: 'info', onClick: setEditId },
         // { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
     ];
 
@@ -170,10 +171,10 @@ const rows: rows = {
                 error                  = {error}
                 selectedActionsLoading = {selectedActionsLoading}
             />
-            {/* {editId >= 0 ? <CustomerEditor
+            {editId >= 0 ? <CustomerEditor
                 handleClose = {handleEditorClose}
                 id          = {editId}
-            /> : null} */}
+            /> : null}
             {detailId > 0 ? <CustomerDetail
                 handleClose = {()=>{setTimeout(()=>{setDetailId(0);}, 300); return true}}
                 id          = {detailId}

@@ -1,46 +1,142 @@
-# Getting Started with Create React App
+# 阿惠家政后台管理系统
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1. 功能列表
 
-## Available Scripts
+- [ ] 首页数据看板
+- [x] 管理人员登录
+- [x] 管理人员扫码登录登录
+- [x] 基于管理组的权限管理
+- [ ] 员工端手机登录
+- 客户管理
+- [x] 客户信息导出为excel
+- [x] 客户信息搜索
+- [x] 客户信息查看
+- [ ] 客户信息修改
+- [ ] 客户信息添加
+- [ ] 客户信息删除
+- [x] 客户信息分类展示，合并地址搜索功能
+- [x] 客户服务历史展示
+- [ ] 客户信息同步到小程序
+- 员工管理
+- [x] 员工信息导出为excel
+- [x] 员工信息搜索
+- [x] 员工信息查看
+- [ ] 员工信息修改
+- [ ] 员工信息添加
+- [ ] 员工信息删除
+- [ ] 派工客户短信提醒功能
+- [ ] 员工信息同步到小程序
+- 管理员管理
+- [ ] 添加管理员
+- [ ] 修改管理员信息、密码
+- [x] 管理组管理
+- [x] 管理组权限管理
+- 派单管理
+- [ ] 派单信息查看
+- [ ] 派工
+- [ ] 员工端抢单
+- [ ] 员工端推送派工信息
+- [ ] 员工工资结算
+- 多门店管理
+- [ ] 门店添加
+- [ ] 门店信息修改
+- [ ] 删除门店信息
+## 2. 技术栈
 
-In the project directory, you can run:
+    前端：
+    react: 18.2.0
+    react-device-detect: 2.2.3
+    react-dom: 18.2.0
+    react-icons: 4.10.1
+    react-router-dom: 6.15.0
+    react-scripts: 5.0.1
+    @emotion/styled: 11.11.0
+    @mui/icons-material: 5.14.3
+    @mui/lab: 5.0.0-alpha.140
+    @mui/material: 5.14.5
+    @mui/x-date-pickers: 6.11.2
+    axios: 1.4.0
+    dayjs: 1.11.9
+    localforage: 1.10.0
+    match-sorter: 6.3.1
+    md5: 2.3.0
+    mitt: 3.0.1
+    next-routes: 1.4.2
+    pinyin-pro: 3.16.3
+    sass: 1.66.1
+    sort-by: 1.2.0
+    url: 0.11.1
+    web-vitals: 2.1.4
+    xlsx: 0.20.0
+    yup: 1.2.0
 
-### `npm start`
+## 1. Functions
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- [ ] homepage data display
+- [x] login for administrators
+- [x] login for administrators based on QRcode
+- [x] permissions based administrators group
+- [ ] login for employee
+- Customer
+- [x] customer export excel
+- [x] customer search
+- [x] customer display
+- [ ] alter customer information
+- [ ] add customer
+- [ ] delete customer
+- [x] categories for customer, address search
+- [x] services history
+- [ ] sync to WeChat mini program
+- Employee
+- [x] employee export to excel
+- [x] search employee
+- [x] list employee
+- [ ] alter employee
+- [ ] add employee
+- [ ] delete employee
+- [ ] notice through SMS
+- [ ] sync to WeChat mini program
+- Admins
+- [ ] add administrator
+- [ ] alter administrator & change password
+- [x] admin group
+- [x] permissions
+- dispatch
+- [ ] dispatch lists
+- [ ] sync dispatch
+- [ ] by employee
+- [ ] to employee
+- [ ] salary
+- Stores
+- [ ] add store
+- [ ] alter store
+- [ ] delete store
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 2. Architecture
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+    FrontEnd：
+    react: 18.2.0
+    react-device-detect: 2.2.3
+    react-dom: 18.2.0
+    react-icons: 4.10.1
+    react-router-dom: 6.15.0
+    react-scripts: 5.0.1
+    @emotion/styled: 11.11.0
+    @mui/icons-material: 5.14.3
+    @mui/lab: 5.0.0-alpha.140
+    @mui/material: 5.14.5
+    @mui/x-date-pickers: 6.11.2
+    axios: 1.4.0
+    dayjs: 1.11.9
+    localforage: 1.10.0
+    match-sorter: 6.3.1
+    md5: 2.3.0
+    mitt: 3.0.1
+    next-routes: 1.4.2
+    pinyin-pro: 3.16.3
+    sass: 1.66.1
+    sort-by: 1.2.0
+    url: 0.11.1
+    web-vitals: 2.1.4
+    xlsx: 0.20.0
+    yup: 1.2.0

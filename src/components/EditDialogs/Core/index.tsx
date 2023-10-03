@@ -1,8 +1,8 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-08-22 17:00:09
- * @FilePath: /ah-admin-react-from-next/src/components/EditDialogs/Core/index.tsx
+ * @LastEditTime: 2023-10-03 13:12:22
+ * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
 import { type ReactNode, useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import DatePicker from '../../../components/FormComponents/DatePicker';
 import { FormEventHandler } from 'react';
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
-interface types {
+export interface types {
     [key: string]: {
         type     : 'input' | 'select' | 'date' | 'datetime' | 'time' | 'image' | 'avatar' | 'textfield';
         required : boolean;
@@ -52,6 +52,11 @@ function EditCore({
     helperText,
     title = '修改'
 }: props) {
+    useEffect(()=>{
+        const keys = Object.keys(colors);
+        if (keys.length <= 0) return;
+        document.querySelector('.InputDialog' + keys[0])?.scrollIntoView({behavior: 'smooth'});
+    }, [colors])
     return (
         <SwipeableDrawer
               // className='dark:bg-gray-900 dark:text-gray-100 p-4'
@@ -78,7 +83,7 @@ function EditCore({
                                 id         : `edit-employee-${key}`,
                                 color      : colors[key] as colors,
                                 helperColor: colors[key] as colors,
-                                className  : '',
+                                className  : 'InputDialog' + key,
                                 name       : key,
                                 required   : item.required,
                                 variant    : "outlined" as "outlined",
