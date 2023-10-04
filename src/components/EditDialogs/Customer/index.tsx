@@ -106,7 +106,7 @@ export class EmployeeEditor extends Component<Props, State>{
         this.props.id > 0 && axios.get(`${urls.employee_detail}/id/${this.props.id}`).then((res) => {
             console.log(res);
               // @ts-ignore
-            this.setState({ formData: res.detail });
+            this.setState({ formData: res.data });
         });
     }
 
@@ -141,6 +141,7 @@ export class EmployeeEditor extends Component<Props, State>{
                 formData={formData}
                 helperText={helperText}
                 types={this.types}
+                errors={[]}
             />
         );
     };

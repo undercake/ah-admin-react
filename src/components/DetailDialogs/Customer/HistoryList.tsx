@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-09 13:46:25
- * @LastEditTime: 2023-08-22 16:58:04
- * @FilePath: /ah-admin-react-from-next/src/components/DetailDialogs/Customer/HistoryList.tsx
+ * @LastEditTime: 2023-10-04 16:40:32
+ * @FilePath: /ah-admin-react/src/components/DetailDialogs/Customer/HistoryList.tsx
  * @Description: customer history list
  */
 import Box from '@mui/material/Box';
@@ -58,7 +58,11 @@ function HisList({
                         <TableCell>{item.NeedServiceTime}</TableCell>
                         <TableCell>{item.ServiceContentName}</TableCell>
                         <TableCell>{item.Comment}</TableCell>
-                        <TableCell>{({0:'空闲（待分配）',100: '已经分配（待派单）',200:'执行完毕'})[item.TaskStatus]}</TableCell>
+                        <TableCell>{item.TaskStatus > 0 && item.TaskStatus < 100 ? `第${item.TaskStatus}次执行` : ({
+                                0:'空闲（待分配）',
+                                100: '已经分配（待派单）',
+                                200: '执行完毕'
+                            })[item.TaskStatus]}</TableCell>
                         <TableCell>{item.PhoneDate}</TableCell>
                     </TableRow>)}
                 </TableBody>

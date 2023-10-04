@@ -36,7 +36,7 @@ function Massager() {
             timer = setTimeout(() => {
                 handleClose();
             },
-            13000);
+            8000);
         });
         mittBus.on('is_login', (i: boolean) => i && handleClose());
     }, []);

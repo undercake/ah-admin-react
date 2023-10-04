@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-08-30 11:24:08
+ * @LastEditTime: 2023-10-04 10:56:35
  * @FilePath: /ah-admin-react/src/pages/Employee/deleted.tsx
  * @Description: employee list page
  */
@@ -12,15 +12,6 @@ import axios, { type resListData } from '../../utils/Axios';
 import { urls } from '../../config';
 import type Employee from './Employee.d';
 
-const rows: rows = {
-    FullName: { type: 'string', name: '姓名' },
-    Sex: { type: 'string', name: '性别'},
-    Department: { type: 'string', name: '部门' },
-    Tel: { type: 'string', name: '手机号' },
-    Workday: { type: 'string', name: '参工日期' },
-    Comment: { type: 'string', name: '说明' },
-    BlameRecord: { type: 'string', name: '过失记录' },
-}
 
 const current_date = new Date();
 
@@ -30,6 +21,14 @@ function EmployeeList() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount] = useState(0);
 
+const rows: rows = {
+    FullName: { type: 'string', name: '姓名' },
+    Sex: { type: 'string', name: '性别'},
+    Department: { type: 'string', name: '部门' },
+    Tel: { type: 'string', name: '手机号' },
+    Comment: { type: 'string', name: '说明' },
+    DelFlag: { type: 'others', name: '删除时间', value: (v: string) => new Date(v).toLocaleString() },
+}
     const getData = () => {
         const url = urls.employee_deleted + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
         // @ts-ignore
@@ -61,13 +60,26 @@ function EmployeeList() {
     }
 
     const editList: editList = [
-        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        { label: '彻底删除', color: 'error', onClick: handleDelete, showConfirm: true },
         { label: '恢复', color: 'success', onClick: handleRec },
     ];
 
     const selectedActions: Actions[] = [
-        { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
-        { name: '批量恢复', color: 'success', showConfirm: true, onClick: handleRecList, icon: <i className="fa-solid fa-rotate-right" /> },
+        {
+            name: '彻底删除',
+            color: 'error',
+            showConfirm: true,
+            onClick: handleDeleteList,
+            icon: <i className="fa-solid fa-trash" />,
+            comment:<span style={{fontWeight: 'bold', color: 'red'}}>删除后不可恢复！</span>
+        },
+        {
+            name: '批量恢复',
+            color: 'success',
+            showConfirm: true,
+            onClick: handleRecList,
+            icon: <i className="fa-solid fa-rotate-right" />
+        },
     ];
 
     const nonSelectedActions: Actions[] = [

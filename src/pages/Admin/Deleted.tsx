@@ -1,7 +1,7 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-30 11:24:21
+ * @LastEditTime: 2023-10-04 15:13:21
  * @FilePath: /ah-admin-react/src/pages/Admin/Deleted.tsx
  * @Description : Customer list page
  */
@@ -10,22 +10,7 @@ import ListTable, { type editList, type rows, type Actions } from "../../compone
 import { useEffect, useState } from 'react';
 import axios, { type resListData } from '../../utils/Axios';
 import { urls } from '../../config';
-
-interface Customer {
-    id         : number,
-    name       : string,
-    mobile     : string,
-    black      : number,
-    pym        : string,
-    pinyin     : string,
-    del        : number,
-    create_time: string,
-    last_modify: string,
-    remark     : string,
-    total_money: string,
-    total_count: number,
-    type       : number,
-}
+import type Admin from './Admin';
 
 const rows: rows = {
     name  : { type: 'string', name: '姓名' },
@@ -37,17 +22,17 @@ const rows: rows = {
 const current_date = new Date();
 
 function CustomerList() {
-    const [data, setData]               = useState<Customer[]>([]);
+    const [data, setData]               = useState<Admin[]>([]);
     const [page, setPage]               = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount]             = useState(0);
 
     const getData = () => {
-        const url = urls.customer_deleted + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
+        const url = urls.admin_deleted + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
           // @ts-ignore
-        axios.get(url).then((res: resListData<Customer>) => {
+        axios.get(url).then((res: resListData<Admin>) => {
               // @ts-ignore
-            setData(res.data.map((d: Customer) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
+            setData(res.data.map((d: Admin) => ({ ...d, age: parseInt((current_date - new Date(d.birth_date)) / 31557600000) })));
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
@@ -57,19 +42,19 @@ function CustomerList() {
     useEffect(getData, [page, rowsPerPage]);
 
     const handleDelete = (id: number) => {
-        axios.delete(urls.customer_deep_del + `/id/${id}`).then(getData);
+        axios.delete(urls.admin_deep_del + `/id/${id}`).then(getData);
     }
 
     const handleDeleteList = (ids: number[]) => {
-        axios.post(urls.customer_deep_del, { ids }).then(getData);
+        axios.post(urls.admin_deep_del, { ids }).then(getData);
     }
 
     const handleRec = (id: number) => {
-        axios.post(urls.customer_rec + `/id/${id}`).then(getData);
+        axios.post(urls.admin_rec + `/id/${id}`).then(getData);
     }
 
     const handleRecList = (ids: number[]) => {
-        axios.post(urls.customer_rec, { ids }).then(getData);
+        axios.post(urls.admin_rec, { ids }).then(getData);
     }
 
     const editList: editList = [
@@ -78,8 +63,21 @@ function CustomerList() {
     ];
 
     const selectedActions: Actions[] = [
-        { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
-        { name: '批量恢复', color: 'success', showConfirm: true, onClick: handleRecList, icon: <i className="fa-solid fa-rotate-right" /> },
+        {
+            name: '彻底删除',
+            color: 'error',
+            showConfirm: true,
+            onClick: handleDeleteList,
+            icon: <i className="fa-solid fa-trash" />,
+            comment:<span style={{fontWeight: 'bold', color: 'red'}}>删除后不可恢复！</span>
+        },
+        {
+            name: '批量恢复',
+            color: 'success',
+            showConfirm: true,
+            onClick: handleRecList,
+            icon: <i className="fa-solid fa-rotate-right" />
+        },
     ];
 
     const nonSelectedActions: Actions[] = [

@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment, type ChangeEvent, type MouseEvent, MouseEventHandler } from 'react';
+import { useState, useEffect, Fragment, type ChangeEvent, type MouseEvent } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -93,11 +93,12 @@ export const Highlight = ({ text, searchStr }: { text: string, searchStr: string
 }
 
 const ComponentByType = ({ type, data, rowVal, searchStr }: { type: itemInRows["type"]; data: any, rowVal: any, searchStr: string }) => {
+    console.log({ type, data, rowVal, searchStr })
     switch (type) {
         case 'string': 
-            return <Highlight text = {data} searchStr = {searchStr} />;
+            return searchStr === '' ? <span>{data}</span> :<Highlight text = {data} searchStr = {searchStr} />;
         case 'options': 
-            return <Highlight text = {rowVal[data]} searchStr = {searchStr} />;
+            return searchStr === '' ? <span>{rowVal[data]}</span> :<Highlight text = {rowVal[data]} searchStr = {searchStr} />;
         case 'avatar': 
             return <Avatar alt = {data} src = {data} variant = "rounded" />
         case 'image': 
@@ -135,14 +136,6 @@ export default function ListTable({
 
     const maxPage = count % rowsPerPage === 0 ? count / rowsPerPage : Math.ceil(count / rowsPerPage);
 
-        // useEffect(()=>{
-        //     // @ts-ignore
-        //     if (undefined === window.XLSX) {
-        //         const script = document.createElement('script');
-        //         script.src = 'https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js';
-        //         document.body.appendChild(script);
-        //     }
-        // });
     useEffect(() => {
         setCurrentPage(page);
     }, [page]);
@@ -164,8 +157,12 @@ export default function ListTable({
             setSelected(new Set(newSelected));
             return;
         }
-        setSelected(new Set());
+        clearSelected();
     };
+
+    const clearSelected = () => {
+        setSelected(new Set());
+    }
 
     const handleSelect = (id: number) => {
         const newSelected = new Set(selected);
@@ -196,6 +193,7 @@ export default function ListTable({
                     searchStr              = {searchStr}
                     loading                = {loading}
                     selectedActionsLoading = {selectedActionsLoading}
+                    clearSelected          = {clearSelected}
                 />
                 <TableContainer>
                     <Table

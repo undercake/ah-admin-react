@@ -55,7 +55,24 @@ function FormSelect({
     ...e
 }: FormSelectProps) {
     return (
-        <FormControl sx={{ marginTop: margin, marginBottom: margin, minWidth: 120, ...sx }} required={required} fullWidth={fullWidth} variant={variant} color={color} className={'my-form-control-input ' + className}>
+        <FormControl sx={{
+            marginTop: margin,
+            marginBottom: margin,
+            minWidth: 120,
+            '& fieldset.MuiOutlinedInput-notchedOutline': {
+                borderColor: error ? 'rgb(240, 83, 83)' : 'rgb(107 114 128 / 500)'
+                },
+            '.dark & fieldset.MuiOutlinedInput-notchedOutline': {
+                borderColor: error ? 'rgb(240, 83, 83)' : 'rgb(107 114 128 / 200)'
+                },
+            '& svg': {
+                color: 'rgb(107 114 128 / 500)'
+                },
+            '.dark & svg': {
+                color: 'rgb(107 114 128 / 200)'
+                },
+            ...sx
+            }} required={required} fullWidth={fullWidth} variant={variant} color={color} className={'my-form-control-input ' + className}>
             <InputLabel className={"dark:text-gray-50 dark:border-gray-50 " + labelClassName} sx={{ '.dark &': { borderColor: 'rgb(249 250 251)' } }} error={error} htmlFor={`${id}-select`}>{label}</InputLabel>
             <Select
                 className={"dark:text-gray-50 " + selectClassName}

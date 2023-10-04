@@ -1,7 +1,7 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-08-30 11:24:13
+ * @LastEditTime: 2023-10-04 15:14:00
  * @FilePath: /ah-admin-react/src/pages/Customer/deleted.tsx
  * @Description : Customer list page
  */
@@ -63,8 +63,21 @@ function CustomerList() {
     ];
 
     const selectedActions: Actions[] = [
-        { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
-        { name: '批量恢复', color: 'success', showConfirm: true, onClick: handleRecList, icon: <i className="fa-solid fa-rotate-right" /> },
+        {
+            name: '彻底删除',
+            color: 'error',
+            showConfirm: true,
+            onClick: handleDeleteList,
+            icon: <i className="fa-solid fa-trash" />,
+            comment:<span style={{fontWeight: 'bold', color: 'red'}}>删除后不可恢复！</span>
+        },
+        {
+            name: '批量恢复',
+            color: 'success',
+            showConfirm: true,
+            onClick: handleRecList,
+            icon: <i className="fa-solid fa-rotate-right" />
+        },
     ];
 
     const nonSelectedActions: Actions[] = [

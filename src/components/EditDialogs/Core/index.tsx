@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-10-03 13:12:22
+ * @LastEditTime: 2023-10-04 16:18:05
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
@@ -37,8 +37,21 @@ interface props {
     formData     : { [key: string]: any };
     helperText   : { [key: string]: string };
     types        : types;
+    errors       : string[];
     title       ?: string;
 }
+
+export interface CoreState {
+    open    : boolean;
+    colors  : {
+        [key:string]: colors
+    };
+    helperText: {
+        [key:string]: string;
+    };
+    errors: string[];
+};
+
 function EditCore({
     children = null,
     onClose,
@@ -50,6 +63,7 @@ function EditCore({
     colors,
     formData,
     helperText,
+    errors,
     title = '修改'
 }: props) {
     useEffect(()=>{
@@ -87,7 +101,7 @@ function EditCore({
                                 name       : key,
                                 required   : item.required,
                                 variant    : "outlined" as "outlined",
-                                error      : colors[key] as string == 'error',
+                                error      : errors.includes(key) ? true : false,
                                 helperText : helperText[key],
                                 onChange   : onCh,
                                 size       : 'small' as "small" | "medium" | "large" | undefined,
@@ -102,7 +116,7 @@ function EditCore({
                                             fullWidth
                                             key = {key}
                                             {...InputProps}
-                                            multiline = {item.type == 'textfield'}
+                                            multiline = {item.type === 'textfield'}
                                         />
                                     );
                                 case 'select': 
@@ -165,8 +179,8 @@ function EditCore({
                         })}
                     {children}
                     <Button
-                        type = "submit"
                         fullWidth
+                        type      = "submit"
                         variant   = "contained"
                         className = 'bg-purple-dark hover:bg-purple-lighter'
                         color     = "secondary"

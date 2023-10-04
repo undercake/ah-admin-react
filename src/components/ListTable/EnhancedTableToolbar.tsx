@@ -16,6 +16,7 @@ export interface Actions {
     icon       ?: ReactNode | string;
     color      ?: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
     showConfirm?: boolean;
+    comment    ?: string | ReactNode;
 }
 interface EnhancedTableToolbarProps {
     numSelected            : number;
@@ -28,6 +29,7 @@ interface EnhancedTableToolbarProps {
     searchStr             ?: string;
     loading               ?: boolean;
     selectedActionsLoading?: boolean
+    clearSelected         ?: () => void;
 }
 
 let timer: NodeJS.Timeout | 0 = 0;
@@ -42,7 +44,8 @@ export default function EnhancedTableToolbar({
     onSearch = () => { },
     searchLabel = '搜索',
     searchStr='',
-    selectedActionsLoading = false
+    selectedActionsLoading = false,
+    clearSelected = () => { }
 }: EnhancedTableToolbarProps) {
     const [search, setSearch] = useState('');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -158,7 +161,7 @@ export default function EnhancedTableToolbar({
                     id        = "tableTitle"
                     component = "div"
                 >
-                        {selectedActions?.map(({ color = 'primary', name, icon, onClick, showConfirm }, index) =>
+                        {selectedActions?.map(({ color = 'primary', name, icon, onClick, showConfirm, comment = '' }, index) =>
                             showConfirm ?
                             <Fragment key={index}>
                                 <LoadingButton
@@ -181,8 +184,11 @@ export default function EnhancedTableToolbar({
                                     horizontal: 'left',
                                     }}
                                 >
-                                    <Typography sx={{ p: 2 }}>确定要 {name} {numSelected}条数据吗？</Typography>
-                                    <Button color='error' size='small' variant="text" onClick={() => onClick(selected as number[])}>确定</Button>
+                                    <Typography sx={{ p: 2 }}>
+                                        确定要 {name} {numSelected}条数据吗？
+                                        {comment !== '' && <><br />{comment}</>}
+                                    </Typography>
+                                    <Button color='error' size='small' variant="text" onClick={() => {clearSelected();onClick(selected as number[]);handleClose();}}>确定</Button>
                                     <Button color='info' size='small' variant="text" onClick={handleClose}>取消</Button>
                                 </Popover>
                             </Fragment> :

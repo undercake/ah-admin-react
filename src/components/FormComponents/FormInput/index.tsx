@@ -59,11 +59,11 @@ function FormInput({
         <FormControl sx={{
             marginTop: margin,
             marginBottom: margin,
-            '& fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline': {
-                borderColor: 'rgb(107 114 128 / 500)'
+            '& fieldset.MuiOutlinedInput-notchedOutline': {
+                borderColor: error ? 'rgb(240, 83, 83)' : 'rgb(107 114 128 / 500)'
                 },
-            '.dark & fieldset.css-1d3z3hw-MuiOutlinedInput-notchedOutline': {
-                borderColor: 'rgb(107 114 128 / 200)'
+            '.dark & fieldset.MuiOutlinedInput-notchedOutline': {
+                borderColor: error ? 'rgb(240, 83, 83)' : 'rgb(107 114 128 / 200)'
                 },
                 ...sx }}
             required={required}

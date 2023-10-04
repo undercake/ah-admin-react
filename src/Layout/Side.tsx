@@ -2,7 +2,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:36
- * @LastEditTime: 2023-09-19 17:24:07
+ * @LastEditTime: 2023-10-04 16:40:16
  * @FilePath: /ah-admin-react/src/Layout/Side.tsx
  * @Description: side menu
  */
@@ -56,19 +56,16 @@ const handleChildMap = ({
                 }
                 sx={{ paddingLeft: type === 'pop' ? '0' : '3.1rem' }}
                 key={`${index}-${ind}`}
-                // onClick={() => {
-                //     push(child.path);
-                // }}
             >
                 <Link to={child.path} style={{display: 'flex'}}>
                     <ListItemIcon sx={{ minWidth: '1.5rem' }}>
                         {type === '0' ? (
                             <FiberManualRecordIcon
-                                className=" dark:text-white"
                                 sx={{
-                                    // '& svg':{
-                                    //     height: '2rem'
-                                    // },
+                                    '.dark &':{
+                                        color: path === child.path ? '#b185ff' : '#ccc',
+                                    },
+                                    color: path === child.path ? '#673ab7' : '#666',
                                     ...(path === child.path ?
                                     { width: '8px', height: '2rem' } :
                                     { width: '6px', height: '2rem' })
@@ -77,9 +74,15 @@ const handleChildMap = ({
                         ) : null}
                     </ListItemIcon>
                     {open ?
-                        <ListItemText primary={<span style={{ fontWeight: path === child.path ? 600 : 400 }}>{child.name}</span>} /> :
+                        <ListItemText primary={<Typography sx={{
+                            fontWeight: path === child.path ? 600 : 400,
+                            color: path === child.path ? '#673ab7' : '#666',
+                            '.dark &': {color: path === child.path ? '#b185ff' : '#ccc'}
+                            }}>
+                            {child.name}
+                            </Typography>} /> :
                         type === 'pop' ?
-                            <ListItemText primary={<span style={{ fontWeight: path === child.path ? 600 : 400 }}>{child.name}</span>} /> :
+                            <ListItemText primary={<Typography sx={{ fontWeight: path === child.path ? 600 : 400 }}>{child.name}</Typography>} /> :
                             null}
                 </Link>
             </ListItem>
@@ -250,7 +253,7 @@ function Side({ open }: { open: boolean }) {
                                     />
                                 </ListItemIcon>
                                 {open ? <ListItemText primary={item.name} /> : null}
-                                {open ? currentTarget === item.path || currentTarget.startsWith(item.path) ? <ExpandLess /> : <ExpandMore /> : null}
+                                {open ? currentTarget === item.path || currentTarget.startsWith(item.path) ? <ExpandLess /> : <ExpandMore sx={{'.dark &': {color: '#ccc'}}} /> : null}
                             </ListItemButton>
                             {open ? (
                                 <Collapse key={`col-${index}`} in={currentTarget === item.path || currentTarget.startsWith(item.path)}  className='transition-height duration-300' timeout={200}>

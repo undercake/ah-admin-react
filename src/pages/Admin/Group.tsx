@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:18:11
- * @LastEditTime: 2023-09-20 12:17:15
+ * @LastEditTime: 2023-10-04 16:54:17
  * @FilePath: /ah-admin-react/src/pages/Admin/Group.tsx
  * @Description: 
  */
@@ -40,7 +40,7 @@ function Group() {
         axios.get(url).then((res: resListData<Group>) => {
             console.log(res);
             // @ts-ignore
-            setData(res.grp);
+            setData(res.data);
             setRowsPerPage(res.count_per_page);
             setPage(res.current_page);
             setCount(res.count)
