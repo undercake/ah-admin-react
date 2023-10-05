@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-08-14 17: 27: 03
- * @LastEditTime: 2023-10-04 17:35:24
+ * @LastEditTime: 2023-10-05 16:33:47
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Admin/index.tsx
 * @Description : 
 */
@@ -13,7 +13,6 @@ import axios from '../../../utils/Axios';
 import mittBus from '../../../utils/MittBus';
 import type Admin from '../../../pages/Admin/Admin';
 import Loading from '../../Status/Loading';
-import { getDateCalendarUtilityClass } from '@mui/x-date-pickers';
 import Error from '../../Status/Error';
 
 type Props = {
@@ -55,8 +54,9 @@ function AdminEditor({ id, handleClose }: Props) {
     });
 
     useEffect(() => {
-        setLoading(true);
         setOpen(true);
+        if (id === 0) return;
+        setLoading(true);
         getData();
     }, []);
 

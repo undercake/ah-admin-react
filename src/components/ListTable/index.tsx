@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment, type ChangeEvent, type MouseEvent } from 'react';
+import { useState, useEffect, Fragment, type ChangeEvent, type MouseEvent, type ReactNode } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -29,12 +29,12 @@ export interface tableData {
     [key: string]: any;
 }
 
-export type editList = 
-    {
+export type editList = {
         label         : string,
         color         : 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined,
         showConfirm  ?: boolean,
         onClick       : (id: number) => void,
+        comment      ?: string | ReactNode,
         [key: string] : any
     }[];
 
@@ -93,7 +93,6 @@ export const Highlight = ({ text, searchStr }: { text: string, searchStr: string
 }
 
 const ComponentByType = ({ type, data, rowVal, searchStr }: { type: itemInRows["type"]; data: any, rowVal: any, searchStr: string }) => {
-    console.log({ type, data, rowVal, searchStr })
     switch (type) {
         case 'string': 
             return searchStr === '' ? <span>{data}</span> :<Highlight text = {data} searchStr = {searchStr} />;
@@ -284,7 +283,7 @@ export default function ListTable({
                                                     padding   = "none"
                                                 >
                                                     <ButtonGroup size = "small" aria-label = "small button group">
-                                                        {editList.map(({ label, onClick, color = 'primary', showConfirm, ...e }, ed_index) => {
+                                                        {editList.map(({ label, onClick, color = 'primary', showConfirm, comment = '', ...e }, ed_index) => {
                                                                 // const { label, onClick, color = 'primary', showConfirm, ...e } = editList[ed_key];
                                                             const colors = {
                                                                 primary: {
@@ -349,7 +348,12 @@ export default function ListTable({
                                                                                 horizontal: 'left',
                                                                             }}
                                                                         >
-                                                                            <Typography sx    = {{ p: 2 }}>确定要{label}吗？</Typography>
+                                                                            <Typography
+                                                                                sx= {{ p: 2 }}
+                                                                                >
+                                                                                确定要{label}吗？
+                                                                                {comment !== '' && <><br />{comment}</>}
+                                                                            </Typography>
                                                                             <Button     color = 'error' size = 'small' variant = "text" onClick = {() => { onClick(row.id); handleClose() }}>确定</Button>
                                                                             <Button     color = 'info' size  = 'small' variant = "text" onClick = {handleClose}>取消</Button>
                                                                         </Popover>
@@ -415,7 +419,7 @@ export default function ListTable({
                         <MenuItem value = {200}>200</MenuItem>
                         <MenuItem value = {400}>400</MenuItem>
                         <MenuItem value = {800}>800</MenuItem>
-                        <MenuItem value = {8000}>8000</MenuItem>
+                        <MenuItem value = {1600}>1600</MenuItem>
                     </Select>
                 </div>
                 <div className = "flex-initial w-10 leading-10">

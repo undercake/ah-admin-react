@@ -5,6 +5,8 @@ import FormInput from '../../components/FormComponents/FormInput';
 import axios from '../../utils/Axios';
 import { urls } from '../../config';
 import md5 from 'md5';
+import * as Yup from 'yup';
+import mittBus from '../../utils/MittBus';
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
 
@@ -47,13 +49,21 @@ class Info extends Component<InfoProps, InfoState> {
         repeatPassHelperColor: 'primary',
     };
 
+    schema = Yup.object().shape({
+        oldPass   : Yup.string().min(6, '原密码不能小于6位').max(66, '原密码不能长于66位').required('原密码不能为空'),
+        newPass   : Yup.string().min(6, '新密码不能小于6位').max(66, '新密码不能长于66位').required('新密码不能为空'),
+        repeatPass: Yup.string().min(6, '重复密码不能小于6位').max(66, '重复密码不能长于66位').required('重复密码不能为空'),
+    });
+
     handleSubmit = (e: SubmitEvent) => {
         e.preventDefault();
         const { oldPass, newPass, repeatPass } = this.state;
-        axios.post(urls.my_set_pass, { oldpass: md5(oldPass), newpass: md5(newPass), newpass_repeat: md5(repeatPass) }).then((res) => {
-            // TODO: 完善提示
-            console.log(res);
-        });
+        this.schema.validate({ oldPass, newPass, repeatPass }).then(() =>
+                axios.post(urls.my_set_pass, { oldpass: md5(oldPass), newpass: md5(newPass), newpass_repeat: md5(repeatPass) }))
+            .then((res) => {
+                mittBus.emit('emitMsg', { status: 'success', msg: '修改成功' });
+                console.log(res);
+            });
     }
 
     render() {
@@ -71,7 +81,7 @@ class Info extends Component<InfoProps, InfoState> {
                     fullWidth
                     variant="outlined"
                     helperText={this.state.oldPassHelper}
-                    error={this.state.oldPassHelperColor == 'error'}
+                    error={this.state.oldPassHelperColor === 'error'}
                     onChange={(e) => this.setState({ oldPass: e.target.value })}
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
@@ -90,7 +100,7 @@ class Info extends Component<InfoProps, InfoState> {
                     fullWidth
                     variant="outlined"
                     helperText={this.state.newPassHelper}
-                    error={this.state.newPassHelperColor == 'error'}
+                    error={this.state.newPassHelperColor === 'error'}
                     onChange={(e) => this.setState({ newPass: e.target.value })}
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}
@@ -99,7 +109,6 @@ class Info extends Component<InfoProps, InfoState> {
                 />
                 <FormInput
                     label='重复密码'
-                    电子邮箱
                     id='my-pass-repeatPass'
                     sx={{ mt: 3 }}
                     color={this.state.repeatPassColor}
@@ -110,7 +119,7 @@ class Info extends Component<InfoProps, InfoState> {
                     fullWidth
                     variant="outlined"
                     helperText={this.state.repeatPassHelper}
-                    error={this.state.repeatPassHelperColor == 'error'}
+                    error={this.state.repeatPassHelperColor === 'error'}
                     onChange={(e) => this.setState({ repeatPass: e.target.value })}
                     autoComplete="none"
                     inputProps={{ maxLength: 6 }}

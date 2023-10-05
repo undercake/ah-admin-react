@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import FormInput from '../../components/FormComponents/FormInput';
 import axios from '../../utils/Axios';
 import { urls } from '../../config';
+import type Admin from '../Admin/Admin';
+import mittBus from '../../utils/MittBus';
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
 
@@ -55,7 +57,8 @@ class Info extends Component<InfoProps, InfoState> {
     };
 
     componentDidMount(): void {
-        axios.get(urls.my_get).then((res) => {
+        // @ts-ignore
+        axios.get(urls.my_get).then((res: {code: number, data: Admin}) => {
             const { full_name, user_name, mobile, email } = res.data;
             this.setState({ nickname: full_name, userName: user_name, mobile, email });
         });
@@ -65,8 +68,11 @@ class Info extends Component<InfoProps, InfoState> {
         e.preventDefault();
         const { nickname, userName, mobile, email } = this.state;
         // TODO: 完善提示
-        axios.post(urls.my_set, { full_name: nickname, user_name: userName, mobile, email }).then((res) => {
+        axios.post(urls.my_set, { full_name: nickname, user_name: userName, mobile, email })
+        // @ts-ignore
+        .then((res:{code:number}) => {
             console.log(res);
+            res.code === 0 && mittBus.emit('msgEmit', { status: 'success', msg: '修改成功' });
         });
     }
 

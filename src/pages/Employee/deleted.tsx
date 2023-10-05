@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-10-04 10:56:35
+ * @LastEditTime: 2023-10-05 16:12:09
  * @FilePath: /ah-admin-react/src/pages/Employee/deleted.tsx
  * @Description: employee list page
  */
@@ -60,7 +60,7 @@ const rows: rows = {
     }
 
     const editList: editList = [
-        { label: '彻底删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        { label: '彻底删除', color: 'error', onClick: handleDelete, showConfirm: true, comment: <span style={{fontWeight: 'bold', color: 'red'}}>删除后不可恢复！</span> },
         { label: '恢复', color: 'success', onClick: handleRec },
     ];
 

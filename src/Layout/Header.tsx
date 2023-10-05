@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-04-26 13:48:46
- * @LastEditTime: 2023-09-03 14:36:11
+ * @LastEditTime: 2023-10-05 14:34:47
  * @FilePath: /ah-admin-react/src/Layout/Header.tsx
  * @Description: header
  */
@@ -28,7 +28,6 @@ function Header({ handleDrawerOpen, noMenu = false,is_login = false }: { handleD
 
     useEffect(()=>{
         is_login && axios.get(urls.my_get).then((res) => {
-            console.log({res})
             const { full_name, avatar } = res.data;
             setUserName(full_name);
 

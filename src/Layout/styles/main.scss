@@ -1,5 +1,20 @@
-main.layout-main-container{
+main.layout-main-container {
     // border-radius: 1rem;
     border-top-left-radius: 1rem;
     height: calc(100vh - 5.5rem);
+}
+
+.MuiPickersPopper-root .MuiMultiSectionDigitalClock-root {
+    &::-webkit-scrollbar {
+        width: 0.4rem;
+        height: 0.4rem;
+    }
+    &::-webkit-scrollbar-thumb {
+        transition: background-color 0.6s;
+        background-color: rgba(204, 204, 204, 0);
+        border-radius: 0.4rem;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: rgba(204, 204, 204, 1);
+    }
 }

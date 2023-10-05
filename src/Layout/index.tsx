@@ -102,7 +102,7 @@ function Layout(props: LayoutProps) {
                     </Box>
                 </>
             )}
-            <Massager />
+            <Massager is_login={is_login} />
         </>
     );
 }

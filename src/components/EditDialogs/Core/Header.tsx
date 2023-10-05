@@ -1,8 +1,8 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-17 03:24:41
- * @LastEditTime: 2023-08-26 15:07:07
- * @FilePath: /ah-admin-react-from-next/src/components/EditDialogs/Core/Header.tsx
+ * @LastEditTime: 2023-10-05 15:42:54
+ * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/Header.tsx
  * @Description: edit core Drawer Header
  */
 
@@ -14,7 +14,7 @@ import { MouseEventHandler } from "react";
 
 function Header({ className = '', sx = {}, onClick, title = '修改' }: { className?: string, sx?: any, title?: string, onClick: (e: Event) => void }) {
     return (
-        <Box className="flex w-full mb-2 shadow-md" sx={{marginLeft:'-1rem', marginRight: '-1rem', paddingLeft: '1rem', paddingRight: '1rem'}}>
+        <Box className="flex w-full mb-2 shadow-md" sx={{marginLeft:'-1rem', marginRight: '-1rem', paddingLeft: '1rem', paddingRight: '1rem', paddingTop: '1rem', paddingBottom: '1rem'}}>
             <IconButton
                 className={'cursor-pointer mr-10 ' + className}
                 sx={{

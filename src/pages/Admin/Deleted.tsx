@@ -1,7 +1,7 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-10-04 15:13:21
+ * @LastEditTime: 2023-10-05 16:28:51
  * @FilePath: /ah-admin-react/src/pages/Admin/Deleted.tsx
  * @Description : Customer list page
  */
@@ -13,10 +13,10 @@ import { urls } from '../../config';
 import type Admin from './Admin';
 
 const rows: rows = {
-    name  : { type: 'string', name: '姓名' },
-    gender: { type: 'options', name: '性别', value: { 0: '男', 1: '女' } },
+    full_name  : { type: 'string', name: '姓名' },
     phone : { type: 'string', name: '手机号' },
     note  : { type: 'string', name: '备注' },
+    deleted: { type: 'others', name: '删除时间', value: (v: string) => new Date(v).toLocaleString() },
 }
 
 const current_date = new Date();
@@ -58,7 +58,7 @@ function CustomerList() {
     }
 
     const editList: editList = [
-        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true, comment: <span style={{fontWeight: 'bold', color: 'red'}}>警告：删除后不可恢复！</span> },
         { label: '恢复', color: 'success', onClick: handleRec, showConfirm: true },
     ];
 

@@ -28,15 +28,15 @@ const mainColor = 'primary';
 
 function Copyright(props: any) {
     return (
-        <Typography className="dark:text-gray-50" variant="body2" color="text.secondary" align="center" {...props}>
+        <Typography className = "dark:text-gray-50" variant = "body2" color = "text.secondary" align = "center" {...props}>
             Copyright © kmahjz.com.cn {new Date().getFullYear()}
         </Typography>
     );
 }
 
 const schema = Yup.object().shape({
-    username: Yup.string().required('用户名不能为空'),
-    password: Yup.string().min(6, '密码至少包含6个字符').required('密码不能为空'),
+    username    : Yup.string().required('用户名不能为空'),
+    password    : Yup.string().min(6, '密码至少包含6个字符').required('密码不能为空'),
     verification: Yup.string().required('验证码不能为空').length(5, '验证码必须为5位')
 });
 
@@ -47,43 +47,42 @@ function VerificationImg({ random, handleClick }: { random: string, handleClick:
     }, [random]);
     return (
         <img
-            src={src}
-            alt="verification"
-            className="w-1/2 h-1/2"
-            onClick={handleClick}
-            width="250"
-            height="62"
-            style={{ cursor: 'pointer', marginRight: '-.78rem' }}
-        // priority
+            src       = {src}
+            alt       = "verification"
+            className = "w-1/2 h-1/2"
+            onClick   = {handleClick}
+            width     = "250"
+            height    = "62"
+            style     = {{ cursor: 'pointer', marginRight: '-.78rem' }}
         />
     );
 }
 
 function Login(props: Props) {
-    const [showPassword, setShowPassword] = useState(false);
-    const [username, setUsername] = useState('');                  // 用户名
-    const [password, setPassword] = useState('');                  // 密码
-    const [verification, setVerification] = useState('');                  // 验证码
-    const [userHelperName, setUserHelperName] = useState('');                  // 用户名提示
-    const [userHelperPassword, setUserHelperPassword] = useState('');                  // 密码提示
+    const [showPassword, setShowPassword]                     = useState(false);
+    const [username, setUsername]                             = useState('');                  // 用户名
+    const [password, setPassword]                             = useState('');                  // 密码
+    const [verification, setVerification]                     = useState('');                  // 验证码
+    const [userHelperName, setUserHelperName]                 = useState('');                  // 用户名提示
+    const [userHelperPassword, setUserHelperPassword]         = useState('');                  // 密码提示
     const [userHelperVerification, setUserHelperVerification] = useState('');                  // 验证码提示
-    const [userColorName, setUserColorName] = useState<colors>(mainColor);   // 用户名颜色
-    const [userColorPassword, setUserColorPassword] = useState<colors>(mainColor);   // 密码颜色
-    const [userColorVerification, setUserColorVerification] = useState<colors>(mainColor);   // 验证码颜色
-    const [random, setRandom] = useState('' + Math.random());  // 验证码随机数
-    const [isQRLogin, setisQRLogin] = useState(false);
+    const [userColorName, setUserColorName]                   = useState<colors>(mainColor);   // 用户名颜色
+    const [userColorPassword, setUserColorPassword]           = useState<colors>(mainColor);   // 密码颜色
+    const [userColorVerification, setUserColorVerification]   = useState<colors>(mainColor);   // 验证码颜色
+    const [random, setRandom]                                 = useState('' + Math.random());  // 验证码随机数
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
-    const handleLogin = () => {
+    const handleLogin             = () => {
         mittBus.emit('getLists', true);
+        mittBus.emit('msgEmit', {type: 'success', msg: '登录成功'});
         props.onLogin();
     };
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const kvObj = Object.create(null);
-        kvObj['username'] = [setUserHelperName, setUserColorName];
-        kvObj['password'] = [setUserHelperPassword, setUserColorPassword];
+        const kvObj           = Object.create(null);
+        kvObj['username']     = [setUserHelperName, setUserColorName];
+        kvObj['password']     = [setUserHelperPassword, setUserColorPassword];
         kvObj['verification'] = [setUserHelperVerification, setUserColorVerification];
         schema
             .validate({
@@ -95,7 +94,7 @@ function Login(props: Props) {
                 return axios.post(urls.login, {
                     username,
                     passwordMd5: md5(password),
-                    captcha: verification
+                    captcha    : verification
                 });
             })
             .then((res: any) => {
@@ -143,26 +142,8 @@ function Login(props: Props) {
                     alignItems: 'center'
                 }}
             >
-                {/* <Avatar vatar sx={{ m: 1, width: '6.3rem', height: '6rem' }} variant='square' src='/static/logo.gif'>
-                </Avatar>
-                <Typography component="h1" variant="h5" sx={{ marginBottom: '1rem' }}>
-                    阿惠家政
-                </Typography>*/}
-                {/* {
-                    isQRLogin ?
-                    <> */}
                 <Box className='flex'>
                     <QRLogin className='basis-2/5' handleLogin={handleLogin}></QRLogin>
-                    {/* <Button
-                                color="primary"
-                                size="medium"
-                                variant="text"
-                                onClick={()=>setisQRLogin(false)}
-                            >
-                                账号密码登录
-                            </Button> */}
-                    {/* </>:
-                        <> */}
                     <Box component="form" className='flex-1' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <Typography className='mb-2 text-center' variant="h5" sx={{ marginBottom: '.5rem' }}>
                             账号登录
@@ -259,16 +240,6 @@ function Login(props: Props) {
                         </Button>
                     </Box>
                 </Box>
-                {/* <Button
-                            color="primary"
-                            size="medium"
-                            variant="text"
-                            onClick={()=>setisQRLogin(true)}
-                        >
-                            企业微信扫码登录
-                        </Button> */}
-                {/* </>
-                } */}
             </Box>
             <Copyright sx={{ mt: 3, mb: 4 }} />
         </>

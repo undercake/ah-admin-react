@@ -6,6 +6,7 @@ import mittBus from '../utils/MittBus';
 interface Msg {
     type: 'success' | 'error' | 'warning' | 'info';
     msg: string;
+    expire?: number;
 }
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
@@ -14,10 +15,13 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 
 let timer: NodeJS.Timeout|0 = 0;
 
-function Massager() {
+function Massager({is_login}: {is_login: boolean}) {
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState<Msg>({ type: 'success', msg: '' });
     const [opacity, setOpacity] = useState(0);
+    const [firstLogin, setFirstLogin] = useState<boolean>(true);
+
+    useEffect(() => {is_login && setFirstLogin(false)}, [is_login, firstLogin]);
 
     const handleClose = () => {
         setOpacity(0);
@@ -27,6 +31,8 @@ function Massager() {
     };
     useEffect(() => {
         mittBus.on('msgEmit', (msg: Msg) => {
+            if (firstLogin && msg.msg === '您尚未登陆') return;
+            const {expire = 8} = msg;
             setTimeout(() => {
                 setOpacity(1);
                 }, 2);
@@ -36,7 +42,7 @@ function Massager() {
             timer = setTimeout(() => {
                 handleClose();
             },
-            8000);
+            expire * 1000);
         });
         mittBus.on('is_login', (i: boolean) => i && handleClose());
     }, []);

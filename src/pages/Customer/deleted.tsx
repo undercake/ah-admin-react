@@ -1,7 +1,7 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-10-04 15:14:00
+ * @LastEditTime: 2023-10-05 16:12:00
  * @FilePath: /ah-admin-react/src/pages/Customer/deleted.tsx
  * @Description : Customer list page
  */
@@ -58,7 +58,7 @@ function CustomerList() {
     }
 
     const editList: editList = [
-        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true, comment: <span style={{fontWeight: 'bold', color: 'red'}}>警告：删除后不可恢复！</span> },
         { label: '恢复', color: 'success', onClick: handleRec, showConfirm: true },
     ];
 

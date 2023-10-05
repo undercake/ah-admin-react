@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-10-04 16:18:05
+ * @LastEditTime: 2023-10-05 15:54:36
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
@@ -69,8 +69,10 @@ function EditCore({
     useEffect(()=>{
         const keys = Object.keys(colors);
         if (keys.length <= 0) return;
-        document.querySelector('.InputDialog' + keys[0])?.scrollIntoView({behavior: 'smooth'});
-    }, [colors])
+        const selector = formData[keys[0]] === '' ? '.InputDialog' + keys[0] : '.InputDialog' + keys[0] + ' label';
+        document.querySelector(selector)?.scrollIntoView({behavior: 'smooth'});
+    }, [colors]);
+
     return (
         <SwipeableDrawer
               // className='dark:bg-gray-900 dark:text-gray-100 p-4'
@@ -81,7 +83,7 @@ function EditCore({
             onOpen     = {onOpen}
         >
             <Header onClick = {(e: Event) => { onClose(e, 'button') }} title = {title} />
-            <ScrollView>
+            <ScrollView sx={{marginTop: '1.5rem'}}>
                 <Box component = "form" onSubmit = {handleSubmit as unknown as FormEventHandler<HTMLFormElement>} noValidate sx = {{ pt: 1, maxWidth: '50rem' }}>
                     {
                         Object.keys(types).map((key: string) => {

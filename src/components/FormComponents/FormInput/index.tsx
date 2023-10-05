@@ -65,6 +65,9 @@ function FormInput({
             '.dark & fieldset.MuiOutlinedInput-notchedOutline': {
                 borderColor: error ? 'rgb(240, 83, 83)' : 'rgb(107 114 128 / 200)'
                 },
+                '.dark & label': {
+                    color: error ? 'rgb(240, 83, 83)': '#ccc'
+                },
                 ...sx }}
             required={required}
             fullWidth={fullWidth}
