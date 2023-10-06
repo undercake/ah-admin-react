@@ -1,17 +1,18 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-10-04 15:12:18
+ * @LastEditTime: 2023-10-06 17:35:23
  * @FilePath: /ah-admin-react/src/pages/Admin/List.tsx
  * @Description: Admin list page
  */
 import Card from '../../components/Card';
-import ListTable, { type editList, type rows, type editGroupList, type Actions } from "../../components/ListTable";
+import ListTable, { type editList, type rows, type Actions } from "../../components/ListTable";
 import { useEffect, useState } from 'react';
 import axios, { type resListData } from '../../utils/Axios';
 import { urls } from '../../config';
 import type Admin from './Admin';
 import AdminEditor from '../../components/EditDialogs/Admin';
+import { hasRights } from '../../utils/Rights';
 
 
 
@@ -34,6 +35,8 @@ function AdminList() {
     }
 
     const getData = () => {
+        setLoading(true);
+        setError(false);
         const url = urls.admin_list + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
         // @ts-ignore
         axios.get(url).then((res: resListData<Admin>) => {
@@ -50,10 +53,11 @@ function AdminList() {
     }
 
     const handleEditorClose = (e: Event, reason: string) => {
-        (reason == 'button' || reason == 'submit') && setTimeout(() => {
+        (reason === 'button' || reason === 'submit') && setTimeout(() => {
             setEditId(-1);
+            getData();
         }, 300);
-        return reason == 'button' || reason == 'submit';
+        return reason === 'button' || reason === 'submit';
     }
 
     useEffect(getData, [page, rowsPerPage]);
@@ -71,16 +75,16 @@ function AdminList() {
     }
 
     const editList: editList = [
-        { label: '编辑', color: 'info', onClick: openEdit },
-        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        hasRights('/employee/alter') ? { label: '编辑', color: 'info', onClick: openEdit } : undefined,
+        hasRights('/employee/delete') ? { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true } : undefined,
     ];
 
-    const selectedActions: Actions[] = [
-        { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
+    const selectedActions: (Actions|undefined)[] = [
+        hasRights('/employee/delete') ? { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> }: undefined,
     ];
 
-    const nonSelectedActions: Actions[] = [
-        { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> },
+    const nonSelectedActions: (Actions|undefined)[] = [
+        hasRights('/employee/add') ? { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> } : undefined,
         { name: '刷新', color: 'primary', onClick: () => getData(), icon: <i className="fa-solid fa-arrows-rotate" /> },
     ];
 

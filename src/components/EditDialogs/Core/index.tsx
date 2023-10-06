@@ -1,11 +1,11 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-10-05 15:54:36
+ * @LastEditTime: 2023-10-06 15:19:06
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import ScrollView from '../../../components/ScrollView';
 import Header from './Header';
@@ -15,6 +15,8 @@ import FormInput from '../../../components/FormComponents/FormInput';
 import FormSelect from '../../../components/FormComponents/Select';
 import DatePicker from '../../../components/FormComponents/DatePicker';
 import { FormEventHandler } from 'react';
+import Error from '../../Status/Error';
+import Loading from '../../Status/Loading';
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
 export interface types {
@@ -38,7 +40,11 @@ interface props {
     helperText   : { [key: string]: string };
     types        : types;
     errors       : string[];
+    refreshText ?: string;
+    refresh     ?: () => void;
     title       ?: string;
+    error       ?: boolean;
+    loading     ?: boolean;
 }
 
 export interface CoreState {
@@ -53,7 +59,6 @@ export interface CoreState {
 };
 
 function EditCore({
-    children = null,
     onClose,
     onOpen,
     open,
@@ -64,18 +69,23 @@ function EditCore({
     formData,
     helperText,
     errors,
-    title = '修改'
+    refresh     = ()=>{},
+    refreshText = '刷新',
+    children    = null,
+    loading     = false,
+    error       = false,
+    title       = '修改'
 }: props) {
     useEffect(()=>{
         const keys = Object.keys(colors);
         if (keys.length <= 0) return;
         const selector = formData[keys[0]] === '' ? '.InputDialog' + keys[0] : '.InputDialog' + keys[0] + ' label';
         document.querySelector(selector)?.scrollIntoView({behavior: 'smooth'});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [colors]);
 
     return (
         <SwipeableDrawer
-              // className='dark:bg-gray-900 dark:text-gray-100 p-4'
             PaperProps = {{ className: 'dark:bg-gray-1080 dark:text-gray-100 p-4' }}
             anchor     = 'right'
             open       = {open}
@@ -83,7 +93,8 @@ function EditCore({
             onOpen     = {onOpen}
         >
             <Header onClick = {(e: Event) => { onClose(e, 'button') }} title = {title} />
-            <ScrollView sx={{marginTop: '1.5rem'}}>
+            {error ? <Box sx={{minWidth: '25rem', textAlign: 'center'}}><Error /> <Button onClick={refresh}>{refreshText}</Button></Box> : loading ? <Box sx={{minWidth: '25rem', textAlign: 'center'}}><Loading /></Box> :
+                <ScrollView sx={{marginTop: '1.5rem'}}>
                 <Box component = "form" onSubmit = {handleSubmit as unknown as FormEventHandler<HTMLFormElement>} noValidate sx = {{ pt: 1, maxWidth: '50rem' }}>
                     {
                         Object.keys(types).map((key: string) => {
@@ -192,7 +203,7 @@ function EditCore({
                         提交
                     </Button>
                 </Box>
-            </ScrollView>
+            </ScrollView>}
         </SwipeableDrawer>
     );
 }

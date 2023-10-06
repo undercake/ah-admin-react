@@ -20,8 +20,8 @@ export interface Actions {
 }
 interface EnhancedTableToolbarProps {
     numSelected            : number;
-    selectedActions       ?: Actions[];
-    nonSelectedActions    ?: Actions[];
+    selectedActions       ?: (Actions|undefined)[];
+    nonSelectedActions    ?: (Actions|undefined)[];
     selected              ?: number[];
     showSearch            ?: boolean;
     onSearch              ?: (s: string) => void;
@@ -100,25 +100,23 @@ export default function EnhancedTableToolbar({
                     id        = "tableTitle"
                     component = "div"
                 >
-                    {nonSelectedActions?.map(({
-                        color = 'primary',
-                        name,
-                        icon,
-                        onClick
-                        }, index) => (
-                            <LoadingButton
-                                key={index}
-                                color={color}
-                                variant="contained"
-                                onClick={() => onClick(selected as number[])}
-                                sx={{marginRight: '.5rem'}}
-                                loading={loading}
-                                loadingPosition="start"
-                                startIcon={<span style={{ marginRight: '.3rem' }}>{icon}</span>}
-                            >
-                                {name}
-                            </LoadingButton>
-                        ))}
+                    {nonSelectedActions?.map((Action, index) => {
+                        if (!Action) return null;
+                        const {color = 'primary',name,icon,onClick} = Action;
+                        return (
+                        <LoadingButton
+                            key={index}
+                            color={color}
+                            variant="contained"
+                            onClick={() => onClick(selected as number[])}
+                            sx={{marginRight: '.5rem'}}
+                            loading={loading}
+                            loadingPosition="start"
+                            startIcon={<span style={{ marginRight: '.3rem' }}>{icon}</span>}
+                        >
+                            {name}
+                        </LoadingButton>
+                    )})}
                     {showSearch && <TextField
                         sx={{
                             marginLeft: '1rem',
@@ -161,8 +159,10 @@ export default function EnhancedTableToolbar({
                     id        = "tableTitle"
                     component = "div"
                 >
-                        {selectedActions?.map(({ color = 'primary', name, icon, onClick, showConfirm, comment = '' }, index) =>
-                            showConfirm ?
+                        {selectedActions?.map((Action, index) => {
+                            if (!Action) return null;
+                            const { color = 'primary', name, icon, onClick, showConfirm, comment = '' } = Action as Actions;
+                            return showConfirm ?
                             <Fragment key={index}>
                                 <LoadingButton
                                     variant="contained"
@@ -203,7 +203,7 @@ export default function EnhancedTableToolbar({
                             >
                                 {name}
                             </LoadingButton>
-                            )}
+                            })}
                 </Typography>)}
         </Toolbar>
     );

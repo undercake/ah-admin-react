@@ -1,13 +1,15 @@
-import Core from '../../../components/EditDialogs/Core';
 import { pinyin } from "pinyin-pro";
 import { Component } from 'react';
+import * as Yup from 'yup';
+import Core from '../../../components/EditDialogs/Core';
 import { urls } from '../../../config';
 import axios from '../../../utils/Axios';
-import type Employee from '../../../pages/Employee/Employee.d';
+import type Customer from '../../../pages/Customer/Customer.d';
+import { CheckMobile } from "../../../utils/InputCheck";
 
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
-type Props = {
+type Props  = {
     handleClose: (a:Event, b:string)=>boolean;
     id         : number;
 };
@@ -24,98 +26,117 @@ interface types {
 
 interface State {
     open    : boolean;
-    formData: Employee;
+    formData: Customer;
     colors  : {
-        name   : colors;
-        phone  : colors;
-        id_code: colors;
-        address: colors;
-        intro  : colors;
-        note   : colors;
+        [key:string]: colors;
     };
     helperText: {
-        name   : string;
-        phone  : string;
-        id_code: string;
-        address: string;
-        intro  : string;
-        note   : string;
+        [key:string]: string;
     };
+    errors : string[];
+    loading: boolean;
+    error  : boolean;
 };
 
-export class EmployeeEditor extends Component<Props, State>{
+export class CustomerEditor extends Component<Props, State>{
     state = {
         open    : false,
         formData: {
-            id          : 0,
-            EmployeeOID : '',
-            ItemCode    : '',   // 编号
-            FullName    : '',   // 姓名
-            Sex         : '',
-            Tel         : '',
-            Birthday    : '',
-            Comment     : '',   // 说明
-            Workday     : '',   //参工日期
-            Department  : '',
-            Address     : '',
-            IDCode      : '',
-            HomeTel     : '',
-            WarrantorTel: '',
-            ItemLevel   : '',   //员工等级
-            BlameRecord : '',   // 过失记录
-            pym         : '',
+            id               : 0,
+            ClientInfoOID    : '',
+            Address          : '',
+            BeginDate        : '',
+            BlackFlag        : 0 as 0 | 1,
+            CreateDate       : '',
+            DelFlag          : 0,
+            EndDate          : '',
+            F1               : 0 as 0 | 1 | 2,                       // 0普通 1VIP 2重要领导
+            FullName         : '',
+            HouseArea        : '',
+            ItemCode         : '',
+            LastModiDate     : '',
+            NormalServiceTime: '',
+            SpecialNeed      : '',
+            Tel1             : '',
+            Tel2             : '',
+            Tel3             : '',
+            TotalCount       : 0,
+            TotalMoney       : '',
+            UserType         : 0 as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7,   //7半月卡6月卡5季卡4年卡3包做2包周1钟点0暂无
+            fRegion          : '',
+            pym              : '',
         },
-        colors: {
-            name   : 'primary' as colors,
-            phone  : 'primary' as colors,
-            id_code: 'primary' as colors,
-            address: 'primary' as colors,
-            intro  : 'primary' as colors,
-            note   : 'primary' as colors,
-        },
-        helperText: {
-            name   : '',
-            phone  : '',
-            id_code: '',
-            address: '',
-            intro  : '',
-            note   : '',
-        },
+        colors    : {},
+        helperText: {},
+        errors    : [],
+        loading   : false,
+        error     : false,
     };
 
-    updatePym    = (input: string) => this.setState({ formData: { ...this.state.formData, pym: pinyin(input, { mode: "surname", pattern: "first", toneType: "none", nonZh: "removed", v: true }).replaceAll(" ", "") } });
-
     types: types = {
-        FullName  : { type: 'input', required: true, label: '姓名', related: [this.updatePym] },
-        Tel       : { type: 'input', required: true, label: '电话' },
-        Sex       : { type: 'select', required: false, label: '性别', options:[{ label: '男', value: '男' }, { label: '女', value: '女' }] },
-        IDCode    : { type: 'input', required: true, label: '身份证号' },
-        Address   : { type: 'input', required: false, label: '地址' },
-        Birthday  : { type: 'input', required: false, label: '出生日期' },
-        Workday   : { type: 'input', required: false, label: '参工日期' },
-        ItemLevel : { type: 'input', required: false, label: '员工等级' },
-        Department: { type: 'input', required: false, label: '所在部门' },
-        pym       : { type: 'input', required: false, label: '拼音码' },
-        Comment   : { type: 'textfield', required: false, label: '说明' },
+        FullName         : { type: 'input', required: true, label: '姓名' },
+        Tel1             : { type: 'input', required: true, label: '电话1' },
+        Tel2             : { type: 'input', required: false, label: '电话2' },
+        Tel3             : { type: 'input', required: false, label: '电话3' },
+        UserType         : { type: 'select', required: true, label: '用户类型', options: [{ label: '普通', value: 0 },{ label: 'VIP', value: 1 },{ label: '重要领导', value: 2 }] },
+        Address          : { type: 'input', required: true, label: '地址' },
+        NormalServiceTime: { type: 'input', required: false, label: '一般服务时间' },
+        SpecialNeed      : { type: 'input', required: false, label: '特殊要求' },
+        fRegion          : { type: 'input', required: false, label: '区域' },
     }
 
     componentDidMount(): void {
-        setTimeout(() => {
-            this.setState({ open: true });
-        }, 10);
-        this.props.id > 0 && axios.get(`${urls.employee_detail}/id/${this.props.id}`).then((res) => {
-            console.log(res);
-              // @ts-ignore
-            this.setState({ formData: res.data });
-        });
+        this.onOpen();
+        this.getData();
     }
 
+    testParams: (value: string, path: string, fun:(v:string)=>any, msg?: string)=>Promise<boolean>
+        = (value: string, path: string, fun:(v:string)=>any, msg = '')=>{
+        return new Promise((resolve, reject) => {
+                if(value === '') return resolve(true);
+                const rs = fun(value);
+                if (rs[0]) return resolve(true);
+                else return reject({message: `${msg}${rs[1]}`, params: {path}});
+            })
+    }
 
-    onOpen = () => console.log('open');
+    schema = Yup.object().shape({
+        FullName         : Yup.string().required('姓名不能为空'),
+        Tel1             : Yup.string().required('电话1不能为空').test('Tel1', '格式错误', (v:string) => this.testParams(v, 'Tel1', CheckMobile, '电话1')),
+        // @ts-ignore
+        Tel2             : Yup.string().test('Tel2', '格式错误', (v:string) => this.testParams(v, 'Tel2', CheckMobile, '电话2')),
+        // @ts-ignore
+        Tel3             : Yup.string().test('Tel3', '格式错误', (v:string) => this.testParams(v, 'Tel3', CheckMobile, '电话3')),
+        UserType         : Yup.number().required('用户类型不能为空').min(0, '重要程度选择错误').max(2, '重要程度选择错误'),
+        Address          : Yup.string().required('地址不能为空').max(100, '地址不能超过100个字符'),
+        NormalServiceTime: Yup.string().max(20, '一般服务时间不能超过20个字符'),
+        SpecialNeed      : Yup.string().max(30, '特殊要求不能超过30个字符'),
+        fRegion          : Yup.string().max(20, '区域不能超过20个字符')
+    })
+
+    getData = () => {
+        this.setState({ error: false });
+        if (this.props.id === 0) return;
+        this.setState({ loading: true });
+        axios.get(`${urls.customer_detail}/id/${this.props.id}`)
+            .then((res) => {
+                    // @ts-ignore
+                this.setState({ formData: res.data });
+                this.setState({ loading: false, error: false });
+            })
+            .catch((err) => {
+                this.setState({ loading: false, error: true });
+                console.error(err);
+            });
+    }
+
+    onOpen = () => setTimeout(() => {
+        this.setState({ open: true });
+    }, 10);
 
     onClose = (e: Event, reason: string) => {
         const is_close = this.props.handleClose(e, reason);
-        is_close && this.setState({ open: false })  //(false);
+        is_close && this.setState({ open: false });
     }
 
     handleSubmit = (e: SubmitEvent) => {
@@ -124,27 +145,27 @@ export class EmployeeEditor extends Component<Props, State>{
 
     onChange = (val: string | number, name: string) => {
         const formData = { ...this.state.formData, [name]: val };
-          // @ts-ignore
-        this.setState({ formData });
+        this.setState({ formData, colors: {}, helperText: {}, errors: [] });
     }
 
     render() {
-        const { colors, formData, helperText } = this.state;
         return (
             <Core
-                open    = {this.state.open}
-                onClose = {this.onClose}
-                onOpen  = {this.onOpen}
-                handleSubmit={this.handleSubmit}
-                onChange={this.onChange}
-                colors={colors}
-                formData={formData}
-                helperText={helperText}
-                types={this.types}
-                errors={[]}
+                open         = {this.state.open}
+                onClose      = {this.onClose}
+                onOpen       = {this.onOpen}
+                handleSubmit = {this.handleSubmit}
+                onChange     = {this.onChange}
+                colors       = {this.state.colors}
+                formData     = {this.state.formData}
+                helperText   = {this.state.helperText}
+                types        = {this.types}
+                errors       = {this.state.errors}
+                error        = {this.state.error}
+                loading      = {this.state.loading}
             />
         );
     };
 };
 
-export default EmployeeEditor;
+export default CustomerEditor;

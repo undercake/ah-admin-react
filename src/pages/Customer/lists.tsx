@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-10-03 09:53:20
+ * @LastEditTime: 2023-10-06 17:41:47
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -14,12 +14,13 @@ import { urls } from '../../config';
 import type Customer from './Customer'
 import CustomerDetail from '../../components/DetailDialogs/Customer';
 import CustomerEditor from '../../components/EditDialogs/Customer';
+import { hasRights } from '../../utils/Rights';
 
 
 const current_date = new Date();
 
-function List({type = 0} : {type?: number}) {
-        const [editId, setEditId]           = useState(-1);
+function List({ type = 0 }: { type?: number }) {
+    const [editId, setEditId]                                 = useState(-1);
     const [data, setData]                                     = useState<Customer[]>([]);
     const [page, setPage]                                     = useState(0);
     const [rowsPerPage, setRowsPerPage]                       = useState(10);
@@ -30,23 +31,23 @@ function List({type = 0} : {type?: number}) {
     const [error, setError]                                   = useState(false);
     const [selectedActionsLoading, setSelectedActionsLoading] = useState<boolean>(false)
 
-const rows: rows = {
-    FullName  : { type: 'string', name: '顾客姓名', onClick: e=>setDetailId(e.id) },
-    HouseArea : { type: 'string', name: '住房面积' },
-    Tel1      : {type: 'string',name: ''},
-    Tel2      : {type: 'string',name: '电话'},
-    Tel3      : {type: 'string',name: ''},
-    Address   : { type: 'string', name: '地址' },
-    UserType  : { type: 'options', name: '服务类型', value: ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'] },
-    BeginDate : { type: 'string', name: '开始时间' },
-    EndDate   : { type: 'string', name: '到期时间' },
-    CreateDate: { type: 'string', name: '录入时间' },
-}
+    const rows: rows = {
+        FullName  : { type: 'string', name: '顾客姓名', onClick: e => setDetailId(e.id) },
+        HouseArea : { type: 'string', name: '住房面积' },
+        Tel1      : { type: 'string', name: '' },
+        Tel2      : { type: 'string', name: '电话' },
+        Tel3      : { type: 'string', name: '' },
+        Address   : { type: 'string', name: '地址' },
+        UserType  : { type: 'options', name: '服务类型', value: ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'] },
+        BeginDate : { type: 'string', name: '开始时间' },
+        EndDate   : { type: 'string', name: '到期时间' },
+        CreateDate: { type: 'string', name: '录入时间' },
+    }
 
     const getData = () => {
         setLoading(true);
         setError(false);
-        const cus_urls:string[] = [
+        const cus_urls: string[] = [
             urls.customer_list,
             urls.customer_other,
             urls.customer_past
@@ -79,39 +80,39 @@ const rows: rows = {
 
     useEffect(getData, [page, rowsPerPage, searchStr]);
 
-    // const openEdit = (id: number) => {
-    //     console.log(id);
-    //     setEditId(id);
-    // }
+      // const openEdit = (id: number) => {
+      //     console.log(id);
+      //     setEditId(id);
+      // }
 
-    // const openDetail = (id: number) => {
-    //     console.log(id);
-    //     setDetailId(id);
-    // }
+      // const openDetail = (id: number) => {
+      //     console.log(id);
+      //     setDetailId(id);
+      // }
 
-    // const handleDelete = (id: number) => {
-    //     axios.delete(urls.customer_delete + `/id/${id}`).then(getData);
-    // }
+      const handleDelete = (id: number) => {
+          axios.delete(urls.customer_delete + `/id/${id}`).then(getData);
+      }
 
-    // const handleDeleteList = (ids: number[]) => {
-    //     axios.post(urls.customer_delete, { ids }).then(getData);
-    // }
+      const handleDeleteList = (ids: number[]) => {
+          axios.post(urls.customer_delete, { ids }).then(getData);
+      }
 
     const handleExportExcel = (ids: number[]) => {
         const exportData: (string | number)[][] = [];
-        data.forEach(({id, FullName, Tel1, Tel2, Tel3, TotalCount, HouseArea, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate }) => {
-            const baseData:any[] = [
-                    FullName,
-                    `${Tel1} ${Tel2} ${Tel3}`,
-                    Address,
-                    HouseArea,
-                    ['普通客户', 'VIP', '重要领导'][F1]
-                ];
-            if(type !== 1) {
+        data.forEach(({ id, FullName, Tel1, Tel2, Tel3, TotalCount, HouseArea, TotalMoney, UserType, Address, BeginDate, EndDate, F1, CreateDate }) => {
+            const baseData: any[] = [
+                FullName,
+                `${Tel1} ${Tel2} ${Tel3}`,
+                Address,
+                HouseArea,
+                ['普通客户', 'VIP', '重要领导'][F1]
+            ];
+            if (type !== 1) {
                 baseData.push(TotalCount,
                     TotalMoney,
-                    BeginDate && (BeginDate.startsWith('0000') || BeginDate.startsWith('2222')) ? '' : BeginDate,
-                    EndDate && (EndDate.startsWith('0000') || EndDate.startsWith('2222')) ? '' : EndDate,
+                    BeginDate && (BeginDate.startsWith('0000') || BeginDate.startsWith('2222')) ? '': BeginDate,
+                    EndDate   && (EndDate.startsWith('0000') || EndDate.startsWith('2222')) ? ''    : EndDate,
                     ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'][UserType]
                 );
             }
@@ -119,8 +120,8 @@ const rows: rows = {
             if (ids.includes(id))
                 exportData.push(baseData);
         });
-        const baseTitle = ['姓名', '电话', '地址', '面积', '客户级别'];
-        type !== 1 && baseTitle.push('剩余次数', '余额', '开始时间', '到期时间', '客户类型');
+        const baseTitle   = ['姓名', '电话', '地址', '面积', '客户级别'];
+              type      !== 1 && baseTitle.push('剩余次数', '余额', '开始时间', '到期时间', '客户类型');
         baseTitle.push('录入日期');
         exportData.unshift(baseTitle);
         setSelectedActionsLoading(true);
@@ -135,18 +136,18 @@ const rows: rows = {
     }
 
     const editList: editList = [
-        { label: '详情', color: 'info', onClick: setDetailId },
-        { label: '编辑', color: 'info', onClick: setEditId },
-        // { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        hasRights('/customer/detail') ? { label: '详情', color: 'info', onClick: setDetailId }: undefined,
+        hasRights('/customer/alter') ? { label: '编辑', color: 'info', onClick: setEditId }   : undefined,
+        hasRights('/customer/delete') ? { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true } : undefined,
     ];
 
     const selectedActions: Actions[] = [
         { name: '导出Excel', color: 'primary', onClick: handleExportExcel, icon: <i className="fa fa-solid fa-file-export" /> },
-        // { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
+          // { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
     ];
 
     const nonSelectedActions: Actions[] = [
-        // { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> },
+          // { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> },
         { name: '刷新', color: 'primary', onClick: () => getData(), icon: <i className="fa-solid fa-arrows-rotate" /> },
     ];
 
@@ -176,7 +177,7 @@ const rows: rows = {
                 id          = {editId}
             /> : null}
             {detailId > 0 ? <CustomerDetail
-                handleClose = {()=>{setTimeout(()=>{setDetailId(0);}, 300); return true}}
+                handleClose = {() => { setTimeout(() => { setDetailId(0); }, 300); return true }}
                 id          = {detailId}
             /> : null}
         </Card>);

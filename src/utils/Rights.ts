@@ -129,7 +129,7 @@ export const hasRights = (p: string) => {
     groups.length < 1 && initRights();
     let $rtn = false;
     for (const k in groups) {
-        if (groups[k].path == p) {
+        if (groups[k].path === p) {
             $rtn = true;
             break;
         }

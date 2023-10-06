@@ -29,14 +29,14 @@ export interface tableData {
     [key: string]: any;
 }
 
-export type editList = {
+export type editList = ({
         label         : string,
         color         : 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined,
         showConfirm  ?: boolean,
         onClick       : (id: number) => void,
         comment      ?: string | ReactNode,
         [key: string] : any
-    }[];
+    }|undefined)[];
 
 export interface itemInRows {
     type    : 'string' | 'options' | 'avatar' | 'image' | 'others';
@@ -67,8 +67,8 @@ interface EnhancedTableProps {
     editList               : editList;
     onChangePage           : (newPage: number) => void;
     onChangeRowsPerPage    : (count: number) => void;
-    selectedActions       ?: Actions[];
-    nonSelectedActions    ?: Actions[];
+    selectedActions       ?: (Actions|undefined)[];
+    nonSelectedActions    ?: (Actions|undefined)[];
     showSearch            ?: boolean;
     onSearch              ?: (s: string) => void;
     searchLabel           ?: string;
@@ -283,8 +283,9 @@ export default function ListTable({
                                                     padding   = "none"
                                                 >
                                                     <ButtonGroup size = "small" aria-label = "small button group">
-                                                        {editList.map(({ label, onClick, color = 'primary', showConfirm, comment = '', ...e }, ed_index) => {
-                                                                // const { label, onClick, color = 'primary', showConfirm, ...e } = editList[ed_key];
+                                                        {editList.map((List, ed_index) => {
+                                                            if (!List) return null;
+                                                            const { label, onClick, color = 'primary', showConfirm, comment = '', ...e } = List;
                                                             const colors = {
                                                                 primary: {
                                                                     backgroundColor: 'rgba(25, 141, 255, 0.04)',

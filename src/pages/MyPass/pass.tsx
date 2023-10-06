@@ -1,4 +1,4 @@
-import { Component, FormEventHandler } from 'react'; import Card from '@mui/material/Card';
+import { Component, FormEventHandler } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormInput from '../../components/FormComponents/FormInput';
@@ -10,7 +10,6 @@ import mittBus from '../../utils/MittBus';
 
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
 
-// @flow
 interface InfoProps {
     className?: string;
 }
@@ -61,7 +60,7 @@ class Info extends Component<InfoProps, InfoState> {
         this.schema.validate({ oldPass, newPass, repeatPass }).then(() =>
                 axios.post(urls.my_set_pass, { oldpass: md5(oldPass), newpass: md5(newPass), newpass_repeat: md5(repeatPass) }))
             .then((res) => {
-                mittBus.emit('emitMsg', { status: 'success', msg: '修改成功' });
+                mittBus.emit('msgEmit', { type: 'success', msg: '修改成功' });
                 console.log(res);
             });
     }
