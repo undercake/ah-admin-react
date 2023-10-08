@@ -75,7 +75,7 @@ function FormInput({
             color={color}
             className={'my-form-control-input ' + className}
         >
-            <InputLabel className={"dark:text-gray-50 dark:border-gray-50 " + labelClassName} sx={{ '.dark &': { borderColor: 'rgb(249 250 251)' }, marginTop: size == 'small' ? '-8px' : '' }} htmlFor={id} error={error}>
+            <InputLabel className={"dark:text-gray-50 dark:border-gray-50 " + labelClassName} sx={{ '.dark &': { borderColor: 'rgb(249 250 251)' }, marginTop: size === 'small' ? '-8px' : '' }} htmlFor={id} error={error}>
                 {label}
             </InputLabel>
             <OutlinedInput

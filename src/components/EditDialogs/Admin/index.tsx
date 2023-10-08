@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-08-14 17: 27: 03
- * @LastEditTime: 2023-10-06 15:21:14
+ * @LastEditTime: 2023-10-08 17:18:57
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Admin/index.tsx
 * @Description : 
 */
@@ -14,6 +14,7 @@ import mittBus from '../../../utils/MittBus';
 import type Admin from '../../../pages/Admin/Admin';
 import * as Yup from 'yup';
 import { CheckMobile } from '../../../utils/InputCheck';
+import YupSubmitHandler from '../../../utils/SubmitHandler';
 
 type Props = {
     handleClose: (a: Event, b: string) => boolean;
@@ -128,49 +129,33 @@ function AdminEditor({ id, handleClose }: Props) {
     const handleSubmit = (e: SubmitEvent) => {
         e.preventDefault();
         const { full_name, user_name, mobile, user_group, email = '' } = formData;
-        const url                                                      = `${urls.admin_alter}/id/${id}`;
-        console.log({ full_name, user_name, mobile, user_group, email })
-        schema
-            .validate({ full_name, user_name, mobile, user_group, email })
-            .then(() => axios.post(url, { full_name, user_name, mobile, user_group, email }))
-              // @ts-ignore
-            .then((d: { code: number, rs: number }) => {
-                if (d.code === 0) {
+        YupSubmitHandler({
+            schema,
+            url: id === 0 ? urls.admin_add :`${urls.admin_alter}/id/${id}`,
+            data: { full_name, user_name, mobile, user_group, email },
+            setState: {
+                helperText: setHelperText,
+                colors: setColors,
+                errors: setErrors
+            },
+            tips: {
+                姓名为必填        : 'full_name',
+                登录名不能为空      : 'user_name',
+                登录名只能为字母和数字组合: 'user_name',
+                管理员角色必填      : 'user_group',
+                管理员角色只能为整数   : 'user_group',
+                邮箱格式不正确      : 'email',
+                手机号格式不正确     : 'mobile'
+            },
+            onSuccess: d => {
                     setOpen(false);
                     handleClose(e, 'submit');
                     mittBus.emit('msgEmit', {
                         type: 'success',
-                        msg : '修改成功！'
+                        msg : id === 0 ? '添加成功' : '修改成功！'
                     })
                 }
-            })
-            .catch(err => {
-                console.log(err);
-                if (err.params) {
-                    setColors({ [err.params.path]: 'error' });
-                    setErrors([err.params.path]);
-                    setHelperText({ [err.params.path]: err.message });
-                    mittBus.emit('msgEmit', {
-                        type: 'warning',
-                        msg : err.message
-                    });
-                }
-                if (err.msg === undefined) return;
-                const tips = {
-                    姓名为必填        : 'full_name',
-                    登录名不能为空      : 'user_name',
-                    登录名只能为字母和数字组合: 'user_name',
-                    管理员角色必填      : 'user_group',
-                    管理员角色只能为整数   : 'user_group',
-                    邮箱格式不正确      : 'email',
-                    手机号格式不正确     : 'mobile'
-                };
-                  // @ts-ignore
-                const tip = tips[err.msg];
-                setColors({ [tip]: 'error' });
-                setHelperText({ [tip]: err.msg });
-                setErrors([tip]);
-            })
+        });
     }
 
     const onChange = (val: string | number, name: string) => {

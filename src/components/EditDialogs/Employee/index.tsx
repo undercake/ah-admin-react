@@ -7,11 +7,10 @@ import type Employee from '../../../pages/Employee/Employee.d';
 import mittBus from '../../../utils/MittBus';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
-import type ValidationError from 'yup';
 import { CheckMobile, CheckIDCode } from '../../../utils/InputCheck';
+import YupSubmitHandler from '../../../utils/SubmitHandler';
 
-type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
-type Props  = {
+type Props = {
     handleClose: (a: Event, b: string) => boolean;
     id         : number;
 };
@@ -42,6 +41,7 @@ export class EmployeeEditor extends Component<Props, State>{
             ItemLevel   : '',   //员工等级
             BlameRecord : '',   // 过失记录
             pym         : '',
+            DelFlag     : 0,
         },
         colors: {
         },
@@ -82,15 +82,15 @@ export class EmployeeEditor extends Component<Props, State>{
         BlameRecord : { type: 'input', required: false, label: '过失记录' },
     }
 
-    testParams: (value: string, path: string, fun:(v:string)=>any, msg?: string)=>Promise<boolean>
-        = (value: string, path: string, fun:(v:string)=>any, msg = '')=>{
-        return new Promise((resolve, reject) => {
-                if(value === '') return resolve(true);
+    testParams: (value: string, path: string, fun: (v: string) => any, msg?: string) => Promise<boolean>
+    =          (value: string, path: string, fun: (v: string) => any, msg = '')      => {
+            return new Promise((resolve, reject) => {
+                if (value === '') return resolve(true);
                 const rs = fun(value);
                 if (rs[0]) return resolve(true);
-                else return reject({message: `${msg}${rs[1]}`, params: {path}});
+                else return reject({ message: `${msg}${rs[1]}`, params: { path } });
             })
-    }
+        }
 
     schema = Yup.object().shape({
         FullName   : Yup.string().required('用户名不能为空'),
@@ -105,15 +105,15 @@ export class EmployeeEditor extends Component<Props, State>{
         Tel        : Yup.string().test('Tel', '格式不正确', (value, testContext) => {
             return this.testParams(value as string, 'Tel', CheckMobile, '电话');
         }),
-        HomeTel   : Yup.string().test('HomeTel', '格式不正确', (value, testContext) => {
+        HomeTel: Yup.string().test('HomeTel', '格式不正确', (value, testContext) => {
             return this.testParams(value as string, 'HomeTel', CheckMobile, '家庭电话');
         }),
         WarrantorTel: Yup.string().test('WarrantorTel', '格式不正确', (value, testContext) => {
-            console.log({value, testContext});
+            console.log({ value, testContext });
             return this.testParams(value as string, 'WarrantorTel', CheckMobile, '担保人电话');
         }),
         IDCode: Yup.string().test('IDCode', '格式不正确', (value, testContext) => {
-            console.log({value, testContext});
+            console.log({ value, testContext });
             return this.testParams(value as string, 'IDCode', CheckIDCode, '身份证号');
         }),
     });
@@ -163,6 +163,7 @@ export class EmployeeEditor extends Component<Props, State>{
 
     handleSubmit = (e: SubmitEvent) => {
         e.preventDefault();
+        const url = `${urls.employee_alter}/id/${this.props.id}`;
         const {
             ItemCode,
             FullName,
@@ -180,9 +181,11 @@ export class EmployeeEditor extends Component<Props, State>{
             Comment,
             BlameRecord
         } = this.state.formData;
-        const url = `${urls.employee_alter}/id/${this.props.id}`;
-        this.schema
-            .validate({
+        YupSubmitHandler({
+            schema  : this.schema,
+            setState: this.setState,
+            url,
+            data: {
                 ItemCode,
                 FullName,
                 pym,
@@ -198,98 +201,40 @@ export class EmployeeEditor extends Component<Props, State>{
                 Department,
                 Comment,
                 BlameRecord
-            })
-            .then(() => axios.post(url, {
-                ItemCode,
-                FullName,
-                pym,
-                Tel,
-                HomeTel,
-                WarrantorTel,
-                Sex,
-                IDCode,
-                Address,
-                Birthday,
-                Workday,
-                ItemLevel,
-                Department,
-                Comment,
-                BlameRecord
-            }))
-              // @ts-ignore
-            .then((d: { code: number, rs: number }) => {
-                if (d.code === 0) {
-                    this.setState({ open: false });
-                    this.props.handleClose(e, 'submit');
-                    mittBus.emit('msgEmit', {
-                        type: 'success',
-                        msg : '修改成功！'
-                    })
-                }
-            })
-            .catch(err => {
-                console.log({err},{
-                    ItemCode,
-                    FullName,
-                    pym,
-                    Tel,
-                    HomeTel,
-                    WarrantorTel,
-                    Sex,
-                    IDCode,
-                    Address,
-                    Birthday,
-                    Workday,
-                    ItemLevel,
-                    Department,
-                    Comment,
-                    BlameRecord
-                });
-                if ('params' in err && 'message' in err) {
-                    this.setState({
-                        colors    : { [err.params.path]: 'error' },
-                        helperText: { [err.params.path]: err.message },
-                        errors    : [err.params.path]
-                    });
-                    mittBus.emit('msgEmit', {
-                        type: 'warning',
-                        msg : err.message
-                    })
-                    return;
-                }
-                if (err.msg === undefined) return;
-                const tips = {
-                    姓名不能为空     : 'FullName',
-                    姓名长度不正确    : 'FullName',
-                    地址长度过长     : 'Address',
-                    电话格式不正确    : 'Tel',
-                    担保人电话格式不正确 : 'WarrantorTel',
-                    家庭电话格式不正确  : 'HomeTel',
-                    出生日期长度过长   : 'Birthday',
-                    参工日期长度过长   : 'Workday',
-                    过失记录长度过长   : 'BlameRecord',
-                    说明长度过长     : 'Comment',
-                    拼音码必填      : 'pym',
-                    拼音码不能包含其他字符: 'pym',
-                    拼音码过长      : 'pym',
-                    身份证格式不正确   : 'IDCode',
-                    编号过长       : 'ItemCode',
-                    员工等级过长     : 'ItemLevel'
-                };
-                  // @ts-ignore
-                const tip = tips[err.msg];
-                this.setState({
-                    colors    : { [tip]: 'error' },
-                    helperText: { [tip]: err.msg },
-                    errors    : [tip]
-                });
-            })
+            },
+            tips: {
+                姓名不能为空     : 'FullName',
+                姓名长度不正确    : 'FullName',
+                地址长度过长     : 'Address',
+                电话格式不正确    : 'Tel',
+                担保人电话格式不正确 : 'WarrantorTel',
+                家庭电话格式不正确  : 'HomeTel',
+                出生日期长度过长   : 'Birthday',
+                参工日期长度过长   : 'Workday',
+                过失记录长度过长   : 'BlameRecord',
+                说明长度过长     : 'Comment',
+                拼音码必填      : 'pym',
+                拼音码不能包含其他字符: 'pym',
+                拼音码过长      : 'pym',
+                身份证格式不正确   : 'IDCode',
+                编号过长       : 'ItemCode',
+                员工等级过长     : 'ItemLevel'
+            },
+            onSuccess: d => {
+                this.setState({ open: false });
+                this.props.handleClose(e, 'submit');
+                mittBus.emit('msgEmit', {
+                    type: 'success',
+                    msg : '修改成功！'
+                })
+            }
+        });
     }
 
     onChange = (val: string | number, name: string) => {
         const formData = { ...this.state.formData, [name]: val };
           // @ts-ignore
-        this.setState({ formData,colors: {}, helperText: {}, errors: [] });
+        this.setState({ formData, colors: {}, helperText: {}, errors: [] });
     }
 
     render() {

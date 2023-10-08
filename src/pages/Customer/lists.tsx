@@ -1,12 +1,12 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-10-06 17:41:47
+ * @LastEditTime: 2023-10-08 14:03:37
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
 import Card from '../../components/Card';
-import ListTable, { type editList, type rows, type editGroupList, type Actions } from "../../components/ListTable";
+import ListTable, { Highlight, type editList, type rows, type Actions } from "../../components/ListTable";
 import { useEffect, useState } from 'react';
 import axios, { type resListData } from '../../utils/Axios';
 import ExportExcel from '../../utils/ExportExcel';
@@ -33,10 +33,13 @@ function List({ type = 0 }: { type?: number }) {
 
     const rows: rows = {
         FullName  : { type: 'string', name: '顾客姓名', onClick: e => setDetailId(e.id) },
-        HouseArea : { type: 'string', name: '住房面积' },
-        Tel1      : { type: 'string', name: '' },
-        Tel2      : { type: 'string', name: '电话' },
-        Tel3      : { type: 'string', name: '' },
+        // @ts-ignore
+        HouseArea : { type: 'others', name: '住房面积', align: 'center', value: (e: Customer) => <>{e.HouseArea === 0 ? '' : e.HouseArea}</> },
+        Tel       : { type: 'others', name: '电话', width: 100, value: (e: Customer) => <>
+            {e.Tel1 !== '' && <p><Highlight text={e.Tel1} searchStr={searchStr} /></p>}
+            {e.Tel2 !== '' && <p><Highlight text={e.Tel2} searchStr={searchStr} /></p>}
+            {e.Tel3 !== '' && <p><Highlight text={e.Tel3} searchStr={searchStr} /></p>}
+            </>},
         Address   : { type: 'string', name: '地址' },
         UserType  : { type: 'options', name: '服务类型', value: ['暂无', '钟点', '包周', '包做', '年卡', '季卡', '月卡', '半月卡'] },
         BeginDate : { type: 'string', name: '开始时间' },
@@ -78,25 +81,16 @@ function List({ type = 0 }: { type?: number }) {
         return reason === 'button' || reason === 'submit';
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(getData, [page, rowsPerPage, searchStr]);
 
-      // const openEdit = (id: number) => {
-      //     console.log(id);
-      //     setEditId(id);
-      // }
+    const handleDelete = (id: number) => {
+        axios.delete(urls.customer_delete + `/id/${id}`).then(getData);
+    }
 
-      // const openDetail = (id: number) => {
-      //     console.log(id);
-      //     setDetailId(id);
-      // }
-
-      const handleDelete = (id: number) => {
-          axios.delete(urls.customer_delete + `/id/${id}`).then(getData);
-      }
-
-      const handleDeleteList = (ids: number[]) => {
-          axios.post(urls.customer_delete, { ids }).then(getData);
-      }
+    const handleDeleteList = (ids: number[]) => {
+        axios.post(urls.customer_delete, { ids }).then(getData);
+    }
 
     const handleExportExcel = (ids: number[]) => {
         const exportData: (string | number)[][] = [];
@@ -136,18 +130,18 @@ function List({ type = 0 }: { type?: number }) {
     }
 
     const editList: editList = [
-        hasRights('/customer/detail') ? { label: '详情', color: 'info', onClick: setDetailId }: undefined,
-        hasRights('/customer/alter') ? { label: '编辑', color: 'info', onClick: setEditId }   : undefined,
-        hasRights('/customer/delete') ? { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true } : undefined,
+        hasRights('/customer/detail') ? { label: '详情', color: 'info', onClick: setDetailId }                     : undefined,
+        hasRights('/customer/alter') ? { label: '编辑', color: 'info', onClick: setEditId }                        : undefined,
+        hasRights('/customer/delete') ? { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true }: undefined,
     ];
 
-    const selectedActions: Actions[] = [
+    const selectedActions: (Actions | undefined)[] = [
         { name: '导出Excel', color: 'primary', onClick: handleExportExcel, icon: <i className="fa fa-solid fa-file-export" /> },
-          // { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
+        hasRights('/customer/delete') ? { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> } : undefined,
     ];
 
-    const nonSelectedActions: Actions[] = [
-          // { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> },
+    const nonSelectedActions: (Actions | undefined)[] = [
+        hasRights('/customer/add') ? { name: '添加', color: 'primary', onClick: () => setEditId(0), icon: <i className='fa-solid fa-plus' /> } : undefined,
         { name: '刷新', color: 'primary', onClick: () => getData(), icon: <i className="fa-solid fa-arrows-rotate" /> },
     ];
 

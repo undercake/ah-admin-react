@@ -38,15 +38,59 @@ export type editList = ({
         [key: string] : any
     }|undefined)[];
 
-export interface itemInRows {
-    type    : 'string' | 'options' | 'avatar' | 'image' | 'others';
+interface itemInRows {
+    type    : 'avatar' | 'image' | 'string' | 'options' | 'others';
     name    : string;
     value  ?: any;
     onClick?: (data:any, e:MouseEvent<any, any>) => void
+    width  ?: number;
+    align  ?: 'left' | 'center' | 'right';
+}
+
+interface stringItems extends itemInRows {
+    type: 'string',
+    name: string,
+    onClick?: (data:any, e:MouseEvent<any, any>) => void,
+    width?: number,
+    align?: 'left' | 'center' | 'right'
+}
+
+interface optionsItems extends itemInRows {
+    type: 'options',
+    name: string,
+    value: string[] | number[] | { [key: string | number]: string | number },
+    onClick?: (data:any, e:MouseEvent<any, any>) => void,
+    width?: number,
+    align?: 'left' | 'center' | 'right'
+}
+
+interface othersItems extends itemInRows {
+    type: 'others',
+    name: string,
+    value: (data:any) => ReactNode,
+    onClick?: (data:any, e:MouseEvent<any, any>) => void,
+    width?: number,
+    align?: 'left' | 'center' | 'right'
+}
+
+interface avatarItems extends itemInRows {
+    type: 'avatar',
+    name: string,
+    onClick?: (data:any, e:MouseEvent<any, any>) => void,
+    width?: number,
+    align?: 'left' | 'center' | 'right'
+}
+
+interface imageItems extends itemInRows {
+    type: 'image',
+    name: string,
+    onClick?: (data:any, e:MouseEvent<any, any>) => void,
+    width?: number,
+    align?: 'left' | 'center' | 'right'
 }
 
 export interface rows {
-    [key: string]: itemInRows;
+    [key: string]: avatarItems | stringItems | optionsItems | othersItems | imageItems;
 }
 
 export interface editGroupList {
@@ -95,9 +139,9 @@ export const Highlight = ({ text, searchStr }: { text: string, searchStr: string
 const ComponentByType = ({ type, data, rowVal, searchStr }: { type: itemInRows["type"]; data: any, rowVal: any, searchStr: string }) => {
     switch (type) {
         case 'string': 
-            return searchStr === '' ? <span>{data}</span> :<Highlight text = {data} searchStr = {searchStr} />;
+            return searchStr === '' ? <span>{data}</span> : <Highlight text = {data} searchStr = {searchStr} />;
         case 'options': 
-            return searchStr === '' ? <span>{rowVal[data]}</span> :<Highlight text = {rowVal[data]} searchStr = {searchStr} />;
+            return searchStr === '' ? <span>{rowVal[data]}</span> : <Highlight text = {rowVal[data]} searchStr = {searchStr} />;
         case 'avatar': 
             return <Avatar alt = {data} src = {data} variant = "rounded" />
         case 'image': 
@@ -255,7 +299,7 @@ export default function ListTable({
                                                     />
                                                 </TableCell>
                                                 {Object.keys(rows).map((key, index) => {
-                                                    const { type, value, onClick } = rows[key];
+                                                    const { type, value, onClick, align='left' } = rows[key];
                                                     const val             = row[key] === undefined || row[key] === null ? '' : row[key];
                                                     return (
                                                         <TableCell
@@ -266,10 +310,11 @@ export default function ListTable({
                                                             padding   = "none"
                                                             key       = {index}
                                                             onClick   = {(e)=>{onClick !== undefined && onClick(row, e)}}
+                                                            align     = {align}
                                                         >
                                                             <ComponentByType
                                                                 type      = {type}
-                                                                data      = {val}
+                                                                data      = {type === 'others' ? row : val}
                                                                 rowVal    = {value}
                                                                 searchStr = {searchStr}
                                                             />
@@ -281,6 +326,7 @@ export default function ListTable({
                                                     component = "th"
                                                     scope     = "row"
                                                     padding   = "none"
+                                                    align     = 'center'
                                                 >
                                                     <ButtonGroup size = "small" aria-label = "small button group">
                                                         {editList.map((List, ed_index) => {
@@ -324,7 +370,10 @@ export default function ListTable({
                                                                     '&:hover'      : { backgroundColor: 'rgba(92, 197, 255, 0.2)' }
                                                                 },
                                                             }
-                                                            const sx = { '.dark &': colors[color] };
+                                                            const sx = {
+                                                                '.dark &': colors[color],
+                                                                textWrap: 'nowrap'
+                                                            };
                                                             if (showConfirm)
                                                                 return (
                                                                     <Fragment key = {ed_index}>

@@ -89,4 +89,4 @@ export const urls: url = {
     login_qr_is_loggedin  : BaseUri + '/user/is_wx_loggedin',
 };
 
-export const version = 'v0.9.5';
+export const version = '0.9.7';

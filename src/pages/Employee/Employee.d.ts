@@ -16,6 +16,7 @@ interface Employee {
     ItemLevel: string; //员工等级
     BlameRecord: string; // 过失记录
     pym: string;
+    DelFlag: number;
 };
 
 export interface EmployeeNew {

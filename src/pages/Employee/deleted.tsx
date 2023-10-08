@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-10-05 16:12:09
+ * @LastEditTime: 2023-10-08 14:45:04
  * @FilePath: /ah-admin-react/src/pages/Employee/deleted.tsx
  * @Description: employee list page
  */
@@ -22,12 +22,12 @@ function EmployeeList() {
     const [count, setCount] = useState(0);
 
 const rows: rows = {
-    FullName: { type: 'string', name: '姓名' },
-    Sex: { type: 'string', name: '性别'},
-    Department: { type: 'string', name: '部门' },
-    Tel: { type: 'string', name: '手机号' },
-    Comment: { type: 'string', name: '说明' },
-    DelFlag: { type: 'others', name: '删除时间', value: (v: string) => new Date(v).toLocaleString() },
+    FullName: { type: 'string', name: '姓名', align: 'center' },
+    Sex: { type: 'string', name: '性别', align: 'center'},
+    Department: { type: 'string', name: '部门', align: 'center' },
+    Tel: { type: 'string', name: '手机号', align: 'center' },
+    Comment: { type: 'string', name: '说明', align: 'center' },
+    DelFlag: { type: 'others', name: '删除时间', align: 'center', value: (v: Employee) => (new Date(v.DelFlag)).toLocaleString() },
 }
     const getData = () => {
         const url = urls.employee_deleted + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
