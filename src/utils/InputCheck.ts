@@ -1,7 +1,7 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-10-05 11: 51: 49
- * @LastEditTime: 2023-10-05 14:59:51
+ * @LastEditTime: 2023-10-09 12:02:14
  * @FilePath: /ah-admin-react/src/utils/InputCheck.ts
  * @Description : 校验输入的工具函数
  */
@@ -75,13 +75,6 @@ export function CheckIDCode(idCode: string): returnCode {
     return [true, '校验成功'];
 }
 
-export function CheckMobile(mobile: string): returnCode {
-    if (mobile.match(/^1[3-9]\d{9}$/) === null) {
-        return [false, '格式不正确'];
-    }
-    return [true, '校验成功'];
-}
-
 export function CheckEmail(email: string): returnCode {
     if (email.match(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/) === null) {
         return [false, '格式不正确'];
@@ -96,9 +89,22 @@ export function CheckUserName(userName: string): returnCode {
     return [true, '校验成功'];
 }
 
+export function CheckMobile(mobile: string): returnCode {
+    if (mobile.match(/^1[3-9]\d{9}$/) === null) {
+        return [false, '格式不正确'];
+    }
+    return [true, '校验成功'];
+}
+
 export function checkTel (tel: string): returnCode {
     if (tel.match(/^(0\d{2,3})?(-)?\d{7,8}$/) === null) {
         return [false, '格式不正确'];
     }
     return [true, '校验成功']
+}
+
+export function telOrMobile (v: string): returnCode {
+    const $rs = CheckMobile(v);
+    if ($rs[0]) return $rs;
+    return checkTel(v);
 }

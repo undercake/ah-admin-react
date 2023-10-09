@@ -1,7 +1,7 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-10-05 16:28:51
+ * @LastEditTime: 2023-10-09 13:27:30
  * @FilePath: /ah-admin-react/src/pages/Admin/Deleted.tsx
  * @Description : Customer list page
  */
@@ -11,13 +11,8 @@ import { useEffect, useState } from 'react';
 import axios, { type resListData } from '../../utils/Axios';
 import { urls } from '../../config';
 import type Admin from './Admin';
+import { hasRights } from '../../utils/Rights';
 
-const rows: rows = {
-    full_name  : { type: 'string', name: '姓名' },
-    phone : { type: 'string', name: '手机号' },
-    note  : { type: 'string', name: '备注' },
-    deleted: { type: 'others', name: '删除时间', value: (v: string) => new Date(v).toLocaleString() },
-}
 
 const current_date = new Date();
 
@@ -26,6 +21,13 @@ function CustomerList() {
     const [page, setPage]               = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [count, setCount]             = useState(0);
+
+    const rows: rows = {
+        full_name  : { type: 'string', name: '姓名' },
+        phone : { type: 'string', name: '手机号' },
+        note  : { type: 'string', name: '备注' },
+        deleted: { type: 'others', name: '删除时间', value: (v: string) => new Date(v).toLocaleString() },
+    }
 
     const getData = () => {
         const url = urls.admin_deleted + (page > 0 ? `/page/${page}` : '') + (rowsPerPage > 10 ? `/item/${rowsPerPage}` : '');
@@ -58,26 +60,26 @@ function CustomerList() {
     }
 
     const editList: editList = [
-        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true, comment: <span style={{fontWeight: 'bold', color: 'red'}}>警告：删除后不可恢复！</span> },
-        { label: '恢复', color: 'success', onClick: handleRec, showConfirm: true },
+        hasRights('/employee/deep_del') ? { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true, comment: <span style={{fontWeight: 'bold', color: 'red'}}>警告：删除后不可恢复！</span>} : undefined,
+        hasRights('/employee/rec') ? { label: '恢复', color: 'success', onClick: handleRec, showConfirm: true } : undefined,
     ];
 
-    const selectedActions: Actions[] = [
-        {
+    const selectedActions: (Actions | undefined)[] = [
+        hasRights('/employee/deep_del') ? {
             name: '彻底删除',
             color: 'error',
             showConfirm: true,
             onClick: handleDeleteList,
             icon: <i className="fa-solid fa-trash" />,
             comment:<span style={{fontWeight: 'bold', color: 'red'}}>删除后不可恢复！</span>
-        },
-        {
+        }: undefined,
+        hasRights('/employee/rec') ? {
             name: '批量恢复',
             color: 'success',
             showConfirm: true,
             onClick: handleRecList,
             icon: <i className="fa-solid fa-rotate-right" />
-        },
+        } : undefined,
     ];
 
     const nonSelectedActions: Actions[] = [

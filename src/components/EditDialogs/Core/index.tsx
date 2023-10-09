@@ -1,7 +1,7 @@
 /*
 * @Author      : Undercake
 * @Date        : 2023-05-17 03: 24: 41
- * @LastEditTime: 2023-10-08 10:02:34
+ * @LastEditTime: 2023-10-09 14:54:58
  * @FilePath: /ah-admin-react/src/components/EditDialogs/Core/index.tsx
 * @Description : edit core Drawer
 */
@@ -21,25 +21,31 @@ import Loading from '../../Status/Loading';
 type colors = 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | undefined;
 export interface types {
     [key: string]: {
-        type     : 'input' | 'select' | 'date' | 'datetime' | 'time' | 'image' | 'avatar' | 'textfield';
+        type     : 'input' | 'number' | 'select' | 'date' | 'datetime' | 'time' | 'image' | 'avatar' | 'textfield';
         required : boolean;
         label    : string;
         options ?: { label: string, value: string | number }[];
         related ?: ((v: string) => void)[];
     };
 }
+
+
+export interface CoreProps {
+    handleClose: (a: Event, b: string) => boolean;
+    id         : number;
+};
 interface props {
     children    ?: ReactNode;
-    onClose      : any;
-    onOpen       : any;
-    open         : boolean;
+    onClose     ?: any;
+    onOpen      ?: any;
+    open        ?: boolean;
     handleSubmit : (e: SubmitEvent) => void
-    onChange     : (val: string | number, name: string) => void;
-    colors       : { [key: string]: colors },
-    formData     : { [key: string]: any };
-    helperText   : { [key: string]: string };
-    types        : types;
-    errors       : string[];
+    onChange    ?: (val: string | number, name: string) => void;
+    colors      ?: { [key: string]: colors },
+    formData    ?: { [key: string]: any };
+    helperText  ?: { [key: string]: string };
+    types       ?: types;
+    errors      ?: string[];
     refreshText ?: string;
     refresh     ?: () => void;
     title       ?: string;
@@ -47,7 +53,8 @@ interface props {
     loading     ?: boolean;
 }
 
-export interface CoreState {
+export interface CoreState<T> {
+    formData: T;
     open    : boolean;
     colors  : {
         [key:string]: colors
@@ -56,25 +63,27 @@ export interface CoreState {
         [key:string]: string;
     };
     errors: string[];
+    loading: boolean;
+    error  : boolean;
 };
 
 function EditCore({
-    onClose,
-    onOpen,
-    open,
+    onClose      = () => {},
+    onOpen       = () => {},
+    open         = false,
     handleSubmit,
-    onChange,
-    types,
-    colors,
-    formData,
-    helperText,
-    errors,
-    refresh     = ()=>{},
-    refreshText = '刷新',
-    children    = null,
-    loading     = false,
-    error       = false,
-    title       = '修改'
+    onChange     = (val: string | number, name: string) => {},
+    types        = {},
+    colors       = {},
+    formData     = {},
+    helperText   = {},
+    errors       = [],
+    refresh      = ()=>{},
+    refreshText  = '刷新',
+    children     = null,
+    loading      = false,
+    error        = false,
+    title        = '修改'
 }: props) {
     useEffect(()=>{
         const keys = Object.keys(colors);
@@ -122,6 +131,7 @@ function EditCore({
                                 value      : formData[key] as string | number,
                             };
                             switch (item.type) {
+                                case 'number'   : 
                                 case 'input'    : 
                                 case 'textfield': 
                                     return (
@@ -129,6 +139,7 @@ function EditCore({
                                             fullWidth
                                             key = {key}
                                             {...InputProps}
+                                            type = {item.type === 'number' ? 'number' : 'text'}
                                             multiline = {item.type === 'textfield'}
                                         />
                                     );

@@ -175,6 +175,7 @@ function Side({ open }: { open: boolean }) {
 
     useEffect(() => {
         hashRouteChange(get());
+    // 
     }, [location]);
 
     useEffect(() => {

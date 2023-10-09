@@ -1,26 +1,15 @@
-import Core, { type types, type CoreState } from '../../../components/EditDialogs/Core';
+import Core, { type types, type CoreState, type CoreProps } from '../../../components/EditDialogs/Core';
 import { pinyin } from "pinyin-pro";
 import { Component } from 'react';
 import { urls } from '../../../config';
 import axios from '../../../utils/Axios';
 import type Employee from '../../../pages/Employee/Employee.d';
-import mittBus from '../../../utils/MittBus';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
 import { CheckMobile, CheckIDCode } from '../../../utils/InputCheck';
 import YupSubmitHandler from '../../../utils/SubmitHandler';
 
-type Props = {
-    handleClose: (a: Event, b: string) => boolean;
-    id         : number;
-};
-
-
-interface State extends CoreState {
-    formData: Employee;
-};
-
-export class EmployeeEditor extends Component<Props, State>{
+export class EmployeeEditor extends Component<CoreProps, CoreState<Employee>>{
     state = {
         open    : false,
         formData: {
@@ -47,7 +36,9 @@ export class EmployeeEditor extends Component<Props, State>{
         },
         helperText: {
         },
-        errors: []
+        errors: [],
+        loading: false,
+        error  : false,
     };
 
     updatePym = (input: string) => this.setState({
@@ -118,21 +109,34 @@ export class EmployeeEditor extends Component<Props, State>{
         }),
     });
 
+    getData = () => {
+        if (this.props.id === 0) return;
+        this.setState({ loading: true, error: false });
+        axios
+            .get(`${urls.employee_detail}/id/${this.props.id}`)
+            .then((res) => {
+                console.log(res);
+                // @ts-ignore
+                this.setState({
+                    formData: {
+                        loading: false,
+                        ...res.data,
+                        Workday : this.convertTime(res.data.Workday.trim()),
+                        Birthday: this.convertTime(res.data.Birthday.trim(), res.data.IDCode, res.data.CreateDate),
+                    }
+                });
+            })
+            .catch((err) => {
+                this.setState({ loading: false, error: true });
+                console.error(err);
+            });
+    }
+
     componentDidMount(): void {
         setTimeout(() => {
             this.setState({ open: true });
         }, 10);
-        this.props.id > 0 && axios.get(`${urls.employee_detail}/id/${this.props.id}`).then((res) => {
-            console.log(res);
-              // @ts-ignore
-            this.setState({
-                formData: {
-                    ...res.data,
-                    Workday : this.convertTime(res.data.Workday.trim()),
-                    Birthday: this.convertTime(res.data.Birthday.trim(), res.data.IDCode, res.data.CreateDate),
-                }
-            });
-        });
+        this.getData();
     }
 
     convertTime = (time: string, idCode: string = '', createDate = '') => {
@@ -183,7 +187,7 @@ export class EmployeeEditor extends Component<Props, State>{
         } = this.state.formData;
         YupSubmitHandler({
             schema  : this.schema,
-            setState: this.setState,
+            setState: this.setState.bind(this),
             url,
             data: {
                 ItemCode,
@@ -223,10 +227,6 @@ export class EmployeeEditor extends Component<Props, State>{
             onSuccess: d => {
                 this.setState({ open: false });
                 this.props.handleClose(e, 'submit');
-                mittBus.emit('msgEmit', {
-                    type: 'success',
-                    msg : '修改成功！'
-                })
             }
         });
     }
@@ -248,9 +248,12 @@ export class EmployeeEditor extends Component<Props, State>{
                 onChange     = {this.onChange}
                 colors       = {colors}
                 formData     = {formData}
+                refresh      = {this.getData}
                 helperText   = {helperText}
                 types        = {this.types}
                 errors       = {errors}
+                error        = {this.state.error}
+                loading      = {this.state.loading}
             />
         );
     };

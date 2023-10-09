@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-30 17:18:35
- * @LastEditTime: 2023-09-23 16:34:25
+ * @LastEditTime: 2023-10-09 11:00:03
  * @FilePath: /ah-admin-react/src/components/Login/QRLogin.tsx
  * @Description: 
  */
@@ -36,20 +36,10 @@ function QRLogin({ handleLogin, ...e }: { handleLogin: () => void,[key:string]:a
 
     const start_QR_login = () => {
         timer_is_scanned = setInterval(() => {
-            isScanned ?
                 // @ts-ignore
-                axios.get(urls.login_qr_is_scanned).then((e: { code: number, status: boolean }) => {
-                    // e.status && clearInterval(timer_is_scanned);
-                    setIsScanned(e.status);
-                }).catch(e => {
-                    console.log(e);
-                    setIsError(true);
-                    clearInterval(timer_is_scanned);
-                    clearInterval(timer_refresh_img);
-                }) :
-                // @ts-ignore
-                axios.get(urls.login_qr_is_loggedin).then((e: { code: number, logged_in: boolean }) => {
+                axios.get(urls.login_qr_is_loggedin).then((e: { code: number, logged_in: boolean, scanned: boolean }) => {
                     e.logged_in && handleLogin();
+                    setIsScanned(e.scanned);
                 }).catch((e) => {
                     console.log(e);
                     setIsError(true);

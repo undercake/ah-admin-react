@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
-import { localSet, localGet } from '../utils';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,

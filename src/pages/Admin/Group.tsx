@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-08-14 17:18:11
- * @LastEditTime: 2023-10-04 16:54:17
+ * @LastEditTime: 2023-10-09 16:20:49
  * @FilePath: /ah-admin-react/src/pages/Admin/Group.tsx
  * @Description: 
  */
@@ -10,20 +10,12 @@ import ListTable, { type editList, type rows, type Actions } from "../../compone
 import { useEffect, useState } from 'react';
 import axios, { type resListData } from '../../utils/Axios';
 import { urls } from '../../config';
+import { hasRights } from '../../utils/Rights';
+import GroupEditor from '../../components/EditDialogs/Group';
+import { type Group } from './Admin';
 
-interface Group {
-    id            : number;
-    rights        : string;
-    name          : string;
-    group_describe: string;
-}
 
-const rows: rows = {
-    name: { type: 'string', name: '组名' },
-    rights: { type: 'others', name: '权限', value: (e:string) => `${e.split(',').length}项` },
-}
-
-function Group() {
+function Grp() {
     const [data, setData] = useState<Group[]>([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -31,6 +23,11 @@ function Group() {
     const [editId, setEditId] = useState(-1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+
+    const rows: rows = {
+        name: { type: 'string', name: '组名' },
+        rights: { type: 'others', name: '权限', value: (e:Group) => `${e.rights.split(',').length}项` },
+    }
 
     const getData = () => {
         setLoading(true);
@@ -64,21 +61,30 @@ function Group() {
 
     const openEdit = (id: number) => {
         setEditId(id);
+        console.log({id, editId});
     }
 
     const editList: editList = [
-        { label: '编辑', color: 'info', onClick: openEdit },
-        { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true },
+        hasRights('/group/alter') ? { label: '编辑', color: 'info', onClick: openEdit } : undefined,
+        hasRights('/group/delete') ? { label: '删除', color: 'error', onClick: handleDelete, showConfirm: true } : undefined,
     ];
 
-    const selectedActions: Actions[] = [
-        { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> },
+    const selectedActions: (Actions | undefined)[] = [
+        hasRights('/group/delete') ? { name: '批量删除', color: 'error', showConfirm: true, onClick: handleDeleteList, icon: <i className="fa-solid fa-trash" /> } : undefined,
     ];
 
-    const nonSelectedActions: Actions[] = [
-        { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> },
+    const nonSelectedActions: (Actions | undefined)[] = [
+        hasRights('/group/add') ? { name: '添加', color: 'primary', onClick: () => openEdit(0), icon: <i className='fa-solid fa-plus' /> } : undefined,
         { name: '刷新', color: 'primary', onClick: () => getData(), icon: <i className="fa-solid fa-arrows-rotate" /> },
     ];
+
+    const handleEditorClose = (e: Event, reason: string) => {
+        (reason === 'button' || reason === 'submit') && setTimeout(() => {
+            setEditId(-1);
+            getData();
+        }, 300);
+        return reason === 'button' || reason === 'submit';
+    }
 
     return <Card variant="outlined" sx={{ minWidth: 275 }} className='p-10 dark:bg-gray-1080 dark:color dark:text-gray-100'>
         <ListTable
@@ -95,7 +101,11 @@ function Group() {
             loading={loading}
             error={error}
         />
+        {editId >= 0 ? <GroupEditor
+                handleClose={(handleEditorClose)}
+                id={editId}
+            /> : null}
     </Card>;
 }
 
-export default Group;
+export default Grp;

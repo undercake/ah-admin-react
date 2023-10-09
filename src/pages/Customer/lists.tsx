@@ -1,7 +1,7 @@
   /*
 * @Author      : Undercake
 * @Date        : 2023-05-14 02: 47: 35
- * @LastEditTime: 2023-10-08 14:03:37
+ * @LastEditTime: 2023-10-09 13:28:33
  * @FilePath: /ah-admin-react/src/pages/Customer/lists.tsx
 * @Description : employee list page
 */
@@ -32,7 +32,7 @@ function List({ type = 0 }: { type?: number }) {
     const [selectedActionsLoading, setSelectedActionsLoading] = useState<boolean>(false)
 
     const rows: rows = {
-        FullName  : { type: 'string', name: '顾客姓名', onClick: e => setDetailId(e.id) },
+        FullName  : { type: 'string', name: '顾客姓名', onClick: e => hasRights('/customer/detail') ? setDetailId(e.id) : undefined},
         // @ts-ignore
         HouseArea : { type: 'others', name: '住房面积', align: 'center', value: (e: Customer) => <>{e.HouseArea === 0 ? '' : e.HouseArea}</> },
         Tel       : { type: 'others', name: '电话', width: 100, value: (e: Customer) => <>

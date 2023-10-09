@@ -1,7 +1,7 @@
   /*
  * @Author      : Undercake
  * @Date        : 2023-10-08 15: 49: 59
- * @LastEditTime: 2023-10-08 17:09:34
+ * @LastEditTime: 2023-10-09 13:13:59
  * @FilePath: /ah-admin-react/src/utils/SubmitHandler.ts
  * @Description : 
  */
@@ -36,6 +36,10 @@ export default function YupSubmitHandler({ schema, setState, tips, data, url, on
         .then((d: { code: number; rs: number }) => {
             if (d.code === 0) {
                 onSuccess(d);
+                mittBus.emit('msgEmit', {
+                    type: 'success',
+                    msg : '提交成功'
+                });
             }
         })
         .catch((err) => {

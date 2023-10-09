@@ -9,12 +9,12 @@ export interface ResponseData {
     data?: any;
 }
 
-export interface resData<T> {
+export interface resData<T = any> {
     code: number;
     message?: string;
     data: T;
 }
-export interface resListData<T> extends ResponseData {
+export interface resListData<T = any> extends ResponseData {
     count: number;
     count_per_page: number;
     current_page: number;
@@ -44,7 +44,7 @@ axios.interceptors.response.use(
             mittBus.emit('msgEmit', { type: 'error', msg: '您尚未登陆' });
             return Promise.reject({ msg: '未登录', data, res: res  });
         }
-        if ('code' in data && data.code != 0 && ('config' in res && res.config.url != urls.isLogged)) {
+        if ('code' in data && data.code !== 0 && ('config' in res && res.config.url !== urls.isLogged)) {
             mittBus.emit('msgEmit', { msg: res.data.message, type: 'error' });
             // @ts-ignore
             if (data.message) return Promise.reject({ msg: data.message, res });

@@ -9,7 +9,7 @@ export default interface Customer {
     EndDate          : string;
     F1               : 0 | 1 | 2                       // 0普通 1VIP 2重要领导
     FullName         : string;
-    HouseArea        : string;
+    HouseArea        : number;
     ItemCode         : string;
     LastModiDate     : string;
     NormalServiceTime: string;

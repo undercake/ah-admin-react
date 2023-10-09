@@ -1,7 +1,7 @@
 /*
  * @Author: Undercake
  * @Date: 2023-05-14 02:47:35
- * @LastEditTime: 2023-10-06 17:35:23
+ * @LastEditTime: 2023-10-09 13:57:54
  * @FilePath: /ah-admin-react/src/pages/Admin/List.tsx
  * @Description: Admin list page
  */
@@ -13,8 +13,6 @@ import { urls } from '../../config';
 import type Admin from './Admin';
 import AdminEditor from '../../components/EditDialogs/Admin';
 import { hasRights } from '../../utils/Rights';
-
-
 
 const current_date = new Date();
 
